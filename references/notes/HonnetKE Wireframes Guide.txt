@@ -1,0 +1,45 @@
+HonnetKE Wireframes Guide
+
+Public / Guest
+- Landing / home page
+- Search results page
+
+Authentication
+- Sign up page
+- OTP verification page
+- Login page
+
+Shared / Global
+- User profile/settings page
+- Delete account confirmation popup
+- Loading screen/spinner
+- Error page, such as 404 or 500
+- Success/confirmation popup
+- Warning notification popup
+
+Student
+- Student dashboard
+- Listing detail page
+- Favourites page
+- Booking requests/status page
+- Report listing popup
+
+Property Provider
+- Dashboard / console
+- Create listing page
+- Manage listings page
+- Listing analytics page
+- Delete listing confirmation popup
+- Mark inactive confirmation popup
+
+Agent-specific
+- Multiple property-owner listings view
+
+Admin
+- Admin console
+- Pending listings page
+- Listing detail review page
+- User management page
+- Suspend/warn user confirmation popup
+- Error logs page
+- Traffic analytics page
