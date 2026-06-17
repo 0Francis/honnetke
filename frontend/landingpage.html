@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HonnetKE — Discover affordable student hostels near your university in Kenya. Search, compare, and find your perfect student accommodation.">
+  <meta name="keywords" content="student hostels Kenya, student accommodation, affordable hostels, university housing, Nairobi hostels">
+  <meta name="author" content="HonnetKE">
+  <title>HonnetKE — One stop platform for your new accomodation</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/landing.css">
+</head>
+<body>
+
+  <!-- Skip to main content (accessibility) -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ═══════════════════════════════════════════
+       NAVBAR
+       ═══════════════════════════════════════════ -->
+  <nav class="navbar" id="navbar" aria-label="Main navigation">
+    <div class="navbar-inner">
+
+      <!-- Logo -->
+      <a href="landingpage.html" class="navbar-logo" aria-label="HonnetKE Home">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Honeycomb icon -->
+          <path d="M20 2L35 10.66V28.34L20 37L5 28.34V10.66L20 2Z" fill="#E8900A" fill-opacity="0.15" stroke="#E8900A" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M20 10L28 14.6V23.4L20 28L12 23.4V14.6L20 10Z" fill="#E8900A" stroke="#E8900A" stroke-width="1.5" stroke-linejoin="round"/>
+          <circle cx="20" cy="19" r="3" fill="#FFF8EC"/>
+        </svg>
+        <span class="logo-text">HonnetKE</span>
+      </a>
+
+      <!-- Center Nav -->
+      <ul class="navbar-nav" id="navbar-nav">
+        <li><a href="landingpage.html" class="nav-link active">Home</a></li>
+        <li><a href="#" class="nav-link">Hostels</a></li>
+      </ul>
+
+      <!-- Right Actions -->
+      <div class="navbar-actions" id="navbar-actions">
+        <a href="#" class="nav-login">Login</a>
+        <a href="#" class="nav-signup">Sign Up</a>
+      </div>
+
+      <!-- Mobile Menu Toggle -->
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- Mobile Navigation Overlay -->
+  <div class="mobile-nav-overlay" id="mobile-nav-overlay" aria-hidden="true">
+    <a href="landingpage.html" class="nav-link active">Home</a>
+    <a href="#" class="nav-link">Hostels</a>
+    <a href="#" class="nav-login">Login</a>
+    <a href="#" class="nav-signup">Sign Up</a>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       HERO SECTION
+       ═══════════════════════════════════════════ -->
+  <section class="hero" id="main-content">
+
+    <!-- Background Image -->
+    <div class="hero-bg">
+      <img src="assets/images/hero-bg.png" alt="" aria-hidden="true" loading="eager">
+    </div>
+    <div class="hero-overlay" aria-hidden="true"></div>
+
+    <!-- Decorative hexagons -->
+    <div class="hero-decor" aria-hidden="true">
+      <div class="hex-shape"></div>
+      <div class="hex-shape"></div>
+      <div class="hex-shape"></div>
+      <div class="hex-shape"></div>
+    </div>
+
+    <!-- Hero Content -->
+    <div class="hero-content">
+
+      <span class="hero-tagline">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Kenya's Student Hostel Platform
+      </span>
+
+      <h1 class="hero-title">
+        <span class="highlight">HonnetKE</span> — One stop platform for your new accommodation
+      </h1>
+
+      <p class="hero-subtitle">
+        Discover affordable student hostels near your university. Search, compare, and connect with verified property providers across Kenya.
+      </p>
+
+      <!-- Search Bar -->
+      <div class="hero-search">
+        <form class="search-bar" id="search-bar" action="#" method="GET" role="search" aria-label="Search hostels">
+
+          <div class="search-field">
+            <input type="text" name="location" placeholder="📍 Location or University" aria-label="Search by location">
+          </div>
+
+          <div class="search-field">
+            <select name="price" aria-label="Filter by price range">
+              <option value="" selected disabled>💰 Price Range</option>
+              <option value="0-5000">Under KES 5,000</option>
+              <option value="5000-10000">KES 5,000 – 10,000</option>
+              <option value="10000-15000">KES 10,000 – 15,000</option>
+              <option value="15000+">KES 15,000+</option>
+            </select>
+          </div>
+
+          <div class="search-field">
+            <select name="property_type" aria-label="Filter by property type">
+              <option value="" selected disabled>🏠 Property Type</option>
+              <option value="hostel">Hostel</option>
+              <option value="bedsitter">Bedsitter</option>
+              <option value="single-room">Single Room</option>
+              <option value="apartment">Apartment</option>
+            </select>
+          </div>
+
+          <div class="search-field">
+            <select name="gender" aria-label="Filter by gender preference">
+              <option value="" selected disabled>👤 Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="mixed">Mixed</option>
+            </select>
+          </div>
+
+          <div class="search-field">
+            <select name="room_type" aria-label="Filter by room type">
+              <option value="" selected disabled>🛏️ Room Type</option>
+              <option value="single">Single</option>
+              <option value="ensuite">Ensuite</option>
+              <option value="shared">Shared</option>
+            </select>
+          </div>
+
+          <button type="submit" class="search-btn" id="search-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Search
+          </button>
+
+        </form>
+      </div>
+
+      <!-- Stats -->
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-number">200<span class="amber">+</span></div>
+          <div class="hero-stat-label">Verified Hostels</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">15<span class="amber">+</span></div>
+          <div class="hero-stat-label">Universities Covered</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">5K<span class="amber">+</span></div>
+          <div class="hero-stat-label">Happy Students</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       FEATURED HOSTELS SECTION
+       ═══════════════════════════════════════════ -->
+  <section class="featured-section section" id="featured-hostels">
+    <div class="container">
+
+      <div class="section-header reveal">
+        <h2 class="section-title">Featured Hostels</h2>
+        <p class="section-subtitle">Hand-picked student accommodations from verified property providers across Kenya.</p>
+      </div>
+
+      <div class="hostels-grid">
+
+        <!-- Card 1 -->
+        <article class="listing-card reveal reveal-delay-1" onclick="window.location.href='#'" role="link" tabindex="0" aria-label="View Sunrise Hostel listing">
+          <div class="card-image">
+            <img src="assets/images/hostel-1.png" alt="Sunrise Hostel room interior" loading="lazy">
+            <div class="card-price-tag">KES 4,500/mo</div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">Sunrise Student Hostel</h3>
+            <div class="card-location">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Rongai, near MMUST
+            </div>
+            <div class="card-badges">
+              <span class="badge badge-amber">Hostel</span>
+              <span class="badge badge-charcoal">Female</span>
+            </div>
+            <div class="card-footer">
+              <span class="card-room-type">Single Room</span>
+              <a href="#" class="card-detail-link">
+                View Details
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="listing-card reveal reveal-delay-2" onclick="window.location.href='#'" role="link" tabindex="0" aria-label="View Jamii Heights listing">
+          <div class="card-image">
+            <img src="assets/images/hostel-2.png" alt="Jamii Heights building exterior" loading="lazy">
+            <div class="card-price-tag">KES 8,000/mo</div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">Jamii Heights</h3>
+            <div class="card-location">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Juja, near JKUAT
+            </div>
+            <div class="card-badges">
+              <span class="badge badge-amber">Apartment</span>
+              <span class="badge badge-charcoal">Mixed</span>
+            </div>
+            <div class="card-footer">
+              <span class="card-room-type">Ensuite</span>
+              <a href="#" class="card-detail-link">
+                View Details
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="listing-card reveal reveal-delay-3" onclick="window.location.href='#'" role="link" tabindex="0" aria-label="View Hive Residences listing">
+          <div class="card-image">
+            <img src="assets/images/hostel-3.png" alt="Hive Residences shared room" loading="lazy">
+            <div class="card-price-tag">KES 3,500/mo</div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">Hive Residences</h3>
+            <div class="card-location">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Kikuyu, near PCEA
+            </div>
+            <div class="card-badges">
+              <span class="badge badge-amber">Hostel</span>
+              <span class="badge badge-charcoal">Male</span>
+            </div>
+            <div class="card-footer">
+              <span class="card-room-type">Shared Room</span>
+              <a href="#" class="card-detail-link">
+                View Details
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 4 -->
+        <article class="listing-card reveal reveal-delay-4" onclick="window.location.href='#'" role="link" tabindex="0" aria-label="View Kilimani Studios listing">
+          <div class="card-image">
+            <img src="assets/images/hostel-4.png" alt="Kilimani Studios bedsitter" loading="lazy">
+            <div class="card-price-tag">KES 12,000/mo</div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">Kilimani Studios</h3>
+            <div class="card-location">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Kilimani, near UoN
+            </div>
+            <div class="card-badges">
+              <span class="badge badge-amber">Bedsitter</span>
+              <span class="badge badge-charcoal">Mixed</span>
+            </div>
+            <div class="card-footer">
+              <span class="card-room-type">Single Room</span>
+              <a href="#" class="card-detail-link">
+                View Details
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 5 -->
+        <article class="listing-card reveal reveal-delay-5" onclick="window.location.href='#'" role="link" tabindex="0" aria-label="View Campus Gate Hostel listing">
+          <div class="card-image">
+            <img src="assets/images/hostel-5.png" alt="Campus Gate Hostel room" loading="lazy">
+            <div class="card-price-tag">KES 5,500/mo</div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">Campus Gate Hostel</h3>
+            <div class="card-location">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Thika, near Mt. Kenya Uni
+            </div>
+            <div class="card-badges">
+              <span class="badge badge-amber">Hostel</span>
+              <span class="badge badge-charcoal">Female</span>
+            </div>
+            <div class="card-footer">
+              <span class="card-room-type">Ensuite</span>
+              <a href="#" class="card-detail-link">
+                View Details
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 6 -->
+        <article class="listing-card reveal reveal-delay-6" onclick="window.location.href='#'" role="link" tabindex="0" aria-label="View Nyeri Student Lodge listing">
+          <div class="card-image">
+            <img src="assets/images/hostel-6.png" alt="Nyeri Student Lodge exterior" loading="lazy">
+            <div class="card-price-tag">KES 6,800/mo</div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">Nyeri Student Lodge</h3>
+            <div class="card-location">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Nyeri, near Dedan Kimathi Uni
+            </div>
+            <div class="card-badges">
+              <span class="badge badge-amber">Single Room</span>
+              <span class="badge badge-charcoal">Male</span>
+            </div>
+            <div class="card-footer">
+              <span class="card-room-type">Single Room</span>
+              <a href="#" class="card-detail-link">
+                View Details
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- View All -->
+      <div class="view-all-wrap reveal">
+        <a href="#" class="btn btn-outline btn-lg">
+          View All Hostels
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       CONTACT / "BUZZ US" SECTION
+       ═══════════════════════════════════════════ -->
+  <section class="contact-section section" id="contact">
+
+    <!-- Decorative hexagons -->
+    <div class="contact-decor" aria-hidden="true">
+      <div class="hex-bg"></div>
+      <div class="hex-bg"></div>
+      <div class="hex-bg"></div>
+    </div>
+
+    <div class="container">
+      <div class="contact-grid">
+
+        <!-- Illustration -->
+        <div class="contact-illustration reveal">
+          <img src="assets/images/hornets-nest.png" alt="HonnetKE hive illustration" loading="lazy">
+        </div>
+
+        <!-- Contact Form -->
+        <div class="contact-form-wrap reveal reveal-delay-2">
+          <h2 class="contact-form-title">Buzz Us 🐝</h2>
+          <p class="contact-form-subtitle">Found a hidden gem? Need help? Drop us a message and we'll get back to you.</p>
+
+          <form class="contact-form" id="contact-form" action="mailto:support@honnetke.co.ke" method="POST" enctype="text/plain">
+            <div class="form-row">
+              <input type="text" class="input" name="name" placeholder="Your Name" required aria-label="Your name">
+              <input type="email" class="input" name="email" placeholder="Email Address" required aria-label="Email address">
+            </div>
+            <div class="form-row">
+              <input type="tel" class="input" name="phone" placeholder="Phone Number" aria-label="Phone number">
+              <input type="text" class="input" name="subject" placeholder="Subject" required aria-label="Subject">
+            </div>
+            <textarea class="input" name="message" placeholder="Tell us what's on your mind..." required aria-label="Your message"></textarea>
+            <button type="submit" class="btn btn-primary btn-lg" id="contact-submit">
+              Send Message
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════ -->
+  <footer class="footer" id="footer">
+    <div class="container">
+
+      <div class="footer-grid">
+
+        <!-- Brand Column -->
+        <div class="footer-brand">
+          <a href="landingpage.html" class="navbar-logo" aria-label="HonnetKE Home">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M20 2L35 10.66V28.34L20 37L5 28.34V10.66L20 2Z" fill="#E8900A" fill-opacity="0.15" stroke="#E8900A" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M20 10L28 14.6V23.4L20 28L12 23.4V14.6L20 10Z" fill="#E8900A" stroke="#E8900A" stroke-width="1.5" stroke-linejoin="round"/>
+              <circle cx="20" cy="19" r="3" fill="#FFF8EC"/>
+            </svg>
+            <span class="logo-text">HonnetKE</span>
+          </a>
+          <p class="footer-tagline">
+            Kenya's #1 student hostel discovery platform. Find affordable, verified accommodation near your campus — join the hive.
+          </p>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-quick-links">
+          <h3 class="footer-heading">Quick Links</h3>
+          <nav class="footer-links" aria-label="Footer navigation">
+            <a href="landingpage.html" class="footer-link">Home</a>
+            <a href="#" class="footer-link">Hostels</a>
+            <a href="#" class="footer-link">Sign Up</a>
+            <a href="#" class="footer-link">Login</a>
+            <a href="#contact" class="footer-link">Contact</a>
+          </nav>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="footer-contact">
+          <h3 class="footer-heading">Get in Touch</h3>
+          <div class="footer-contact-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            support@honnetke.co.ke
+          </div>
+          <div class="footer-contact-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            +254 700 000 000
+          </div>
+          <div class="footer-contact-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Nairobi, Kenya
+          </div>
+
+          <!-- Social Icons -->
+          <div class="footer-socials">
+            <a href="#" class="social-icon" aria-label="Twitter">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <p class="footer-copyright">&copy; 2026 HonnetKE. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="js/landing.js"></script>
+
+</body>
+</html>

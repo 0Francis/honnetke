@@ -1,0 +1,109 @@
+/* ===================================================
+   HonnetKE Design Tokens
+   Single source of truth for the brand system.
+   =================================================== */
+
+:root {
+  /* ── Brand Colors ── */
+  --color-primary:        #E8900A;
+  --color-primary-hover:  #D07D08;
+  --color-primary-dark:   #B56A04;
+  --color-primary-light:  rgba(232, 144, 10, 0.12);
+  --color-primary-glow:   rgba(232, 144, 10, 0.35);
+
+  --color-secondary:      #1E1E1E;
+  --color-secondary-light:#2A2A2A;
+
+  --color-accent:         #FFF8EC;
+  --color-accent-warm:    #FFF0D4;
+
+  --color-success:        #2D9B5A;
+  --color-error:          #D94040;
+
+  /* ── Neutral Colors ── */
+  --color-white:          #FFFFFF;
+  --color-black:          #000000;
+  --color-text:           #1E1E1E;
+  --color-text-muted:     #6B7280;
+  --color-text-light:     #9CA3AF;
+  --color-text-inverse:   #FFFFFF;
+  --color-border:         #E5E7EB;
+  --color-border-light:   #F3F4F6;
+  --color-bg:             #FFF8EC;
+  --color-bg-white:       #FFFFFF;
+
+  /* ── Typography ── */
+  --font-heading:         'Plus Jakarta Sans', sans-serif;
+  --font-body:            'Inter', sans-serif;
+
+  --fs-display:           clamp(2.5rem, 5vw, 4rem);
+  --fs-h1:                clamp(2rem, 4vw, 3rem);
+  --fs-h2:                clamp(1.5rem, 3vw, 2.25rem);
+  --fs-h3:                1.25rem;
+  --fs-h4:                1.125rem;
+  --fs-body:              1rem;
+  --fs-body-sm:           0.875rem;
+  --fs-caption:           0.75rem;
+
+  --fw-regular:           400;
+  --fw-medium:            500;
+  --fw-semibold:          600;
+  --fw-bold:              700;
+  --fw-extrabold:         800;
+
+  --lh-tight:             1.2;
+  --lh-normal:            1.6;
+  --lh-relaxed:           1.8;
+
+  /* ── Spacing ── */
+  --space-xs:             0.25rem;
+  --space-sm:             0.5rem;
+  --space-md:             1rem;
+  --space-lg:             1.5rem;
+  --space-xl:             2rem;
+  --space-2xl:            3rem;
+  --space-3xl:            4rem;
+  --space-4xl:            6rem;
+  --space-5xl:            8rem;
+
+  /* ── Shadows ── */
+  --shadow-xs:            0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm:            0 1px 3px rgba(0, 0, 0, 0.08),
+                          0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md:            0 4px 12px rgba(0, 0, 0, 0.10),
+                          0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-lg:            0 12px 40px rgba(0, 0, 0, 0.15),
+                          0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-xl:            0 20px 60px rgba(0, 0, 0, 0.20);
+  --shadow-amber:         0 4px 20px rgba(232, 144, 10, 0.25);
+  --shadow-amber-lg:      0 8px 32px rgba(232, 144, 10, 0.35);
+
+  /* ── Border Radius ── */
+  --radius-xs:            4px;
+  --radius-sm:            8px;
+  --radius-md:            12px;
+  --radius-lg:            20px;
+  --radius-xl:            28px;
+  --radius-full:          9999px;
+
+  /* ── Transitions ── */
+  --ease-out:             cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in-out:          cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring:          cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-fast:      150ms var(--ease-out);
+  --transition:           300ms var(--ease-out);
+  --transition-slow:      500ms var(--ease-out);
+
+  /* ── Layout ── */
+  --container-max:        1200px;
+  --container-padding:    1.5rem;
+  --navbar-height:        72px;
+
+  /* ── Z-Index Scale ── */
+  --z-base:               1;
+  --z-dropdown:           100;
+  --z-sticky:             200;
+  --z-overlay:            300;
+  --z-modal:              400;
+  --z-toast:              500;
+}
