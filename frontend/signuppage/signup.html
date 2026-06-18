@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Create your HonnetKE account — Join the Hive and discover affordable student hostels near your university in Kenya.">
+  <meta name="keywords" content="sign up, create account, student hostel, HonnetKE, Kenya accommodation">
+  <meta name="author" content="HonnetKE">
+  <title>Sign Up — HonnetKE</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Shared Stylesheets -->
+  <link rel="stylesheet" href="../landingpage/css/variables.css">
+  <link rel="stylesheet" href="../landingpage/css/reset.css">
+  <link rel="stylesheet" href="../landingpage/css/global.css">
+  <!-- Page-specific -->
+  <link rel="stylesheet" href="css/signup.css">
+</head>
+<body>
+
+  <!-- Skip to main content (accessibility) -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ═══════════════════════════════════════════
+       NAVBAR
+       ═══════════════════════════════════════════ -->
+  <nav class="navbar navbar-dark" id="navbar" aria-label="Main navigation">
+    <div class="navbar-inner">
+
+      <!-- Logo -->
+      <a href="../landingpage/landingpage.html" class="navbar-logo" aria-label="HonnetKE Home">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M20 2L35 10.66V28.34L20 37L5 28.34V10.66L20 2Z" fill="#E8900A" fill-opacity="0.15" stroke="#E8900A" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M20 10L28 14.6V23.4L20 28L12 23.4V14.6L20 10Z" fill="#E8900A" stroke="#E8900A" stroke-width="1.5" stroke-linejoin="round"/>
+          <circle cx="20" cy="19" r="3" fill="#FFF8EC"/>
+        </svg>
+        <span class="logo-text">HonnetKE</span>
+      </a>
+
+      <!-- Center Nav -->
+      <ul class="navbar-nav" id="navbar-nav">
+        <li><a href="../landingpage/landingpage.html" class="nav-link">Home</a></li>
+        <li><a href="#" class="nav-link">Hostels</a></li>
+      </ul>
+
+      <!-- Right Actions -->
+      <div class="navbar-actions" id="navbar-actions">
+        <a href="../loginpage/login.html" class="nav-login">Login</a>
+        <a href="signup.html" class="nav-signup active-page">Sign Up</a>
+      </div>
+
+      <!-- Mobile Menu Toggle -->
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- Mobile Navigation Overlay -->
+  <div class="mobile-nav-overlay" id="mobile-nav-overlay" aria-hidden="true">
+    <a href="../landingpage/landingpage.html" class="nav-link">Home</a>
+    <a href="#" class="nav-link">Hostels</a>
+    <a href="../loginpage/login.html" class="nav-login">Login</a>
+    <a href="signup.html" class="nav-signup">Sign Up</a>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       MAIN CONTENT — SIGN UP
+       ═══════════════════════════════════════════ -->
+  <main class="auth-layout" id="main-content">
+
+    <!-- Left Visual Panel -->
+    <div class="auth-visual" aria-hidden="true">
+      <div class="auth-visual-bg">
+        <img src="../landingpage/assets/images/auth-bg.png" alt="" loading="eager">
+      </div>
+      <div class="auth-visual-overlay"></div>
+
+      <!-- Decorative hexagons -->
+      <div class="auth-decor">
+        <div class="hex-float"></div>
+        <div class="hex-float"></div>
+        <div class="hex-float"></div>
+      </div>
+
+      <div class="auth-visual-content">
+        <a href="../landingpage/landingpage.html" class="auth-logo" aria-label="HonnetKE Home">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 2L35 10.66V28.34L20 37L5 28.34V10.66L20 2Z" fill="#E8900A" fill-opacity="0.2" stroke="#E8900A" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M20 10L28 14.6V23.4L20 28L12 23.4V14.6L20 10Z" fill="#E8900A" stroke="#E8900A" stroke-width="1.5" stroke-linejoin="round"/>
+            <circle cx="20" cy="19" r="3" fill="#FFF8EC"/>
+          </svg>
+        </a>
+        <h2 class="auth-visual-title">Join the Hive</h2>
+        <p class="auth-visual-subtitle">Discover affordable, verified student hostels near your university</p>
+        <div class="auth-visual-stat">
+          <span class="stat-number">5,000<span class="amber">+</span></span>
+          <span class="stat-label">students already in the hive</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Form Panel -->
+    <div class="auth-form-panel">
+      <div class="auth-form-container">
+
+        <!-- Mobile logo (shows only on small screens) -->
+        <a href="../landingpage/landingpage.html" class="auth-mobile-logo" aria-label="HonnetKE Home">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M20 2L35 10.66V28.34L20 37L5 28.34V10.66L20 2Z" fill="#E8900A" fill-opacity="0.15" stroke="#E8900A" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M20 10L28 14.6V23.4L20 28L12 23.4V14.6L20 10Z" fill="#E8900A" stroke="#E8900A" stroke-width="1.5" stroke-linejoin="round"/>
+            <circle cx="20" cy="19" r="3" fill="#FFF8EC"/>
+          </svg>
+          <span class="logo-text">HonnetKE</span>
+        </a>
+
+        <div class="auth-form-header">
+          <h1 class="auth-form-title">Create Your Account</h1>
+          <p class="auth-form-subtitle">Fill in your details to join the hive</p>
+        </div>
+
+        <form class="auth-form" id="signup-form" novalidate>
+
+          <!-- Full Name -->
+          <div class="form-group" id="group-fullname">
+            <label for="signup-fullname" class="form-label">Full Name</label>
+            <div class="input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <input type="text" class="input input-icon-pad" id="signup-fullname" name="full_name" placeholder="e.g. Jane Wanjiku" required autocomplete="name">
+            </div>
+            <span class="form-error" id="error-fullname"></span>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group" id="group-email">
+            <label for="signup-email" class="form-label">Email Address</label>
+            <div class="input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <input type="email" class="input input-icon-pad" id="signup-email" name="email" placeholder="e.g. jane@university.ac.ke" required autocomplete="email">
+            </div>
+            <span class="form-error" id="error-email"></span>
+          </div>
+
+          <!-- Phone Number -->
+          <div class="form-group" id="group-phone">
+            <label for="signup-phone" class="form-label">Phone Number</label>
+            <div class="input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <input type="tel" class="input input-icon-pad" id="signup-phone" name="phone_number" placeholder="e.g. 0712 345 678" required autocomplete="tel">
+            </div>
+            <span class="form-error" id="error-phone"></span>
+          </div>
+
+          <!-- Role Selection -->
+          <div class="form-group" id="group-role">
+            <label for="signup-role" class="form-label">I am a…</label>
+            <div class="input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <select class="input input-icon-pad select-styled" id="signup-role" name="role" required>
+                <option value="student" selected>Student</option>
+                <option value="landlord">Landlord</option>
+                <option value="agent">Agent</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Role-Specific Fields -->
+          <div class="role-fields" id="role-fields">
+
+            <!-- Student: University -->
+            <div class="form-group role-field" id="field-university" data-role="student">
+              <label for="signup-university" class="form-label">University / Campus</label>
+              <div class="input-wrap">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1 2.7 3 6 3s6-1.9 6-3v-5"/></svg>
+                <input type="text" class="input input-icon-pad" id="signup-university" name="university" placeholder="e.g. University of Nairobi" autocomplete="organization">
+              </div>
+            </div>
+
+            <!-- Landlord: Business Name -->
+            <div class="form-group role-field" id="field-business" data-role="landlord" style="display:none;">
+              <label for="signup-business" class="form-label">Business / Property Name <span class="optional">(optional)</span></label>
+              <div class="input-wrap">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <input type="text" class="input input-icon-pad" id="signup-business" name="business_name" placeholder="e.g. Sunrise Properties">
+              </div>
+            </div>
+
+            <!-- Agent: Agency Name -->
+            <div class="form-group role-field" id="field-agency" data-role="agent" style="display:none;">
+              <label for="signup-agency" class="form-label">Agency Name</label>
+              <div class="input-wrap">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                <input type="text" class="input input-icon-pad" id="signup-agency" name="agency_name" placeholder="e.g. KenyaLets Realty">
+              </div>
+            </div>
+
+            <!-- Agent: License Number -->
+            <div class="form-group role-field" id="field-license" data-role="agent" style="display:none;">
+              <label for="signup-license" class="form-label">Agent License Number <span class="optional">(optional)</span></label>
+              <div class="input-wrap">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <input type="text" class="input input-icon-pad" id="signup-license" name="license_number" placeholder="e.g. EAB/2024/1234">
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Password -->
+          <div class="form-group" id="group-password">
+            <label for="signup-password" class="form-label">Password</label>
+            <div class="input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <input type="password" class="input input-icon-pad input-password" id="signup-password" name="password" placeholder="Min. 8 characters" required autocomplete="new-password" minlength="8">
+              <button type="button" class="password-toggle" id="toggle-password" aria-label="Show password">
+                <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              </button>
+            </div>
+            <span class="form-error" id="error-password"></span>
+            <!-- Password strength indicator -->
+            <div class="password-strength" id="password-strength">
+              <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+              <span class="strength-label" id="strength-label"></span>
+            </div>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="form-group" id="group-confirm">
+            <label for="signup-confirm" class="form-label">Confirm Password</label>
+            <div class="input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <input type="password" class="input input-icon-pad input-password" id="signup-confirm" name="confirm_password" placeholder="Re-enter your password" required autocomplete="new-password">
+              <button type="button" class="password-toggle" id="toggle-confirm" aria-label="Show password">
+                <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              </button>
+            </div>
+            <span class="form-error" id="error-confirm"></span>
+          </div>
+
+          <!-- Terms -->
+          <div class="form-group form-checkbox-group" id="group-terms">
+            <label class="checkbox-label" for="signup-terms">
+              <input type="checkbox" id="signup-terms" name="terms" required>
+              <span class="checkmark"></span>
+              I agree to the <a href="#" class="link-amber">Terms of Service</a> and <a href="#" class="link-amber">Privacy Policy</a>
+            </label>
+            <span class="form-error" id="error-terms"></span>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" class="btn btn-primary btn-lg btn-full" id="signup-submit">
+            Create Account
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+
+        </form>
+
+        <!-- Alt link -->
+        <p class="auth-alt-text">
+          Already have an account? <a href="../loginpage/login.html" class="link-amber">Log in</a>
+        </p>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════ -->
+  <footer class="footer" id="footer">
+    <div class="container">
+
+      <div class="footer-grid">
+
+        <!-- Brand Column -->
+        <div class="footer-brand">
+          <a href="../landingpage/landingpage.html" class="navbar-logo" aria-label="HonnetKE Home">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M20 2L35 10.66V28.34L20 37L5 28.34V10.66L20 2Z" fill="#E8900A" fill-opacity="0.15" stroke="#E8900A" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M20 10L28 14.6V23.4L20 28L12 23.4V14.6L20 10Z" fill="#E8900A" stroke="#E8900A" stroke-width="1.5" stroke-linejoin="round"/>
+              <circle cx="20" cy="19" r="3" fill="#FFF8EC"/>
+            </svg>
+            <span class="logo-text">HonnetKE</span>
+          </a>
+          <p class="footer-tagline">
+            Kenya's #1 student hostel discovery platform. Find affordable, verified accommodation near your campus — join the hive.
+          </p>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-quick-links">
+          <h3 class="footer-heading">Quick Links</h3>
+          <nav class="footer-links" aria-label="Footer navigation">
+            <a href="../landingpage/landingpage.html" class="footer-link">Home</a>
+            <a href="#" class="footer-link">Hostels</a>
+            <a href="signup.html" class="footer-link">Sign Up</a>
+            <a href="../loginpage/login.html" class="footer-link">Login</a>
+            <a href="../landingpage/landingpage.html#contact" class="footer-link">Contact</a>
+          </nav>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="footer-contact">
+          <h3 class="footer-heading">Get in Touch</h3>
+          <div class="footer-contact-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            support@honnetke.co.ke
+          </div>
+          <div class="footer-contact-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            +254 700 000 000
+          </div>
+          <div class="footer-contact-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Nairobi, Kenya
+          </div>
+
+          <!-- Social Icons -->
+          <div class="footer-socials">
+            <a href="#" class="social-icon" aria-label="Twitter">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <p class="footer-copyright">&copy; 2026 HonnetKE. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- TODO: Hornet animation placeholder — implement with Lottie/CSS in post-MVP -->
+
+  <!-- JavaScript -->
+  <script src="js/signup.js"></script>
+
+</body>
+</html>
