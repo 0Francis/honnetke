@@ -1,0 +1,71 @@
+Chapter 5 context guide
+
+5.1 Introduction
+
+Check 2.1 Instructions
+
+5.2 Setup Description
+
+How does the developed solution look? How does it work to meet the need and solve the problem in 1.2? How well has this project been done? Describe the challenges and how they were overcome. Were there implementations not met as proposed? reason? How does this affect the working of the solution as conceptualised?
+
+Technical Stack and Environment
+How does the implementation within a controlled development environment facilitate the achievement of the set expectations set upon design, like modularity, separation of concerns, scalability, etc
+
+Describe the specific hardware environment where your solution is deployed. How does the selected processing power (e.g., CPU) and memory (RAM) capacity ensure the system handles concurrent requests without performance degradation?
+
+Which programming language and backend framework did you select for this implementation? Justify how the built-in features of any techniques, frameworks, etc., directly address the problem identified in your proposal.
+
+Explain the choice of your front-end technology. In what ways does this choice facilitate a 'responsive and intuitive' interface that effectively removes user confusion and improves the overall 'significance' of the user experience?
+
+Database Management?
+
+Which Integrated Development Environment (IDE) and version control tools were utilised? How did these tools ensure 'ordered steps' and full traceability of code changes throughout the development lifecycle
+
+What is your automated backup strategy? Detail how this procedure ensures that data's benefits are not forgotten, and that the system remains protected from 'evil' such as permanent data loss or system corruption?
+
+Refer to your Analysis and Design diagrams to illustrate the business logic and ensure the data flow matches their technical setup.
+
+You must explicitly mention which Appendix contains the supporting evidence for the implementations (e.g., screenshots ). These appecidies are shared after the references- well labelled to be included in the list of figures
+
+Stakeholder Interaction and Functional Fulfilment
+
+Access Control & User Rights implementation according to design?
+
+Non-Functional Requirement (NFR) Realisation?
+Reporting and Decision Support
+
+Logic Consistency & Traceability
+
+How do you ensure that no 'new processes' were introduced during implementation that were not accounted for in your initial diagrams, / no processes were left out as designed? Can you trace one core functional requirement from your Use Case diagram to its final implementation and the corresponding test case evidence in your appendices?
+
+Error messages?
+
+Implementation Challenges and Adjustments? Deviations from Proposal?
+
+5.3 Testing
+
+Testing must be conducted to perform both Verification and Validation, ensuring the system is "fit for purpose" and free from critical errors.
+
+Briefly describe the tests that were carried out
+
+Manual or automated?
+
+Which tools were used?
+
+Write A COMPLETE INDIVIDUAL test case for each unique functionality. Each test case should be represented in a test case table as taught in Software Engineering
+
+Make sure they cover Types of test, reason for the test, test environment, test tool, test cases, results, Description of Environment, data, test cases of CORE Functional Requirements, Test Data, Expected Results, Actual Result, Pass/Fail Evidence/screenshot should be shared as appendicies not in the chapter 5 document
+
+Test Case 1: Type of Test, Functionality Tested
+Testcase
+
+Screenshot shared as an appendix
+
+Test Case X: Type of Test, Functionality Tested
+Testcase
+
+Sample/screenshot shared as an appendix
+
+**As you write about the implementations in chapter 5, make sure you mention which appendix the content refers to/ points to for easy check upon assessment
+
+** Do not share any scripts/screenshots in chapter 5, but as appendices

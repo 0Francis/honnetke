@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const menuToggle   = document.getElementById('menu-toggle');
   const mobileNav    = document.getElementById('mobile-nav-overlay');
   const signupForm   = document.getElementById('signup-form');
-  const roleSelect   = document.getElementById('signup-role');
 
 
   /* ──────────────────────────────────────────
@@ -45,42 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ──────────────────────────────────────────
-     2. ROLE-SPECIFIC FIELDS
-     ────────────────────────────────────────── */
-  if (roleSelect) {
-    const roleFields = document.querySelectorAll('.role-field');
-
-    function updateRoleFields() {
-      const selectedRole = roleSelect.value;
-
-      roleFields.forEach(field => {
-        const fieldRole = field.getAttribute('data-role');
-        if (fieldRole === selectedRole) {
-          field.style.display = '';
-          // Trigger animation
-          field.style.animation = 'none';
-          field.offsetHeight; // Force reflow
-          field.style.animation = '';
-        } else {
-          field.style.display = 'none';
-          // Clear inputs when hiding
-          const inputs = field.querySelectorAll('input');
-          inputs.forEach(input => {
-            input.value = '';
-            clearFieldError(input.closest('.form-group'));
-          });
-        }
-      });
-    }
-
-    roleSelect.addEventListener('change', updateRoleFields);
-    // Initialize on load
-    updateRoleFields();
-  }
-
-
-  /* ──────────────────────────────────────────
-     3. PASSWORD SHOW/HIDE TOGGLE
+     2. PASSWORD SHOW/HIDE TOGGLE
      ────────────────────────────────────────── */
   document.querySelectorAll('.password-toggle').forEach(btn => {
     btn.addEventListener('click', () => {
