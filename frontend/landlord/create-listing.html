@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Create a new hostel or property listing on HonnetKE — fill in details, location, amenities, and upload images.">
+  <meta name="keywords" content="create listing, add property, hostel listing, HonnetKE landlord">
+  <meta name="author" content="HonnetKE">
+  <title>Create Listing — HonnetKE</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Shared Stylesheets -->
+  <link rel="stylesheet" href="../landingpage/css/variables.css">
+  <link rel="stylesheet" href="../landingpage/css/reset.css">
+  <link rel="stylesheet" href="../landingpage/css/global.css">
+  <link rel="stylesheet" href="css/landlord.css">
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ═══════════════════════════════════════════
+       LANDLORD NAVBAR
+       ═══════════════════════════════════════════ -->
+  <nav class="landlord-navbar" id="navbar" aria-label="Landlord navigation">
+    <div class="navbar-inner">
+      <a href="dashboard.html" class="navbar-logo" aria-label="HonnetKE Landlord Dashboard">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M20 2L35 10.66V28.34L20 37L5 28.34V10.66L20 2Z" fill="#E8900A" fill-opacity="0.15" stroke="#E8900A" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M20 10L28 14.6V23.4L20 28L12 23.4V14.6L20 10Z" fill="#E8900A" stroke="#E8900A" stroke-width="1.5" stroke-linejoin="round"/>
+          <circle cx="20" cy="19" r="3" fill="#FFF8EC"/>
+        </svg>
+        <span class="logo-text">HonnetKE</span>
+      </a>
+      <ul class="navbar-nav" id="navbar-nav">
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="manage-listings.html" class="nav-link">My Listings</a></li>
+        <li><a href="create-listing.html" class="nav-link active">Create Listing</a></li>
+        <li><a href="bookings.html" class="nav-link">Bookings</a></li>
+        <li><a href="analytics.html" class="nav-link">Analytics</a></li>
+      </ul>
+      <div class="navbar-right">
+        <button class="notification-btn" id="notification-btn" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notification-badge"></span>
+        </button>
+        <div class="user-menu">
+          <button class="user-avatar-btn" aria-label="User menu" aria-expanded="false">
+            <div class="avatar">PK</div>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="user-dropdown">
+            <a href="#" class="dropdown-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My Profile</a>
+            <a href="manage-listings.html" class="dropdown-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>My Listings</a>
+            <div class="dropdown-divider"></div>
+            <a href="../loginpage/login.html" class="dropdown-item danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout</a>
+          </div>
+        </div>
+      </div>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <div class="landlord-mobile-nav" id="landlord-mobile-nav" aria-hidden="true">
+    <a href="dashboard.html" class="nav-link">Dashboard</a>
+    <a href="manage-listings.html" class="nav-link">My Listings</a>
+    <a href="create-listing.html" class="nav-link active">Create Listing</a>
+    <a href="bookings.html" class="nav-link">Bookings</a>
+    <a href="analytics.html" class="nav-link">Analytics</a>
+    <a href="../loginpage/login.html" class="mobile-logout">Logout</a>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- ═══════════════════════════════════════════
+       MAIN CONTENT — CREATE LISTING
+       ═══════════════════════════════════════════ -->
+  <main class="landlord-main" id="main-content">
+
+    <div class="page-header">
+      <div class="container">
+        <h1 class="page-title">Create New Listing</h1>
+        <p class="page-subtitle">Fill in the details below to list your property on HonnetKE.</p>
+      </div>
+    </div>
+
+    <section class="dashboard-section">
+      <div class="container">
+
+        <!-- Stepper -->
+        <div class="form-stepper">
+          <div class="stepper-step active">
+            <span class="step-number">1</span>
+            <span class="step-label">Basic Info</span>
+          </div>
+          <div class="stepper-line"></div>
+          <div class="stepper-step">
+            <span class="step-number">2</span>
+            <span class="step-label">Location</span>
+          </div>
+          <div class="stepper-line"></div>
+          <div class="stepper-step">
+            <span class="step-number">3</span>
+            <span class="step-label">Amenities</span>
+          </div>
+          <div class="stepper-line"></div>
+          <div class="stepper-step">
+            <span class="step-number">4</span>
+            <span class="step-label">Images</span>
+          </div>
+          <div class="stepper-line"></div>
+          <div class="stepper-step">
+            <span class="step-number">5</span>
+            <span class="step-label">Review</span>
+          </div>
+        </div>
+
+        <!-- Form Card -->
+        <div class="form-card">
+
+          <!-- Step 1: Basic Info -->
+          <div class="form-step active" id="step-1">
+            <h2>Basic Information</h2>
+            <p class="step-description">Tell us about your property — name, type, pricing, and preferences.</p>
+
+            <div class="form-group">
+              <label class="form-label" for="listing-title">Property Title *</label>
+              <input type="text" class="form-input" id="listing-title" placeholder="e.g. Sunrise Student Hostel" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="listing-description">Description *</label>
+              <textarea class="form-textarea" id="listing-description" placeholder="Describe your property — rooms, facilities, what makes it great for students..." required></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="property-type">Property Type *</label>
+                <select class="form-select" id="property-type" required>
+                  <option value="" disabled selected>Select type</option>
+                  <option value="hostel">Hostel</option>
+                  <option value="apartment">Apartment</option>
+                  <option value="bedsitter">Bedsitter</option>
+                  <option value="single-room">Single Room</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="listing-price">Monthly Price (KES) *</label>
+                <div class="input-prefix">
+                  <span class="prefix">KES</span>
+                  <input type="number" class="form-input" id="listing-price" placeholder="e.g. 5000" min="0" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="gender-preference">Gender Preference *</label>
+                <select class="form-select" id="gender-preference" required>
+                  <option value="" disabled selected>Select preference</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="mixed">Mixed</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="room-type">Room Type *</label>
+                <select class="form-select" id="room-type" required>
+                  <option value="" disabled selected>Select room type</option>
+                  <option value="single">Single</option>
+                  <option value="ensuite">Ensuite</option>
+                  <option value="shared">Shared</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-nav">
+              <div></div>
+              <button type="button" class="btn-next">
+                Next: Location
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 2: Location -->
+          <div class="form-step" id="step-2">
+            <h2>Location Details</h2>
+            <p class="step-description">Help students find your property — provide accurate location information.</p>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="listing-county">County *</label>
+                <select class="form-select" id="listing-county" required>
+                  <option value="" disabled selected>Select county</option>
+                  <option value="nairobi">Nairobi</option>
+                  <option value="kiambu">Kiambu</option>
+                  <option value="machakos">Machakos</option>
+                  <option value="kajiado">Kajiado</option>
+                  <option value="nakuru">Nakuru</option>
+                  <option value="uasin-gishu">Uasin Gishu</option>
+                  <option value="mombasa">Mombasa</option>
+                  <option value="kisumu">Kisumu</option>
+                  <option value="nyeri">Nyeri</option>
+                  <option value="kakamega">Kakamega</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="listing-area">Area / Town *</label>
+                <input type="text" class="form-input" id="listing-area" placeholder="e.g. Juja, Rongai, Kikuyu" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="listing-campus">Nearest Campus</label>
+              <input type="text" class="form-input" id="listing-campus" placeholder="e.g. JKUAT Main Campus, UoN Chiromo">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="listing-address">Full Address</label>
+              <input type="text" class="form-input" id="listing-address" placeholder="e.g. Gachororo Road, off Thika Superhighway">
+            </div>
+
+            <div class="form-nav">
+              <button type="button" class="btn-prev">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                Previous
+              </button>
+              <button type="button" class="btn-next">
+                Next: Amenities
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 3: Amenities -->
+          <div class="form-step" id="step-3">
+            <h2>Amenities</h2>
+            <p class="step-description">Select the amenities available in your property.</p>
+
+            <div class="amenities-grid">
+              <label class="amenity-checkbox">
+                <input type="checkbox" name="amenity" value="wifi">
+                <svg class="amenity-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                <span>WiFi</span>
+              </label>
+              <label class="amenity-checkbox">
+                <input type="checkbox" name="amenity" value="water">
+                <svg class="amenity-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                <span>Water</span>
+              </label>
+              <label class="amenity-checkbox">
+                <input type="checkbox" name="amenity" value="security">
+                <svg class="amenity-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span>Security</span>
+              </label>
+              <label class="amenity-checkbox">
+                <input type="checkbox" name="amenity" value="parking">
+                <svg class="amenity-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                <span>Parking</span>
+              </label>
+              <label class="amenity-checkbox">
+                <input type="checkbox" name="amenity" value="electricity">
+                <svg class="amenity-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <span>Electricity</span>
+              </label>
+              <label class="amenity-checkbox">
+                <input type="checkbox" name="amenity" value="kitchen">
+                <svg class="amenity-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+                <span>Kitchen</span>
+              </label>
+              <label class="amenity-checkbox">
+                <input type="checkbox" name="amenity" value="laundry">
+                <svg class="amenity-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2"/><circle cx="12" cy="14" r="4"/><line x1="8" y1="6" x2="8.01" y2="6"/></svg>
+                <span>Laundry</span>
+              </label>
+              <label class="amenity-checkbox">
+                <input type="checkbox" name="amenity" value="study-area">
+                <svg class="amenity-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                <span>Study Area</span>
+              </label>
+              <label class="amenity-checkbox">
+                <input type="checkbox" name="amenity" value="cctv">
+                <svg class="amenity-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                <span>CCTV</span>
+              </label>
+              <label class="amenity-checkbox">
+                <input type="checkbox" name="amenity" value="furnished">
+                <svg class="amenity-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"/><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0z"/><path d="M4 18v2"/><path d="M20 18v2"/></svg>
+                <span>Furnished</span>
+              </label>
+            </div>
+
+            <div class="form-nav">
+              <button type="button" class="btn-prev">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                Previous
+              </button>
+              <button type="button" class="btn-next">
+                Next: Images
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 4: Images -->
+          <div class="form-step" id="step-4">
+            <h2>Property Images</h2>
+            <p class="step-description">Upload up to 10 photos of your property. The first image will be the primary cover photo.</p>
+
+            <div class="upload-area" id="upload-area">
+              <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              <h3>Drag & drop images here</h3>
+              <p>or <span class="browse-link">browse files</span> from your device</p>
+              <p style="margin-top: var(--space-sm); font-size: 0.7rem; color: var(--color-text-light);">Supports JPG, PNG, WebP — Max 5MB per image</p>
+            </div>
+            <input type="file" id="listing-images" accept="image/*" multiple hidden>
+
+            <div class="image-preview-grid" id="image-preview-grid"></div>
+
+            <div class="form-nav">
+              <button type="button" class="btn-prev">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                Previous
+              </button>
+              <button type="button" class="btn-next">
+                Next: Review
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 5: Review & Submit -->
+          <div class="form-step" id="step-5">
+            <h2>Review & Submit</h2>
+            <p class="step-description">Double-check your listing details before submitting for review.</p>
+
+            <!-- Basic Info Review -->
+            <div class="review-section">
+              <div class="review-section-header">
+                <h3>Basic Information</h3>
+                <button class="review-edit-btn" data-step="0">Edit</button>
+              </div>
+              <div class="review-grid">
+                <div class="review-item">
+                  <div class="review-label">Title</div>
+                  <div class="review-value" id="review-title">—</div>
+                </div>
+                <div class="review-item">
+                  <div class="review-label">Property Type</div>
+                  <div class="review-value" id="review-property-type">—</div>
+                </div>
+                <div class="review-item">
+                  <div class="review-label">Price</div>
+                  <div class="review-value" id="review-price">—</div>
+                </div>
+                <div class="review-item">
+                  <div class="review-label">Gender Preference</div>
+                  <div class="review-value" id="review-gender">—</div>
+                </div>
+                <div class="review-item">
+                  <div class="review-label">Room Type</div>
+                  <div class="review-value" id="review-room-type">—</div>
+                </div>
+                <div class="review-item">
+                  <div class="review-label">Description</div>
+                  <div class="review-value" id="review-description">—</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Location Review -->
+            <div class="review-section">
+              <div class="review-section-header">
+                <h3>Location</h3>
+                <button class="review-edit-btn" data-step="1">Edit</button>
+              </div>
+              <div class="review-grid">
+                <div class="review-item">
+                  <div class="review-label">County</div>
+                  <div class="review-value" id="review-county">—</div>
+                </div>
+                <div class="review-item">
+                  <div class="review-label">Area</div>
+                  <div class="review-value" id="review-area">—</div>
+                </div>
+                <div class="review-item">
+                  <div class="review-label">Nearest Campus</div>
+                  <div class="review-value" id="review-campus">—</div>
+                </div>
+                <div class="review-item">
+                  <div class="review-label">Address</div>
+                  <div class="review-value" id="review-address">—</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Amenities Review -->
+            <div class="review-section">
+              <div class="review-section-header">
+                <h3>Amenities</h3>
+                <button class="review-edit-btn" data-step="2">Edit</button>
+              </div>
+              <div class="review-value" id="review-amenities">None selected</div>
+            </div>
+
+            <div class="form-nav">
+              <button type="button" class="btn-prev">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                Previous
+              </button>
+              <button type="button" class="btn-submit">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                Submit Listing for Review
+              </button>
+            </div>
+          </div>
+
+        </div><!-- /form-card -->
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" id="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="dashboard.html" class="navbar-logo" aria-label="HonnetKE Home">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M20 2L35 10.66V28.34L20 37L5 28.34V10.66L20 2Z" fill="#E8900A" fill-opacity="0.15" stroke="#E8900A" stroke-width="2" stroke-linejoin="round"/><path d="M20 10L28 14.6V23.4L20 28L12 23.4V14.6L20 10Z" fill="#E8900A" stroke="#E8900A" stroke-width="1.5" stroke-linejoin="round"/><circle cx="20" cy="19" r="3" fill="#FFF8EC"/></svg>
+            <span class="logo-text">HonnetKE</span>
+          </a>
+          <p class="footer-tagline">Kenya's #1 student hostel discovery platform. List your properties and connect with thousands of students — join the hive.</p>
+        </div>
+        <div class="footer-quick-links">
+          <h3 class="footer-heading">Quick Links</h3>
+          <nav class="footer-links" aria-label="Footer navigation">
+            <a href="dashboard.html" class="footer-link">Dashboard</a>
+            <a href="manage-listings.html" class="footer-link">My Listings</a>
+            <a href="create-listing.html" class="footer-link">Create Listing</a>
+            <a href="bookings.html" class="footer-link">Bookings</a>
+            <a href="../landingpage/landingpage.html#contact" class="footer-link">Contact</a>
+          </nav>
+        </div>
+        <div class="footer-contact">
+          <h3 class="footer-heading">Get in Touch</h3>
+          <div class="footer-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>support@honnetke.co.ke</div>
+          <div class="footer-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+254 700 000 000</div>
+          <div class="footer-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Nairobi, Kenya</div>
+          <div class="footer-socials">
+            <a href="#" class="social-icon" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+            <a href="#" class="social-icon" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+            <a href="#" class="social-icon" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copyright">&copy; 2026 HonnetKE. All rights reserved.</p>
+        <div class="footer-bottom-links"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/landlord.js"></script>
+</body>
+</html>

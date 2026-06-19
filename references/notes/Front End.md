@@ -84,12 +84,37 @@ Each page then adds its own page-specific stylesheet.
 - **Folder**: `frontend/students/` (dashboard.html)
 - **Status**: 🔨 Building
 
-### 8. Landlord/Agent Dashboard
+### 8. Landlord Dashboard
 
-- **Folder**: `frontend/providerdashboard/` (planned)
+- **Folder**: `frontend/landlord/` (dashboard.html)
+- **Status**: 🔨 Building
+
+### 9. Create Listing Page (Landlord)
+
+- **Folder**: `frontend/landlord/` (create-listing.html)
+- **Status**: 🔨 Building
+
+### 10. Manage Listings Page (Landlord)
+
+- **Folder**: `frontend/landlord/` (manage-listings.html)
+- **Status**: 🔨 Building
+
+### 11. Bookings Page (Landlord)
+
+- **Folder**: `frontend/landlord/` (bookings.html)
+- **Status**: 🔨 Building
+
+### 12. Analytics Page (Landlord)
+
+- **Folder**: `frontend/landlord/` (analytics.html)
+- **Status**: 🔨 Building
+
+### 13. Agent Dashboard
+
+- **Folder**: `frontend/agents/` (planned)
 - **Status**: 📋 Not started
 
-### 9. Admin Console
+### 14. Admin Console
 
 - **Folder**: `frontend/adminconsole/` (planned)
 - **Status**: 📋 Not started
@@ -187,6 +212,114 @@ frontend/students/
 
 ---
 
+## Landlord Frontend Plan
+
+> All landlord pages live inside `frontend/landlord/`.
+> They share a common Landlord Navbar (different from the guest and student navbars) and Footer.
+> All pages import the shared CSS from `frontend/landingpage/css/` then add `css/landlord.css`.
+
+### Landlord Navbar (All Landlord Pages)
+
+Charcoal bg, sticky, glassmorphism on scroll. Different from guest and student navbars:
+
+- **Left**: HonnetKE logo (links to landlord dashboard)
+- **Center**: Dashboard · My Listings · Create Listing · Bookings · Analytics
+- **Right**: Notification bell icon + user avatar dropdown (Profile / Logout)
+- **Mobile**: Hamburger → full-screen overlay with same links
+
+### Landlord Pages
+
+#### L1. Landlord Dashboard (`dashboard.html`)
+
+- **Status**: Building
+- **Layout**: Full-width page with footer
+- **Welcome section**: Greeting heading + subtitle
+- **Stats Overview Section**: 4 stat cards in a row
+  - Total Listings (count)
+  - Active Listings (count, green accent)
+  - Pending Review (count, amber accent)
+  - Total Bookings (count)
+- **Quick Actions Section**: 3 action cards in a row
+  - Create New Listing (amber, prominent, links to create-listing.html)
+  - Manage Listings (links to manage-listings.html)
+  - View Analytics (links to analytics.html)
+- **Recent Bookings Section**: Table of latest booking requests (student name, listing, date, status badge, confirm/decline buttons) + "View All Bookings" link
+
+#### L2. Create Listing Page (`create-listing.html`)
+
+- **Status**: Building
+- **Layout**: Full-width centered form with stepper progress indicator
+- **Step 1 — Basic Info**: Title, Description (textarea), Property Type (dropdown: Hostel/Apartment/Bedsitter/Single Room), Price (KES), Gender Preference (Male/Female/Mixed), Room Type (Single/Ensuite/Shared)
+- **Step 2 — Location**: County, Area, Nearest Campus, Full Address
+- **Step 3 — Amenities**: Checkbox grid (WiFi, Water, Security, Parking, Electricity, Kitchen, Laundry, Study Area, CCTV, Furnished)
+- **Step 4 — Images**: Drag-and-drop upload area, thumbnail preview grid, primary image selection (Cloudinary integration placeholder)
+- **Step 5 — Review & Submit**: Read-only summary of all fields, edit buttons per section, submit button
+- **After submit**: Toast notification → redirect to manage-listings.html
+
+#### L3. Manage Listings Page (`manage-listings.html`)
+
+- **Status**: Building
+- **Layout**: Full-width with filter bar + listing cards grid
+- **Filter bar**: Status filter pills (All / Active / Pending / Inactive / Blocked)
+- **Listing cards grid**: Each card shows property image, title, location, price, status badge (color-coded), action dropdown (Edit / Deactivate / Reactivate / Delete)
+- **Delete confirmation modal**: Warning message + confirm/cancel buttons
+- **Deactivate confirmation modal**: Reason field + confirm/cancel buttons
+- **Empty state**: "No listings yet — create your first listing!" + CTA button
+
+#### L4. Bookings Page (`bookings.html`)
+
+- **Status**: Building
+- **Layout**: Full-width with filter tabs + bookings table/cards
+- **Filter tabs**: All / Pending / Confirmed / Declined / Cancelled
+- **Bookings table**: Student name, listing title, request date, request note preview, status badge, action buttons (Confirm / Decline for pending bookings)
+- **Response modal**: Text area for provider response note when confirming or declining
+- **Empty state**: "No booking requests yet"
+
+#### L5. Analytics Page (`analytics.html`)
+
+- **Status**: Building
+- **Layout**: Full-width with overview cards + chart + per-listing table
+- **Overview cards**: 3 stat cards — Views This Week, Total Views (All Time), Most Viewed Listing
+- **Weekly views chart**: CSS-based bar chart showing weekly view counts (last 8 weeks)
+- **Per-listing performance table**: Listing name, views this week, total views, status badge
+- **Note**: Analytics stored as weekly aggregates per the database schema, purged after 30 days
+
+### Landlord File Structure
+
+```
+frontend/landlord/
+├── dashboard.html
+├── create-listing.html
+├── manage-listings.html
+├── bookings.html
+├── analytics.html
+├── css/
+│   └── landlord.css         ← all landlord page styles
+└── js/
+    └── landlord.js          ← all landlord page logic
+```
+
+### Shared Components (in every landlord page)
+
+1. **Landlord Navbar** — charcoal bg, landlord-specific links, user avatar, notification bell
+2. **Footer** — same as landing page footer (3-column: brand, quick links, contact)
+3. **Stat Card** — reusable overview card with icon, value, label
+4. **Status Badge** — color-coded badge for listing/booking status (pending=amber, active/confirmed=green, inactive/declined=gray, blocked/cancelled=red)
+5. **Toast Notification** — for action confirmations and success/error feedback
+6. **Confirmation Modal** — reusable modal for delete/deactivate/booking actions
+
+### Integration Points
+
+- **Login**: Login page redirects landlords to `../landlord/dashboard.html` based on role
+- **Signup**: Signup page already includes Landlord role; landlord-specific field is Business/Property Name (optional)
+- **Shared CSS**: All pages import `variables.css`, `reset.css`, `global.css` from `../landingpage/css/`
+- **Logout**: Navbar logout links back to `../loginpage/login.html`
+- **Footer**: Contact link references `../landingpage/landingpage.html#contact`
+- **Demo images**: Listing cards use images from `../landingpage/assets/images/`
+- **Admin flow**: When a landlord creates a listing, status defaults to `pending` — admin reviews via admin console (future)
+
+---
+
 ## File Structure
 
 ```
@@ -217,7 +350,31 @@ frontend/
 │   └── js/
 │       └── login.js
 │
-└── (future pages...)
+├── students/
+│   ├── dashboard.html
+│   ├── hostels.html
+│   ├── listing.html
+│   ├── favourites.html
+│   ├── history.html
+│   ├── css/
+│   │   └── students.css
+│   └── js/
+│       └── students.js
+│
+├── landlord/
+│   ├── dashboard.html
+│   ├── create-listing.html
+│   ├── manage-listings.html
+│   ├── bookings.html
+│   ├── analytics.html
+│   ├── css/
+│   │   └── landlord.css
+│   └── js/
+│       └── landlord.js
+│
+├── agents/                      ← planned
+│
+└── adminconsole/                ← planned
 ```
 
 ## Key Conventions
