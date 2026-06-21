@@ -1120,6 +1120,20 @@
   box-shadow: 0 0 0 3px var(--color-primary-light);
 }
 
+.form-input.input-error,
+.form-select.input-error,
+.form-textarea.input-error {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 3px rgba(217, 64, 64, 0.1);
+}
+
+.form-input.input-error:focus,
+.form-select.input-error:focus,
+.form-textarea.input-error:focus {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 3px rgba(217, 64, 64, 0.15);
+}
+
 .form-textarea {
   min-height: 120px;
   resize: vertical;

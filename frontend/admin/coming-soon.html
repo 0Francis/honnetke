@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — HonnetKE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../landingpage/css/variables.css">
+  <link rel="stylesheet" href="../landingpage/css/reset.css">
+  <link rel="stylesheet" href="../landingpage/css/global.css">
+  <style>
+    body {
+      background: var(--color-bg);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-xl);
+    }
+
+    .coming-soon-card {
+      max-width: 520px;
+      text-align: center;
+      background: var(--color-bg-white);
+      border-radius: 24px;
+      padding: var(--space-3xl) var(--space-2xl);
+      box-shadow: 0 8px 40px rgba(30, 30, 30, 0.08);
+    }
+
+    .coming-soon-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto var(--space-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-primary-light);
+      border-radius: 50%;
+    }
+
+    .coming-soon-icon svg {
+      width: 40px;
+      height: 40px;
+      stroke: var(--color-primary);
+    }
+
+    .coming-soon-title {
+      font-family: var(--font-heading);
+      font-size: var(--fs-h1);
+      font-weight: var(--fw-extrabold);
+      color: var(--color-text);
+      margin-bottom: var(--space-sm);
+    }
+
+    .coming-soon-subtitle {
+      font-size: var(--fs-body);
+      color: var(--color-text-muted);
+      line-height: 1.6;
+      margin-bottom: var(--space-xl);
+    }
+
+    .coming-soon-user {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-xs) var(--space-md);
+      background: var(--color-primary-light);
+      border-radius: 100px;
+      font-size: var(--fs-body-sm);
+      color: var(--color-primary-dark);
+      font-weight: var(--fw-semibold);
+      margin-bottom: var(--space-xl);
+    }
+
+    .coming-soon-user .user-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-primary);
+    }
+
+    .coming-soon-actions {
+      display: flex;
+      gap: var(--space-sm);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-logout {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-sm) var(--space-lg);
+      border-radius: 12px;
+      font-family: var(--font-body);
+      font-size: var(--fs-body-sm);
+      font-weight: var(--fw-semibold);
+      cursor: pointer;
+      border: 2px solid var(--color-border);
+      background: transparent;
+      color: var(--color-text);
+      transition: all 0.2s ease;
+    }
+
+    .btn-logout:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .btn-home {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-sm) var(--space-lg);
+      border-radius: 12px;
+      font-family: var(--font-body);
+      font-size: var(--fs-body-sm);
+      font-weight: var(--fw-semibold);
+      cursor: pointer;
+      border: none;
+      background: var(--color-primary);
+      color: var(--color-text-inverse);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-home:hover {
+      background: var(--color-primary-hover);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="coming-soon-card">
+    <div class="coming-soon-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </div>
+
+    <div class="coming-soon-user" id="admin-badge">
+      <span class="user-dot"></span>
+      <span id="admin-name">Admin</span>
+    </div>
+
+    <h1 class="coming-soon-title">Coming Soon</h1>
+    <p class="coming-soon-subtitle">
+      The admin dashboard is under construction. You'll soon be able to manage users, listings, and platform analytics from here.
+    </p>
+
+    <div class="coming-soon-actions">
+      <a href="../landingpage/landingpage.html" class="btn-home">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        Back to Home
+      </a>
+      <button class="btn-logout" id="logout-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Log Out
+      </button>
+    </div>
+  </div>
+
+  <script src="../shared/js/api.js"></script>
+  <script src="../shared/js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = window.HonnetKE.auth.requireAuth(['admin']);
+      if (user) {
+        document.getElementById('admin-name').textContent = user.fullName || 'Admin';
+      }
+      document.getElementById('logout-btn').addEventListener('click', () => {
+        window.HonnetKE.auth.logout();
+      });
+    });
+  </script>
+
+</body>
+</html>

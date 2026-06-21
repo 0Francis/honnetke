@@ -1,0 +1,12 @@
+{
+  "name": "honnetke-frontend",
+  "version": "1.0.0",
+  "description": "HonnetKE student hostel platform — frontend",
+  "scripts": {
+    "dev": "live-server --port=5500 --no-browser",
+    "start": "live-server --port=5500 --no-browser"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}

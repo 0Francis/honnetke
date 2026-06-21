@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lost in the Hive — HonnetKE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../landingpage/css/variables.css">
+  <link rel="stylesheet" href="../landingpage/css/reset.css">
+  <link rel="stylesheet" href="../landingpage/css/global.css">
+  <style>
+    body {
+      background: var(--color-bg);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-xl);
+    }
+
+    .error-card {
+      max-width: 560px;
+      text-align: center;
+    }
+
+    .error-hex {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto var(--space-lg);
+      position: relative;
+      animation: hexFloat 3s ease-in-out infinite;
+    }
+
+    .error-hex svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    @keyframes hexFloat {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+
+    .error-code {
+      font-family: var(--font-heading);
+      font-size: clamp(4rem, 12vw, 7rem);
+      font-weight: var(--fw-extrabold);
+      line-height: 1;
+      color: var(--color-primary);
+      letter-spacing: -0.04em;
+      margin-bottom: var(--space-sm);
+    }
+
+    .error-message {
+      font-family: var(--font-heading);
+      font-size: var(--fs-h3);
+      font-weight: var(--fw-semibold);
+      color: var(--color-text);
+      margin-bottom: var(--space-sm);
+    }
+
+    .error-subtitle {
+      font-size: var(--fs-body);
+      color: var(--color-text-muted);
+      line-height: 1.6;
+      margin-bottom: var(--space-xl);
+    }
+
+    .error-actions {
+      display: flex;
+      gap: var(--space-sm);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .error-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-sm) var(--space-lg);
+      border-radius: 12px;
+      font-family: var(--font-body);
+      font-size: var(--fs-body-sm);
+      font-weight: var(--fw-semibold);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .error-btn-primary {
+      background: var(--color-primary);
+      color: var(--color-text-inverse);
+      border: none;
+    }
+
+    .error-btn-primary:hover {
+      background: var(--color-primary-hover);
+    }
+
+    .error-btn-secondary {
+      background: transparent;
+      color: var(--color-text);
+      border: 2px solid var(--color-border);
+    }
+
+    .error-btn-secondary:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="error-card">
+    <div class="error-hex">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 2L35 10.66V28.34L20 37L5 28.34V10.66L20 2Z" fill="#E8900A" fill-opacity="0.12" stroke="#E8900A" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M20 10L28 14.6V23.4L20 28L12 23.4V14.6L20 10Z" fill="#E8900A" stroke="#E8900A" stroke-width="1.5" stroke-linejoin="round"/>
+        <circle cx="20" cy="19" r="3" fill="#FFF8EC"/>
+      </svg>
+    </div>
+
+    <h1 class="error-code" id="error-code">404</h1>
+    <p class="error-message" id="error-message">This hornet flew off course.</p>
+    <p class="error-subtitle" id="error-subtitle">
+      The page you're looking for doesn't exist or has been moved. Let's get you back to the hive.
+    </p>
+
+    <div class="error-actions">
+      <a href="../landingpage/landingpage.html" class="error-btn error-btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        Back to Home
+      </a>
+      <a href="javascript:history.back()" class="error-btn error-btn-secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Go Back
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Sanitized, friendly error messages — no stack traces or internal details.
+    const ERROR_MESSAGES = {
+      '404': {
+        message: 'This hornet flew off course.',
+        subtitle: "The page you're looking for doesn't exist or has been moved. Let's get you back to the hive."
+      },
+      '403': {
+        message: 'The hive is closed to you.',
+        subtitle: "You don't have permission to access this page. Try logging in with the right account."
+      },
+      '500': {
+        message: 'The hive is having a moment.',
+        subtitle: "Something went wrong on our end. Give it a buzz later — we're on it."
+      },
+      '502': {
+        message: 'The bees are on break.',
+        subtitle: "The server is temporarily unavailable. We'll be back shortly."
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('code') || '404';
+      const info = ERROR_MESSAGES[code] || ERROR_MESSAGES['404'];
+
+      document.getElementById('error-code').textContent = code;
+      document.getElementById('error-message').textContent = info.message;
+      document.getElementById('error-subtitle').textContent = info.subtitle;
+    });
+  </script>
+
+</body>
+</html>

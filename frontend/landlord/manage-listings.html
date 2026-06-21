@@ -31,7 +31,6 @@
       <ul class="navbar-nav" id="navbar-nav">
         <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
         <li><a href="manage-listings.html" class="nav-link active">My Listings</a></li>
-        <li><a href="create-listing.html" class="nav-link">Create Listing</a></li>
         <li><a href="bookings.html" class="nav-link">Bookings</a></li>
         <li><a href="analytics.html" class="nav-link">Analytics</a></li>
       </ul>
@@ -53,7 +52,6 @@
   <div class="landlord-mobile-nav" id="landlord-mobile-nav" aria-hidden="true">
     <a href="dashboard.html" class="nav-link">Dashboard</a>
     <a href="manage-listings.html" class="nav-link active">My Listings</a>
-    <a href="create-listing.html" class="nav-link">Create Listing</a>
     <a href="bookings.html" class="nav-link">Bookings</a>
     <a href="analytics.html" class="nav-link">Analytics</a>
     <a href="../loginpage/login.html" class="mobile-logout">Logout</a>
@@ -75,6 +73,15 @@
 
     <section class="dashboard-section reveal">
       <div class="container">
+
+        <!-- Create Listing Button -->
+        <div class="section-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-lg);">
+          <h2 class="section-title">All Properties</h2>
+          <a href="create-listing.html" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Create Listing
+          </a>
+        </div>
 
         <!-- Filter Tabs -->
         <div class="filter-tabs" id="listing-filters">
@@ -265,6 +272,8 @@
     </div>
   </footer>
 
+  <script src="../shared/js/api.js"></script>
+  <script src="../shared/js/auth.js"></script>
   <script src="js/landlord.js"></script>
 </body>
 </html>
