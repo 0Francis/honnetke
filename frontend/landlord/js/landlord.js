@@ -6,6 +6,24 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  /* ── Auth Guard ── */
+  if (window.HonnetKE && window.HonnetKE.auth) {
+    const user = window.HonnetKE.auth.requireAuth(['landlord', 'agent']);
+    if (!user) return;
+
+    // Update avatar initials and welcome name
+    const avatar = document.querySelector('.avatar');
+    if (avatar && user.fullName) {
+      const initials = user.fullName.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+      avatar.textContent = initials;
+    }
+    const welcomeTitle = document.querySelector('.page-title');
+    if (welcomeTitle && welcomeTitle.textContent.includes('Welcome back,')) {
+      const firstName = user.fullName ? user.fullName.split(' ')[0] : '';
+      welcomeTitle.innerHTML = `Welcome back, <span style="color: var(--color-primary);">${firstName}</span>`;
+    }
+  }
+
   /* ── DOM References ── */
   const navbar        = document.querySelector('.landlord-navbar');
   const menuToggle    = document.getElementById('menu-toggle');
@@ -167,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ──────────────────────────────────────────
-     6. MULTI-STEP FORM (Create Listing)
+     6. MULTI-STEP FORM (Create / Edit Listing)
      ────────────────────────────────────────── */
   const formSteps    = document.querySelectorAll('.form-step');
   const stepperSteps = document.querySelectorAll('.stepper-step');
@@ -176,6 +194,55 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnNextAll   = document.querySelectorAll('.btn-next');
   const btnSubmit    = document.querySelector('.btn-submit');
   let currentStep    = 0;
+
+  // Detect edit mode from URL param
+  const editId = new URLSearchParams(window.location.search).get('edit');
+  const isEditMode = !!editId;
+
+  // Required fields per step
+  const step1Fields = ['listing-title', 'listing-description', 'property-type', 'listing-price', 'gender-preference', 'room-type'];
+  const step2Fields = ['listing-county', 'listing-area'];
+
+  function validateStep(stepIndex) {
+    let isValid = true;
+    let firstInvalid = null;
+    const fields = stepIndex === 0 ? step1Fields : stepIndex === 1 ? step2Fields : [];
+
+    fields.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const val = el.value.trim();
+      if (!val) {
+        el.classList.add('input-error');
+        if (!firstInvalid) firstInvalid = el;
+        isValid = false;
+      } else {
+        el.classList.remove('input-error');
+      }
+    });
+
+    // Price must be a positive number
+    if (stepIndex === 0) {
+      const priceEl = document.getElementById('listing-price');
+      if (priceEl && priceEl.value && parseFloat(priceEl.value) <= 0) {
+        priceEl.classList.add('input-error');
+        if (!firstInvalid) firstInvalid = priceEl;
+        isValid = false;
+      }
+    }
+
+    if (!isValid && firstInvalid) {
+      firstInvalid.focus();
+      firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    return isValid;
+  }
+
+  // Clear error state on input
+  document.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(el => {
+    el.addEventListener('input', () => el.classList.remove('input-error'));
+    el.addEventListener('change', () => el.classList.remove('input-error'));
+  });
 
   function updateStepper() {
     formSteps.forEach((step, i) => {
@@ -200,6 +267,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   btnNextAll.forEach(btn => {
     btn.addEventListener('click', () => {
+      if (!validateStep(currentStep)) {
+        showToast('Missing Fields', 'Please fill in all required fields before proceeding.');
+        return;
+      }
       if (currentStep < formSteps.length - 1) {
         currentStep++;
         updateStepper();
@@ -218,13 +289,156 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Pre-fill form if in edit mode
+  function setVal(id, value) {
+    const el = document.getElementById(id);
+    if (el && value != null) el.value = value;
+  }
+
+  async function loadListingForEdit() {
+    if (!isEditMode) return;
+    try {
+      const listing = await window.HonnetKE.api.get(`/listings/${editId}`, true);
+
+      // Update page header
+      const pageTitle = document.querySelector('.page-title');
+      const pageSubtitle = document.querySelector('.page-subtitle');
+      if (pageTitle) pageTitle.textContent = 'Edit Listing';
+      if (pageSubtitle) pageSubtitle.textContent = 'Update your property details below.';
+
+      // Update submit button text
+      if (btnSubmit) {
+        btnSubmit.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Update Listing`;
+      }
+
+      // Step 1 fields
+      setVal('listing-title', listing.title);
+      setVal('listing-description', listing.description);
+      setVal('property-type', listing.propertyType);
+      setVal('listing-price', listing.price);
+      setVal('gender-preference', listing.genderPreference);
+      setVal('room-type', listing.roomType);
+
+      // Step 2 fields
+      setVal('listing-county', listing.county);
+      setVal('listing-area', listing.area);
+      setVal('listing-campus', listing.nearestCampus);
+      setVal('listing-address', listing.address);
+
+      // Step 3 amenities
+      if (listing.amenities && Array.isArray(listing.amenities)) {
+        document.querySelectorAll('.amenity-checkbox input').forEach(cb => {
+          cb.checked = listing.amenities.includes(cb.value);
+          cb.closest('.amenity-checkbox')?.classList.toggle('checked', cb.checked);
+        });
+      }
+
+      // Step 4 images — show existing images as previews
+      if (listing.images && listing.images.length > 0 && previewGrid) {
+        listing.images.forEach((img, index) => {
+          const item = document.createElement('div');
+          item.className = 'image-preview-item' + (index === 0 ? ' primary' : '');
+          item.innerHTML = `
+            <img src="${img.imageUrl}" alt="Existing image ${index + 1}">
+            <button class="remove-img" aria-label="Remove image" data-url="${img.imageUrl}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+            ${index === 0 ? '<span class="primary-badge">Primary</span>' : ''}
+          `;
+          item.querySelector('.remove-img').addEventListener('click', (e) => {
+            e.stopPropagation();
+            item.remove();
+          });
+          previewGrid.appendChild(item);
+        });
+      }
+    } catch (err) {
+      showToast('Error', 'Could not load listing for editing.');
+      setTimeout(() => { window.location.href = 'manage-listings.html'; }, 2000);
+    }
+  }
+
+  loadListingForEdit();
+
   if (btnSubmit) {
-    btnSubmit.addEventListener('click', (e) => {
+    btnSubmit.addEventListener('click', async (e) => {
       e.preventDefault();
-      showToast('Listing Submitted! 🎉', 'Your listing is pending admin review.');
-      setTimeout(() => {
-        window.location.href = 'manage-listings.html';
-      }, 2000);
+
+      // Validate all steps before submit
+      for (let s = 0; s < formSteps.length - 1; s++) {
+        if (!validateStep(s)) {
+          currentStep = s;
+          updateStepper();
+          showToast('Missing Fields', 'Please fill in all required fields.');
+          return;
+        }
+      }
+
+      const title = document.getElementById('listing-title')?.value.trim();
+      const description = document.getElementById('listing-description')?.value.trim();
+      const propertyType = document.getElementById('property-type')?.value;
+      const price = document.getElementById('listing-price')?.value;
+      const genderPreference = document.getElementById('gender-preference')?.value;
+      const roomType = document.getElementById('room-type')?.value;
+      const county = document.getElementById('listing-county')?.value;
+      const area = document.getElementById('listing-area')?.value.trim();
+      const nearestCampus = document.getElementById('listing-campus')?.value.trim();
+      const address = document.getElementById('listing-address')?.value.trim();
+      const amenities = Array.from(document.querySelectorAll('.amenity-checkbox input:checked'))
+        .map(c => c.value);
+
+      btnSubmit.classList.add('btn-loading');
+      btnSubmit.disabled = true;
+
+      try {
+        const payload = {
+          title, description, propertyType, price,
+          genderPreference, roomType, amenities,
+          county, area, nearestCampus, address,
+        };
+
+        let listingId;
+        if (isEditMode) {
+          const res = await window.HonnetKE.api.patch(`/listings/${editId}`, payload, true);
+          listingId = editId;
+          showToast('Listing Updated ✅', res.message || 'Your listing has been updated.');
+        } else {
+          const res = await window.HonnetKE.api.post('/listings', payload, true);
+          listingId = res.listing.listingId;
+          showToast('Listing Submitted! 🎉', res.message || 'Your listing is pending admin review.');
+        }
+
+        // Upload images if any new ones were selected
+        if (uploadedFiles.length > 0) {
+          const formData = new FormData();
+          uploadedFiles.forEach(file => formData.append('images', file));
+
+          const token = window.HonnetKE.auth.getToken();
+          const imgRes = await fetch(
+            `${window.HonnetKE.api.BASE}/listings/${listingId}/images`,
+            {
+              method: 'POST',
+              headers: { Authorization: `Bearer ${token}` },
+              body: formData,
+            }
+          );
+          if (!imgRes.ok) {
+            const imgErr = await imgRes.json().catch(() => ({}));
+            showToast('Images Partially Failed', imgErr.message || 'Some images could not be uploaded.');
+          }
+        }
+
+        setTimeout(() => {
+          window.location.href = 'manage-listings.html';
+        }, 2000);
+      } catch (err) {
+        btnSubmit.classList.remove('btn-loading');
+        btnSubmit.disabled = false;
+        showToast('Error', err.message || 'Failed to save listing. Please try again.');
+      }
     });
   }
 
@@ -533,7 +747,147 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ──────────────────────────────────────────
-     11. SMOOTH SCROLL for Anchor Links
+     12. MANAGE LISTINGS — Fetch from API
+     ────────────────────────────────────────── */
+  const listingsGrid = document.querySelector('.listings-grid');
+
+  async function fetchMyListings() {
+    if (!listingsGrid) return;
+    try {
+      const res = await window.HonnetKE.api.get('/listings?status=all&limit=50', true);
+      renderListings(res.listings || []);
+    } catch (err) {
+      showToast('Error', 'Could not load your listings.');
+    }
+  }
+
+  function renderListings(listings) {
+    if (!listingsGrid) return;
+
+    if (listings.length === 0) {
+      listingsGrid.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+          <p style="font-size: 1.1rem; color: var(--color-text-muted); margin-bottom: 1rem;">You haven't created any listings yet.</p>
+          <a href="create-listing.html" class="btn btn-primary">Create Your First Listing</a>
+        </div>`;
+      return;
+    }
+
+    listingsGrid.innerHTML = listings.map(listing => {
+      const img = listing.images && listing.images.length > 0
+        ? listing.images[0].imageUrl
+        : '../landingpage/assets/images/hostel-placeholder.png';
+      const statusClass = listing.status;
+      const statusLabel = listing.status.charAt(0).toUpperCase() + listing.status.slice(1);
+      const price = Number(listing.price).toLocaleString();
+
+      return `
+        <div class="manage-card" data-status="${statusClass}" data-id="${listing.listingId}">
+          <div class="manage-card-img">
+            <img src="${img}" alt="${listing.title}" loading="lazy">
+            <span class="status-badge ${statusClass}"><span class="status-dot"></span>${statusLabel}</span>
+            <div class="card-price-tag">KES ${price}/mo</div>
+          </div>
+          <div class="manage-card-body">
+            <h3 class="manage-card-title">${listing.title}</h3>
+            <div class="manage-card-location">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              ${listing.area}, ${listing.county}
+            </div>
+            <div class="manage-card-actions">
+              <button class="action-btn" data-action="edit" data-id="${listing.listingId}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>
+              ${listing.status === 'active' || listing.status === 'pending'
+                ? `<button class="action-btn" data-action="deactivate" data-id="${listing.listingId}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>Deactivate</button>`
+                : `<button class="action-btn" data-action="reactivate" data-id="${listing.listingId}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>Reactivate</button>`
+              }
+              <button class="action-btn danger" data-action="delete" data-id="${listing.listingId}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Delete</button>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    // Re-bind action buttons
+    bindListingActions();
+  }
+
+  function bindListingActions() {
+    document.querySelectorAll('[data-action="delete"]').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const id = btn.dataset.id;
+        if (!confirm('Are you sure you want to permanently delete this listing?')) return;
+        try {
+          await window.HonnetKE.api.del(`/listings/${id}`, true);
+          showToast('Listing Deleted', 'The listing has been permanently removed.');
+          fetchMyListings();
+        } catch (err) {
+          showToast('Error', err.message || 'Failed to delete listing.');
+        }
+      });
+    });
+
+    document.querySelectorAll('[data-action="deactivate"]').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const id = btn.dataset.id;
+        try {
+          await window.HonnetKE.api.patch(`/listings/${id}/deactivate`, {}, true);
+          showToast('Listing Deactivated', 'The listing is now inactive and hidden from students.');
+          fetchMyListings();
+        } catch (err) {
+          showToast('Error', err.message || 'Failed to deactivate listing.');
+        }
+      });
+    });
+
+    document.querySelectorAll('[data-action="reactivate"]').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const id = btn.dataset.id;
+        try {
+          await window.HonnetKE.api.patch(`/listings/${id}/reactivate`, {}, true);
+          showToast('Listing Reactivated ✅', 'Your listing has been re-submitted for review.');
+          fetchMyListings();
+        } catch (err) {
+          showToast('Error', err.message || 'Failed to reactivate listing.');
+        }
+      });
+    });
+
+    document.querySelectorAll('[data-action="edit"]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = btn.dataset.id;
+        window.location.href = `create-listing.html?edit=${id}`;
+      });
+    });
+  }
+
+  // Auto-fetch listings on manage-listings page
+  if (listingsGrid) {
+    fetchMyListings();
+  }
+
+
+  /* ──────────────────────────────────────────
+     13. LOGOUT WIRING
+     ────────────────────────────────────────── */
+  document.querySelectorAll('.mobile-logout, .dropdown-item.danger').forEach(btn => {
+    if (btn.textContent.trim() === 'Logout') {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (window.HonnetKE && window.HonnetKE.auth) {
+          window.HonnetKE.auth.logout();
+        } else {
+          window.location.href = '../loginpage/login.html';
+        }
+      });
+    }
+  });
+
+
+  /* ──────────────────────────────────────────
+     14. SMOOTH SCROLL for Anchor Links
      ────────────────────────────────────────── */
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', (e) => {
