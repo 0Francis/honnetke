@@ -164,6 +164,7 @@ const login = async (req, res, next) => {
     const purpose = needsVerify ? 'verify' : 'login';
 
     const otpCode = await createOtp(email, role, purpose);
+    console.log(`[DEV] OTP for ${email} (${purpose}): ${otpCode}`);
     if (purpose === 'verify') {
       await sendVerificationEmail(email, user.fullName, otpCode);
     } else {

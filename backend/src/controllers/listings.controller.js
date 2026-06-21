@@ -33,14 +33,19 @@ const getListings = async (req, res, next) => {
       county, area, type, gender, room,
       minPrice, maxPrice, search,
       status = 'active',
+      scope = 'public',
       page = 1,
       limit = 12,
     } = req.query;
 
     const where = {};
 
-    // Public sees only active; providers can filter by their own statuses
-    if (req.user) {
+    // If a provider requests their own listings, filter by provider
+    if (scope === 'mine' && req.user && (req.user.role === 'landlord' || req.user.role === 'agent')) {
+      Object.assign(where, providerFilter(req));
+      if (status && status !== 'all') where.status = status;
+    } else if (req.user) {
+      // Authenticated user browsing — can see statuses if they pass status=all
       if (status && status !== 'all') where.status = status;
     } else {
       where.status = 'active';

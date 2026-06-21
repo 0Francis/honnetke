@@ -37,6 +37,7 @@
         <span class="logo-text">HonnetKE</span>
       </a>
       <ul class="navbar-nav" id="navbar-nav">
+        <li><a href="../landingpage/index.html" class="nav-link">Home</a></li>
         <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
         <li><a href="manage-listings.html" class="nav-link">My Listings</a></li>
         <li><a href="bookings.html" class="nav-link">Bookings</a></li>
@@ -54,9 +55,10 @@
           </button>
           <div class="user-dropdown">
             <a href="#" class="dropdown-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My Profile</a>
-            <a href="manage-listings.html" class="dropdown-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>My Listings</a>
+            <a href="analytics.html" class="dropdown-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analytics</a>
+            <a href="#" class="dropdown-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>View History</a>
             <div class="dropdown-divider"></div>
-            <a href="../loginpage/login.html" class="dropdown-item danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout</a>
+            <a href="../loginpage/login.html" class="dropdown-item danger" id="dropdown-logout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout</a>
           </div>
         </div>
       </div>
@@ -65,11 +67,14 @@
   </nav>
 
   <div class="landlord-mobile-nav" id="landlord-mobile-nav" aria-hidden="true">
+    <a href="../landingpage/index.html" class="nav-link">Home</a>
     <a href="dashboard.html" class="nav-link">Dashboard</a>
     <a href="manage-listings.html" class="nav-link">My Listings</a>
     <a href="bookings.html" class="nav-link">Bookings</a>
     <a href="analytics.html" class="nav-link">Analytics</a>
-    <a href="../loginpage/login.html" class="mobile-logout">Logout</a>
+    <a href="#" class="nav-link">My Profile</a>
+    <a href="#" class="nav-link">View History</a>
+    <a href="../loginpage/login.html" class="mobile-logout" id="mobile-logout">Logout</a>
   </div>
 
   <div class="toast-container" id="toast-container"></div>
@@ -415,10 +420,16 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
                 Previous
               </button>
-              <button type="button" class="btn-submit">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                Submit Listing for Review
-              </button>
+              <div style="display:flex;gap:0.75rem;">
+                <button type="button" class="btn-cancel" id="btn-cancel-listing">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                  Cancel
+                </button>
+                <button type="button" class="btn-submit">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  Submit Listing for Review
+                </button>
+              </div>
             </div>
           </div>
 

@@ -754,7 +754,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function fetchMyListings() {
     if (!listingsGrid) return;
     try {
-      const res = await window.HonnetKE.api.get('/listings?status=all&limit=50', true);
+      const res = await window.HonnetKE.api.get('/listings?scope=mine&status=all&limit=50', true);
       renderListings(res.listings || []);
     } catch (err) {
       showToast('Error', 'Could not load your listings.');
@@ -880,8 +880,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!statsGrid) return;
 
     try {
-      const res = await window.HonnetKE.api.get('/listings?status=all&limit=100', true);
-      const listings = res.listings || [];
+      const [listingsRes, bookingsRes] = await Promise.all([
+        window.HonnetKE.api.get('/listings?scope=mine&status=all&limit=100', true),
+        window.HonnetKE.api.get('/bookings', true).catch(() => ({ bookings: [] })),
+      ]);
+      const listings = listingsRes.listings || [];
+      const bookings = bookingsRes.bookings || [];
 
       const total = listings.length;
       const active = listings.filter(l => l.status === 'active').length;
@@ -892,17 +896,36 @@ document.addEventListener('DOMContentLoaded', () => {
       if (statValues[0]) statValues[0].textContent = total;
       if (statValues[1]) statValues[1].textContent = active;
       if (statValues[2]) statValues[2].textContent = pending;
-      // Bookings stat — backend not implemented yet
-      if (statValues[3]) statValues[3].textContent = '0';
+      if (statValues[3]) statValues[3].textContent = bookings.length;
 
-      // Recent bookings table — backend bookings not implemented yet
+      // Recent bookings table
       if (recentBookingsBody) {
-        recentBookingsBody.innerHTML = `
-          <tr>
-            <td colspan="5" style="text-align: center; padding: 2rem; color: var(--color-text-muted);">
-              No booking requests yet. Once students start booking your listings, they'll appear here.
-            </td>
-          </tr>`;
+        if (bookings.length === 0) {
+          recentBookingsBody.innerHTML = `
+            <tr>
+              <td colspan="5" style="text-align: center; padding: 2rem; color: var(--color-text-muted);">
+                No booking requests yet. Once students start booking your listings, they'll appear here.
+              </td>
+            </tr>`;
+        } else {
+          const recent = bookings.slice(0, 5);
+          recentBookingsBody.innerHTML = recent.map(b => {
+            const date = new Date(b.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+            const statusClass = b.status;
+            const statusLabel = b.status.charAt(0).toUpperCase() + b.status.slice(1);
+            const studentName = b.student ? b.student.fullName : 'Unknown';
+            const listingTitle = b.listing ? b.listing.title : 'Unknown';
+
+            return `
+              <tr>
+                <td class="table-student-name">${studentName}</td>
+                <td class="table-listing-name">${listingTitle}</td>
+                <td class="table-date">${date}</td>
+                <td><span class="status-badge ${statusClass}"><span class="status-dot"></span>${statusLabel}</span></td>
+                <td><a href="bookings.html" class="table-action-link">View</a></td>
+              </tr>`;
+          }).join('');
+        }
       }
     } catch (err) {
       console.warn('Could not fetch dashboard data:', err.message);
@@ -999,6 +1022,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
   fetchBookings();
 
+  // Wire booking action buttons (confirm/decline)
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const action = btn.dataset.action;
+    const bookingId = btn.dataset.id;
+    if (!bookingId) return;
+
+    const statusMap = {
+      'confirm-booking': { status: 'confirmed', label: 'confirmed', toast: 'Booking Confirmed ✅' },
+      'decline-booking': { status: 'declined', label: 'declined', toast: 'Booking Declined' },
+    };
+    const config = statusMap[action];
+    if (!config) return;
+
+    btn.disabled = true;
+    btn.textContent = '...';
+
+    try {
+      await window.HonnetKE.api.patch(`/bookings/${bookingId}`, { status: config.status }, true);
+      showToast(config.toast, `Booking has been ${config.label}.`);
+      fetchBookings();
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = action === 'confirm-booking' ? 'Confirm' : 'Decline';
+      showToast('Error', err.message || 'Could not update booking');
+    }
+  });
+
 
   /* ──────────────────────────────────────────
      12d. ANALYTICS PAGE — Fetch from API
@@ -1012,21 +1064,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!barChart) return;
 
     try {
-      const res = await window.HonnetKE.api.get('/listings?status=all&limit=100', true);
-      const listings = res.listings || [];
+      const res = await window.HonnetKE.api.get('/analytics', true);
+      const data = res;
 
-      // Update overview stats (views not tracked yet — show 0)
+      // Update overview stats
       const statValues = document.querySelectorAll('.stats-grid .stat-value');
-      if (statValues[0]) statValues[0].textContent = '0';
-      if (statValues[1]) statValues[1].textContent = '0';
-      if (statValues[2]) statValues[2].textContent = listings.length > 0 ? listings[0].title : '—';
+      if (statValues[0]) statValues[0].textContent = data.thisWeekViews || 0;
+      if (statValues[1]) statValues[1].textContent = data.totalViews || 0;
+      if (statValues[2]) statValues[2].textContent = data.mostViewedListing || '—';
 
       // Render per-listing performance table
       const analyticsTable = document.querySelectorAll('.data-table tbody');
-      // Use the last tbody on the page (analytics page has one table)
       const tableBody = analyticsTable[analyticsTable.length - 1];
       if (tableBody) {
-        if (listings.length === 0) {
+        const perListing = data.perListing || [];
+        if (perListing.length === 0) {
           tableBody.innerHTML = `
             <tr>
               <td colspan="5" style="text-align: center; padding: 2rem; color: var(--color-text-muted);">
@@ -1034,29 +1086,44 @@ document.addEventListener('DOMContentLoaded', () => {
               </td>
             </tr>`;
         } else {
-          tableBody.innerHTML = listings.map(l => {
+          tableBody.innerHTML = perListing.map(l => {
             const statusClass = l.status;
             const statusLabel = l.status.charAt(0).toUpperCase() + l.status.slice(1);
             const locationText = [l.area, l.nearestCampus].filter(Boolean).join(', near ');
+            const weekColor = l.thisWeekViews > 0 ? 'var(--color-primary)' : 'var(--color-text-muted)';
 
             return `
               <tr>
                 <td class="table-student-name">${l.title}</td>
                 <td class="table-listing-name">${locationText || '—'}</td>
-                <td><strong style="color: var(--color-text-muted);">0</strong></td>
-                <td>0</td>
+                <td><strong style="color: ${weekColor};">${l.thisWeekViews}</strong></td>
+                <td>${l.totalViews}</td>
                 <td><span class="status-badge ${statusClass}"><span class="status-dot"></span>${statusLabel}</span></td>
               </tr>`;
           }).join('');
         }
       }
 
-      // Clear bar chart (no view tracking yet)
+      // Render bar chart from per-listing data
       if (barChart) {
-        barChart.innerHTML = `
-          <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--color-text-muted); font-size: var(--fs-caption);">
-            View tracking will be available once analytics collection is enabled.
-          </div>`;
+        const perListing = data.perListing || [];
+        if (perListing.length === 0 || data.totalViews === 0) {
+          barChart.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--color-text-muted); font-size: var(--fs-caption);">
+              No view data yet. Analytics are aggregated weekly.
+            </div>`;
+        } else {
+          const maxViews = Math.max(...perListing.map(l => l.thisWeekViews), 1);
+          barChart.innerHTML = perListing.map(l => {
+            const heightPct = Math.max((l.thisWeekViews / maxViews) * 100, 5);
+            const shortTitle = l.title.length > 15 ? l.title.substring(0, 12) + '…' : l.title;
+            return `
+              <div class="bar-chart-bar" title="${l.title}: ${l.thisWeekViews} views this week">
+                <div class="bar-fill" style="height: ${heightPct}%;"></div>
+                <span class="bar-label">${shortTitle}</span>
+              </div>`;
+          }).join('');
+        }
       }
     } catch (err) {
       console.warn('Could not fetch analytics:', err.message);
@@ -1069,7 +1136,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ──────────────────────────────────────────
      13. LOGOUT WIRING
      ────────────────────────────────────────── */
-  document.querySelectorAll('.mobile-logout, .dropdown-item.danger').forEach(btn => {
+  document.querySelectorAll('.mobile-logout, .dropdown-item.danger, #dropdown-logout, #mobile-logout').forEach(btn => {
     if (btn.textContent.trim() === 'Logout') {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -1081,6 +1148,19 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
+
+
+  /* ──────────────────────────────────────────
+     13b. CANCEL BUTTON (Create/Edit Listing)
+     ────────────────────────────────────────── */
+  const cancelBtn = document.getElementById('btn-cancel-listing');
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', () => {
+      if (confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
+        window.location.href = 'manage-listings.html';
+      }
+    });
+  }
 
 
   /* ──────────────────────────────────────────
