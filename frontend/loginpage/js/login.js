@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
      4. LOGIN FORM VALIDATION & SUBMIT
      ────────────────────────────────────────── */
   if (loginForm) {
-    loginForm.addEventListener('submit', (e) => {
+    loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       let isValid = true;
@@ -150,19 +150,36 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // ── All valid — simulate login ──
+      // ── All valid — call login API (step 1 of 2FA) ──
       const submitBtn = document.getElementById('login-submit');
       submitBtn.classList.add('btn-loading');
       submitBtn.disabled = true;
 
-      setTimeout(() => {
-        // In production, this calls the login API and reads role from response
-        // For now, simulate a successful login
-        alert('Login successful! Redirecting to your dashboard...');
+      try {
+        const res = await window.HonnetKE.api.post('/auth/login', {
+          email: email.value.trim(),
+          password: password.value,
+        });
+
+        // Backend validated the password and emailed a one-time code.
+        // Carry the flow to the verification page.
+        const rememberMe = document.getElementById('remember-me').checked;
+        window.HonnetKE.auth.setPending({
+          email: res.email,
+          role: res.role,
+          purpose: res.purpose,
+          remember: rememberMe,
+        });
+        window.location.href = window.HonnetKE.auth.OTP_PAGE;
+      } catch (err) {
         submitBtn.classList.remove('btn-loading');
         submitBtn.disabled = false;
-        // window.location.href = '/dashboard';
-      }, 1500);
+        showFieldError(
+          document.getElementById('group-password'),
+          document.getElementById('error-password'),
+          err.message || 'Login failed. Please try again.'
+        );
+      }
     });
   }
 
@@ -241,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    forgotForm.addEventListener('submit', (e) => {
+    forgotForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const email = document.getElementById('forgot-email');
@@ -265,22 +282,22 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // ── Simulate sending reset link ──
+      // ── Request a reset code ──
       const submitBtn = document.getElementById('forgot-submit');
       submitBtn.classList.add('btn-loading');
       submitBtn.disabled = true;
 
-      setTimeout(() => {
-        // Show success state
+      try {
+        await window.HonnetKE.api.post('/auth/forgot-password', { email: email.value.trim() });
+      } catch (err) {
+        // Always show the same neutral message (no account enumeration).
+      } finally {
         forgotForm.style.display = 'none';
         forgotSuccess.style.display = '';
-
-        // Show the email in success message
         document.getElementById('success-email').textContent = email.value;
-
         submitBtn.classList.remove('btn-loading');
         submitBtn.disabled = false;
-      }, 1200);
+      }
     });
   }
 

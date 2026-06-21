@@ -16,25 +16,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ──────────────────────────────────────────
-     1. DISPLAY PHONE NUMBER FROM SIGNUP
+     1. DISPLAY EMAIL FROM PENDING AUTH FLOW
      ────────────────────────────────────────── */
-  try {
-    const storedPhone = sessionStorage.getItem('honnetke_signup_phone');
-    if (storedPhone) {
-      // Mask the phone number for privacy
-      const cleaned = storedPhone.replace(/[\s\-()]/g, '');
-      let masked = '';
-      if (cleaned.startsWith('+254')) {
-        masked = '+254 ' + cleaned.slice(4, 5) + 'XX XXX ' + cleaned.slice(-3);
-      } else if (cleaned.startsWith('0')) {
-        masked = '0' + cleaned.slice(1, 2) + 'XX XXX ' + cleaned.slice(-3);
-      } else {
-        masked = storedPhone;
-      }
+  const pending = window.HonnetKE.auth.getPending();
+  if (pending && pending.email) {
+    // Mask the email for privacy: show first 2 chars + ***@domain
+    const [local, domain] = pending.email.split('@');
+    if (local && domain) {
+      const masked = local.slice(0, 2) + '***@' + domain;
       phoneDisplay.textContent = masked;
     }
-  } catch (err) {
-    // sessionStorage not available — use default display
+  } else {
+    // No pending flow — send them back to login
+    window.location.href = window.HonnetKE.auth.LOGIN_PAGE;
+    return;
   }
 
 
@@ -123,9 +118,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ──────────────────────────────────────────
-     4. FORM SUBMISSION
+     4. FORM SUBMISSION — verify OTP via API
      ────────────────────────────────────────── */
-  otpForm.addEventListener('submit', (e) => {
+  otpForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const code = Array.from(otpInputs).map(input => input.value).join('');
@@ -140,16 +135,27 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // ── Simulate verification ──
     otpSubmit.classList.add('btn-loading');
     otpSubmit.disabled = true;
 
-    setTimeout(() => {
-      // In production, this would call the API to verify the OTP
-      // For now, simulate success and redirect to login
-      alert('Account verified successfully! You can now log in.');
-      window.location.href = '../loginpage/login.html';
-    }, 1500);
+    try {
+      const res = await window.HonnetKE.api.post('/auth/verify-otp', {
+        email: pending.email,
+        role: pending.role,
+        code,
+        purpose: pending.purpose || 'verify',
+      });
+
+      // Success — store the session and redirect to dashboard
+      window.HonnetKE.auth.saveSession(res.token, res.user, pending.remember);
+      window.HonnetKE.auth.clearPending();
+      window.HonnetKE.auth.redirectToDashboard(res.user.role);
+    } catch (err) {
+      otpSubmit.classList.remove('btn-loading');
+      otpSubmit.disabled = false;
+      otpError.textContent = err.message || 'Verification failed. Please try again.';
+      otpInputs.forEach(input => input.classList.add('error'));
+    }
   });
 
 
@@ -185,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
   startCountdown();
 
   // Handle resend click
-  resendBtn.addEventListener('click', () => {
+  resendBtn.addEventListener('click', async () => {
     if (!resendBtn.disabled) {
       // Clear existing inputs
       otpInputs.forEach(input => {
@@ -195,14 +201,19 @@ document.addEventListener('DOMContentLoaded', () => {
       otpInputs[0].focus();
       otpError.textContent = '';
 
+      // Request a new code
+      try {
+        await window.HonnetKE.api.post('/auth/resend-otp', {
+          email: pending.email,
+          role: pending.role,
+          purpose: pending.purpose || 'verify',
+        });
+      } catch (err) {
+        otpError.textContent = 'Could not resend code. Please try again later.';
+      }
+
       // Restart countdown
       resendBtn.innerHTML = 'Resend in <span class="resend-timer" id="resend-timer">0:45</span>';
-      // Re-grab the timer span after innerHTML replacement
-      const newTimerSpan = document.getElementById('resend-timer');
-      if (newTimerSpan) {
-        // Update the reference - we need to use the module-level var
-        // but since we replaced innerHTML, we'll just restart
-      }
       startCountdown();
     }
   });

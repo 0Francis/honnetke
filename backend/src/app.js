@@ -14,7 +14,20 @@ const adminRoutes = require('./routes/admin.routes');
 
 const app = express();
 
-app.use(cors({ origin: process.env.FRONTEND_URL }));
+const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5500')
+  .split(',')
+  .map((u) => u.trim())
+  .flatMap((u) => {
+    const alt = u.replace('localhost', '127.0.0.1');
+    return alt === u ? [u] : [u, alt];
+  });
+
+app.use(cors({
+  origin(origin, cb) {
+    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+    return cb(new Error('Not allowed by CORS'));
+  },
+}));
 app.use(express.json());
 app.use(trafficLogger);
 

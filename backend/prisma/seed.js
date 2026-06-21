@@ -8,16 +8,29 @@ async function main() {
 
   // Hash passwords
   const passwordHash = await bcrypt.hash('Password123!', 10);
+  const adminPasswordHash = await bcrypt.hash('Honnetke123!', 10);
 
-  // Admin (already created per notes, but seed for consistency)
+  // Admins (pre-seeded — admins cannot self-register)
   const admin = await prisma.admin.upsert({
-    where: { email: 'admin@honnetke.com' },
+    where: { email: 'francis.wainaina@strathmore.edu' },
     update: {},
     create: {
-      fullName: 'System Admin',
-      email: 'admin@honnetke.com',
-      passwordHash,
-      phoneNumber: '+254700000000',
+      fullName: 'Francis Wainaina',
+      email: 'francis.wainaina@strathmore.edu',
+      passwordHash: adminPasswordHash,
+      phoneNumber: '+254700000001',
+      status: 'active',
+    },
+  });
+
+  const admin2 = await prisma.admin.upsert({
+    where: { email: 'shana.githu@strathmore.edu' },
+    update: {},
+    create: {
+      fullName: 'Shana Githu',
+      email: 'shana.githu@strathmore.edu',
+      passwordHash: adminPasswordHash,
+      phoneNumber: '+254700000002',
       status: 'active',
     },
   });
@@ -32,6 +45,7 @@ async function main() {
       passwordHash,
       phoneNumber: '+254711111111',
       status: 'active',
+      isVerified: true,
     },
   });
 
@@ -44,6 +58,7 @@ async function main() {
       passwordHash,
       phoneNumber: '+254722222222',
       status: 'active',
+      isVerified: true,
     },
   });
 
@@ -57,6 +72,7 @@ async function main() {
       passwordHash,
       phoneNumber: '+254733333333',
       status: 'active',
+      isVerified: true,
     },
   });
 
@@ -69,6 +85,7 @@ async function main() {
       passwordHash,
       phoneNumber: '+254744444444',
       status: 'active',
+      isVerified: true,
     },
   });
 
@@ -82,6 +99,7 @@ async function main() {
       passwordHash,
       phoneNumber: '+254755555555',
       status: 'active',
+      isVerified: true,
     },
   });
 

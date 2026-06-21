@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Verify your phone number to complete your HonnetKE account registration.">
   <meta name="author" content="HonnetKE">
-  <title>Verify Your Number — HonnetKE</title>
+  <title>Verify Your Email — HonnetKE</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,9 +39,9 @@
         </a>
       </div>
 
-      <h1 class="otp-title">Verify Your Number</h1>
+      <h1 class="otp-title">Verify Your Email</h1>
       <p class="otp-subtitle">
-        We sent a 6-digit code to <span class="otp-phone" id="otp-phone-display">+254 7XX XXX XXX</span>
+        We sent a 6-digit code to <span class="otp-phone" id="otp-phone-display">your email</span>
       </p>
 
       <form id="otp-form" novalidate>
@@ -77,6 +77,8 @@
   </main>
 
   <!-- JavaScript -->
+  <script src="../shared/js/api.js"></script>
+  <script src="../shared/js/auth.js"></script>
   <script src="js/otp.js"></script>
 
 </body>

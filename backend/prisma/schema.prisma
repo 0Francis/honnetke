@@ -51,6 +51,12 @@ enum NotificationType {
   system
 }
 
+enum OtpPurpose {
+  verify
+  login
+  reset
+}
+
 // ─── User Tables ──────────────────────────────────────────────────────────────
 
 model Student {
@@ -60,6 +66,7 @@ model Student {
   passwordHash String     @map("password_hash") @db.VarChar(255)
   phoneNumber  String     @unique @map("phone_number") @db.VarChar(15)
   status       UserStatus @default(active)
+  isVerified   Boolean    @default(false) @map("is_verified")
   createdAt    DateTime   @default(now()) @map("created_at")
 
   favourites    Favourite[]
@@ -78,6 +85,7 @@ model Landlord {
   passwordHash String     @map("password_hash") @db.VarChar(255)
   phoneNumber  String     @unique @map("phone_number") @db.VarChar(15)
   status       UserStatus @default(active)
+  isVerified   Boolean    @default(false) @map("is_verified")
   createdAt    DateTime   @default(now()) @map("created_at")
 
   listings      Listing[]
@@ -94,6 +102,7 @@ model Agent {
   passwordHash String     @map("password_hash") @db.VarChar(255)
   phoneNumber  String     @unique @map("phone_number") @db.VarChar(15)
   status       UserStatus @default(active)
+  isVerified   Boolean    @default(false) @map("is_verified")
   createdAt    DateTime   @default(now()) @map("created_at")
 
   listings      Listing[]
@@ -290,4 +299,20 @@ model TrafficLog {
   visitCount Int      @default(0) @map("visit_count")
 
   @@map("traffic_logs")
+}
+
+// ─── Auth / OTP ───────────────────────────────────────────────────────────────
+
+model Otp {
+  otpId     Int        @id @default(autoincrement()) @map("otp_id")
+  email     String     @db.VarChar(100)
+  role      String     @db.VarChar(20)
+  codeHash  String     @map("code_hash") @db.VarChar(255)
+  purpose   OtpPurpose
+  expiresAt DateTime   @map("expires_at")
+  consumed  Boolean    @default(false)
+  createdAt DateTime   @default(now()) @map("created_at")
+
+  @@index([email, purpose])
+  @@map("otps")
 }

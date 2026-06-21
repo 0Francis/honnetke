@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Form submit validation
   if (signupForm) {
-    signupForm.addEventListener('submit', (e) => {
+    signupForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       let isValid = true;
@@ -257,22 +257,36 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // ── All valid — simulate submission ──
+      // ── All valid — call register API ──
       const submitBtn = document.getElementById('signup-submit');
       submitBtn.classList.add('btn-loading');
       submitBtn.disabled = true;
 
-      // Simulate API call delay, then redirect to OTP
-      setTimeout(() => {
-        // Store phone for OTP page display
-        const phoneValue = phone.value.trim();
-        try {
-          sessionStorage.setItem('honnetke_signup_phone', phoneValue);
-        } catch (err) {
-          // sessionStorage not available — ignore
-        }
-        window.location.href = 'otp.html';
-      }, 1200);
+      try {
+        await window.HonnetKE.api.post('/auth/register', {
+          fullName: fullname.value.trim(),
+          email: email.value.trim(),
+          phoneNumber: phone.value.trim(),
+          password: password.value,
+          role: document.getElementById('signup-role').value,
+        });
+
+        // Backend created the account and emailed a verification code.
+        window.HonnetKE.auth.setPending({
+          email: email.value.trim(),
+          role: document.getElementById('signup-role').value,
+          purpose: 'verify',
+        });
+        window.location.href = window.HonnetKE.auth.OTP_PAGE;
+      } catch (err) {
+        submitBtn.classList.remove('btn-loading');
+        submitBtn.disabled = false;
+        showFieldError(
+          document.getElementById('group-email'),
+          document.getElementById('error-email'),
+          err.message || 'Registration failed. Please try again.'
+        );
+      }
     });
   }
 
