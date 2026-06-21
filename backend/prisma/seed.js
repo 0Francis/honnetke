@@ -6,9 +6,9 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Seeding database...');
 
-  // Hash passwords
-  const passwordHash = await bcrypt.hash('Password123!', 10);
-  const adminPasswordHash = await bcrypt.hash('Honnetke123!', 10);
+  // Hash passwords — all users share the same password
+  const passwordHash = await bcrypt.hash('Honnetke123!', 10);
+  const adminPasswordHash = passwordHash;
 
   // Admins (pre-seeded — admins cannot self-register)
   const admin = await prisma.admin.upsert({
@@ -37,11 +37,11 @@ async function main() {
 
   // Students
   const student1 = await prisma.student.upsert({
-    where: { email: 'jane@student.com' },
+    where: { email: 'wainainaf526@gmail.com' },
     update: {},
     create: {
-      fullName: 'Jane Doe',
-      email: 'jane@student.com',
+      fullName: 'Francis Wainaina',
+      email: 'wainainaf526@gmail.com',
       passwordHash,
       phoneNumber: '+254711111111',
       status: 'active',
@@ -50,11 +50,11 @@ async function main() {
   });
 
   const student2 = await prisma.student.upsert({
-    where: { email: 'john@student.com' },
+    where: { email: 'jkamau_88@gmail.com' },
     update: {},
     create: {
       fullName: 'John Kamau',
-      email: 'john@student.com',
+      email: 'jkamau_88@gmail.com',
       passwordHash,
       phoneNumber: '+254722222222',
       status: 'active',
@@ -64,11 +64,11 @@ async function main() {
 
   // Landlords
   const landlord1 = await prisma.landlord.upsert({
-    where: { email: 'mwangi@landlord.com' },
+    where: { email: 'kamaufraqa@gmail.com' },
     update: {},
     create: {
-      fullName: 'Peter Mwangi',
-      email: 'mwangi@landlord.com',
+      fullName: 'Francis Kamau',
+      email: 'kamaufraqa@gmail.com',
       passwordHash,
       phoneNumber: '+254733333333',
       status: 'active',
@@ -77,11 +77,11 @@ async function main() {
   });
 
   const landlord2 = await prisma.landlord.upsert({
-    where: { email: 'akinyi@landlord.com' },
+    where: { email: 'maryakinyi7@gmail.com' },
     update: {},
     create: {
       fullName: 'Mary Akinyi',
-      email: 'akinyi@landlord.com',
+      email: 'maryakinyi7@gmail.com',
       passwordHash,
       phoneNumber: '+254744444444',
       status: 'active',
@@ -91,11 +91,11 @@ async function main() {
 
   // Agents
   const agent1 = await prisma.agent.upsert({
-    where: { email: 'otieno@agent.com' },
+    where: { email: 'kamaufrank80@gmail.com' },
     update: {},
     create: {
-      fullName: 'James Otieno',
-      email: 'otieno@agent.com',
+      fullName: 'Frank Kamau',
+      email: 'kamaufrank80@gmail.com',
       passwordHash,
       phoneNumber: '+254755555555',
       status: 'active',
@@ -182,16 +182,7 @@ async function main() {
     },
   });
 
-  // Listing Images
-  await prisma.listingImage.createMany({
-    data: [
-      { listingId: listing1.listingId, imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1/listing1-1.jpg', isPrimary: true },
-      { listingId: listing1.listingId, imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1/listing1-2.jpg', isPrimary: false },
-      { listingId: listing2.listingId, imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1/listing2-1.jpg', isPrimary: true },
-      { listingId: listing3.listingId, imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1/listing3-1.jpg', isPrimary: true },
-      { listingId: listing4.listingId, imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1/listing4-1.jpg', isPrimary: true },
-    ],
-  });
+  // Listing Images — left empty (no real images yet)
 
   // Favourites
   await prisma.favourite.create({

@@ -220,4 +220,93 @@ document.addEventListener('DOMContentLoaded', () => {
     statsObserver.observe(heroStats);
   }
 
+
+  /* ──────────────────────────────────────────
+     9. FETCH FEATURED LISTINGS FROM API
+     ────────────────────────────────────────── */
+  const hostelsGrid = document.querySelector('.hostels-grid');
+
+  async function fetchFeaturedListings() {
+    if (!hostelsGrid) return;
+    try {
+      const res = await window.HonnetKE.api.get('/listings?limit=6');
+      const listings = res.listings || [];
+
+      if (listings.length === 0) {
+        hostelsGrid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+            <p style="font-size: 1.1rem; color: var(--color-text-muted);">No listings available yet. Check back soon!</p>
+          </div>`;
+        return;
+      }
+
+      hostelsGrid.innerHTML = listings.map(listing => {
+        const img = listing.images && listing.images.length > 0
+          ? listing.images[0].imageUrl
+          : '';
+        const price = Number(listing.price).toLocaleString();
+        const genderLabel = listing.genderPreference
+          ? listing.genderPreference.charAt(0).toUpperCase() + listing.genderPreference.slice(1)
+          : '';
+        const typeLabel = listing.propertyType
+          ? listing.propertyType.charAt(0).toUpperCase() + listing.propertyType.slice(1).replace('-', ' ')
+          : '';
+        const roomLabel = listing.roomType
+          ? listing.roomType.charAt(0).toUpperCase() + listing.roomType.slice(1) + ' Room'
+          : '';
+        const locationText = [listing.area, listing.nearestCampus].filter(Boolean).join(', near ');
+
+        return `
+          <article class="listing-card reveal" onclick="window.location.href='#'" role="link" tabindex="0" aria-label="View ${listing.title}">
+            <div class="card-image">
+              ${img
+                ? `<img src="${img}" alt="${listing.title}" loading="lazy">`
+                : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--color-border-light);color:var(--color-text-muted);font-size:0.85rem;">No Image</div>`
+              }
+              <div class="card-price-tag">KES ${price}/mo</div>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">${listing.title}</h3>
+              <div class="card-location">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                ${locationText || '—'}
+              </div>
+              <div class="card-badges">
+                ${typeLabel ? `<span class="badge badge-amber">${typeLabel}</span>` : ''}
+                ${genderLabel ? `<span class="badge badge-charcoal">${genderLabel}</span>` : ''}
+              </div>
+              <div class="card-footer">
+                <span class="card-room-type">${roomLabel}</span>
+                <a href="#" class="card-detail-link">
+                  View Details
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>`;
+      }).join('');
+
+      // Re-bind card click handlers
+      hostelsGrid.querySelectorAll('.listing-card').forEach(card => {
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            alert('Please sign up or log in to view listing details.');
+          }
+        });
+        card.onclick = (e) => {
+          e.preventDefault();
+          alert('Please sign up or log in to view listing details.');
+        };
+      });
+
+      // Re-observe new reveal elements
+      hostelsGrid.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    } catch (err) {
+      console.warn('Could not fetch listings:', err.message);
+    }
+  }
+
+  fetchFeaturedListings();
+
 });

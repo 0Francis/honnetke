@@ -6,6 +6,190 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  /* ──────────────────────────────────────────
+     0. AUTH GUARD + USER PROFILE
+     ────────────────────────────────────────── */
+  if (window.HonnetKE && window.HonnetKE.auth) {
+    window.HonnetKE.auth.requireAuth('student');
+    const user = window.HonnetKE.auth.getUser();
+    if (user) {
+      // Update avatar initials
+      const avatarEl = document.querySelector('.avatar');
+      if (avatarEl && user.fullName) {
+        const initials = user.fullName.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+        avatarEl.textContent = initials;
+      }
+      // Update welcome message
+      const pageTitle = document.querySelector('.page-title');
+      if (pageTitle && user.fullName) {
+        pageTitle.textContent = `Welcome back, ${user.fullName.split(' ')[0]}`;
+      }
+      // Update welcome toast
+      const firstName = user.fullName ? user.fullName.split(' ')[0] : 'there';
+      const currentPage = window.location.pathname.split('/').pop();
+      if (currentPage === 'dashboard.html') {
+        const hasShownWelcome = sessionStorage.getItem('honnetke_welcome_shown');
+        if (!hasShownWelcome) {
+          setTimeout(() => {
+            showToast(`Welcome back, ${firstName}! 🐝`, 'Ready to find your perfect hostel?');
+            sessionStorage.setItem('honnetke_welcome_shown', 'true');
+          }, 800);
+        }
+      }
+    }
+  }
+
+  // Wire logout
+  document.querySelectorAll('.mobile-logout, .dropdown-item.danger').forEach(btn => {
+    if (btn.textContent.trim() === 'Logout') {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (window.HonnetKE && window.HonnetKE.auth) {
+          window.HonnetKE.auth.logout();
+        } else {
+          window.location.href = '../loginpage/login.html';
+        }
+      });
+    }
+  });
+
+
+  /* ──────────────────────────────────────────
+     0b. FETCH LISTINGS FROM API
+     ────────────────────────────────────────── */
+  const recentScroll = document.querySelector('.recent-scroll');
+  const featuredGrid = document.querySelector('.featured-grid');
+
+  async function fetchStudentListings() {
+    try {
+      const res = await window.HonnetKE.api.get('/listings?limit=10');
+      const listings = res.listings || [];
+
+      // Recent activity — first 5 listings
+      if (recentScroll) {
+        if (listings.length === 0) {
+          recentScroll.innerHTML = `
+            <div style="text-align: center; padding: 2rem; color: var(--color-text-muted);">
+              No listings available yet. Check back soon!
+            </div>`;
+        } else {
+          recentScroll.innerHTML = listings.slice(0, 5).map(l => {
+            const img = l.images && l.images.length > 0 ? l.images[0].imageUrl : '';
+            const price = Number(l.price).toLocaleString();
+            const locationText = [l.area, l.nearestCampus].filter(Boolean).join(', near ');
+
+            return `
+              <a href="listing.html" class="recent-card">
+                <div class="recent-card-img">
+                  ${img
+                    ? `<img src="${img}" alt="${l.title}" loading="lazy">`
+                    : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--color-border-light);color:var(--color-text-muted);font-size:0.8rem;">No Image</div>`
+                  }
+                </div>
+                <div class="recent-card-body">
+                  <h3 class="recent-card-title">${l.title}</h3>
+                  <div class="recent-card-location">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    ${locationText || '—'}
+                  </div>
+                  <span class="recent-card-price">KES ${price}/mo</span>
+                </div>
+              </a>`;
+          }).join('');
+        }
+      }
+
+      // Featured hostels — first 3 active listings
+      if (featuredGrid) {
+        const active = listings.filter(l => l.status === 'active').slice(0, 3);
+        if (active.length === 0 && listings.length === 0) {
+          featuredGrid.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--color-text-muted);">
+              No featured hostels available yet.
+            </div>`;
+        } else {
+          const display = active.length > 0 ? active : listings.slice(0, 3);
+          featuredGrid.innerHTML = display.map(l => {
+            const img = l.images && l.images.length > 0 ? l.images[0].imageUrl : '';
+            const price = Number(l.price).toLocaleString();
+            const genderLabel = l.genderPreference
+              ? l.genderPreference.charAt(0).toUpperCase() + l.genderPreference.slice(1)
+              : '';
+            const typeLabel = l.propertyType
+              ? l.propertyType.charAt(0).toUpperCase() + l.propertyType.slice(1).replace('-', ' ')
+              : '';
+            const roomLabel = l.roomType
+              ? l.roomType.charAt(0).toUpperCase() + l.roomType.slice(1) + ' Room'
+              : '';
+            const locationText = [l.area, l.nearestCampus].filter(Boolean).join(', near ');
+
+            return `
+              <article class="listing-card" data-href="listing.html" role="link" tabindex="0" aria-label="View ${l.title}">
+                <div class="card-image">
+                  ${img
+                    ? `<img src="${img}" alt="${l.title}" loading="lazy">`
+                    : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--color-border-light);color:var(--color-text-muted);font-size:0.85rem;">No Image</div>`
+                  }
+                  <div class="card-price-tag">KES ${price}/mo</div>
+                  <button class="card-fav-btn" aria-label="Save to favourites">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                  </button>
+                </div>
+                <div class="card-body">
+                  <h3 class="card-title">${l.title}</h3>
+                  <div class="card-location">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    ${locationText || '—'}
+                  </div>
+                  <div class="card-badges">
+                    ${typeLabel ? `<span class="badge badge-amber">${typeLabel}</span>` : ''}
+                    ${genderLabel ? `<span class="badge badge-charcoal">${genderLabel}</span>` : ''}
+                  </div>
+                  <div class="card-footer">
+                    <span class="card-room-type">${roomLabel}</span>
+                    <a href="listing.html" class="card-detail-link">
+                      View Details
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                  </div>
+                </div>
+              </article>`;
+          }).join('');
+
+          // Re-bind fav buttons and card clicks
+          featuredGrid.querySelectorAll('.card-fav-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              btn.classList.toggle('active');
+              showToast(btn.classList.contains('active') ? 'Saved! 💛' : 'Removed',
+                         btn.classList.contains('active') ? 'Added to your Hive Saves' : 'Listing removed from Hive Saves');
+            });
+          });
+
+          featuredGrid.querySelectorAll('.listing-card[data-href]').forEach(card => {
+            card.addEventListener('click', (e) => {
+              if (e.target.closest('.card-fav-btn')) return;
+              const href = card.getAttribute('data-href');
+              if (href) window.location.href = href;
+            });
+            card.addEventListener('keydown', (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                const href = card.getAttribute('data-href');
+                if (href) window.location.href = href;
+              }
+            });
+          });
+        }
+      }
+    } catch (err) {
+      console.warn('Could not fetch listings:', err.message);
+    }
+  }
+
+  fetchStudentListings();
+
   /* ── DOM References ── */
   const navbar        = document.querySelector('.student-navbar');
   const menuToggle    = document.getElementById('menu-toggle');
@@ -131,17 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
     toast.addEventListener('animationend', () => toast.remove());
   }
 
-  // Welcome toast on dashboard (check sessionStorage flag)
-  const currentPage = window.location.pathname.split('/').pop();
-  if (currentPage === 'dashboard.html') {
-    const hasShownWelcome = sessionStorage.getItem('honnetke_welcome_shown');
-    if (!hasShownWelcome) {
-      setTimeout(() => {
-        showToast('Welcome back, Jane! 🐝', 'Ready to find your perfect hostel?');
-        sessionStorage.setItem('honnetke_welcome_shown', 'true');
-      }, 800);
-    }
-  }
+  // Welcome toast handled in auth guard section above
 
 
   /* ──────────────────────────────────────────
