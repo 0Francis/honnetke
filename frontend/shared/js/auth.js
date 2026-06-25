@@ -16,7 +16,7 @@
     student: '../students/dashboard.html',
     landlord: '../landlord/dashboard.html',
     agent: '../landlord/dashboard.html',
-    admin: '../admin/coming-soon.html',
+    admin: '../admin/dashboard.html',
   };
 
   const LOGIN_PAGE = '../loginpage/login.html';

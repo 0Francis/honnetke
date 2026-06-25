@@ -116,8 +116,14 @@ Each page then adds its own page-specific stylesheet.
 
 ### 14. Admin Console
 
-- **Folder**: `frontend/adminconsole/` (planned)
-- **Status**: 📋 Not started
+- **Folder**: `frontend/admin/`
+- **Sub-pages**:
+  - 14a. Admin Dashboard (`dashboard.html`) — 🔨 Building
+  - 14b. Manage Listings (`manage-listings.html`) — 🔨 Building
+  - 14c. Manage Users (`manage-users.html`) — 🔨 Building
+  - 14d. Flagged Listings (`flagged-listings.html`) — 🔨 Building
+  - 14e. Duplicate Queue (`duplicate-queue.html`) — 🔨 Building
+- **Status**: 🔨 Building
 
 ---
 
@@ -316,7 +322,137 @@ frontend/landlord/
 - **Logout**: Navbar logout links back to `../loginpage/login.html`
 - **Footer**: Contact link references `../landingpage/landingpage.html#contact`
 - **Demo images**: Listing cards use images from `../landingpage/assets/images/`
-- **Admin flow**: When a landlord creates a listing, status defaults to `pending` — admin reviews via admin console (future)
+- **Admin flow**: When a landlord creates a listing, status defaults to `pending` — admin reviews via admin console (see Admin Frontend Plan below)
+
+---
+
+## Admin Frontend Plan
+
+> All admin pages live inside `frontend/admin/`.
+> Admin accounts are created directly in the database — there is no admin signup page.
+> All pages import the shared CSS from `frontend/landingpage/css/` then add `css/admin.css`.
+> Auth guard: `requireAuth(['admin'])` on every page.
+
+### Admin Navbar (All Admin Pages)
+
+Charcoal bg, sticky, glassmorphism on scroll. Distinct from guest/student/landlord navbars:
+
+- **Left**: HonnetKE logo (links to admin dashboard) + purple "ADMIN" badge
+- **Center**: Dashboard · Listings · Users · Flagged · Duplicates
+- **Right**: Notification bell icon + user avatar dropdown (Profile / Logout)
+- **Mobile**: Hamburger → full-screen overlay with same links
+
+### Admin Pages
+
+#### A1. Admin Dashboard (`dashboard.html`)
+
+- **Status**: Building
+- **Layout**: Full-width page with footer
+- **Welcome toast**: Shown once per session via JS
+- **Stats Overview Section**: 6 stat cards (3×2 grid)
+  - Total Users (purple)
+  - Total Listings (blue)
+  - Active Listings (green)
+  - Pending Approvals (amber)
+  - Flagged Listings — 3+ reports (red)
+  - System Errors — last 24h (teal)
+- **Quick Actions Section**: 4 action cards
+  - Review Pending Listings (amber gradient, primary CTA)
+  - Manage Users
+  - View Flagged
+  - Duplicate Queue
+- **Recent Reports Section**: Data table showing last 5 reports (student, listing, reason, date, status badge, resolve button)
+- **System Health Section**: 2 health cards — Traffic today, Errors in last 24h
+
+#### A2. Manage Listings (`manage-listings.html`)
+
+- **Status**: Building
+- **Layout**: Full-width with filter bar + data table
+- **Filter tabs**: All / Pending / Active / Inactive / Blocked (pill tabs)
+- **Data table columns**: ID, Title, Provider, Location, Price (KES), Status Badge, Submitted Date, Actions
+- **Actions**:
+  - Pending listings: Approve (green) + Decline (red outline)
+  - Active listings: Suspend (gray outline)
+  - Inactive/Blocked: No actions (text label)
+- **Decline modal**: Text area for decline reason + confirm/cancel
+- **Suspend modal**: Warning message + confirm/cancel
+- **Approve modal**: Confirmation + confirm/cancel
+
+#### A3. Manage Users (`manage-users.html`)
+
+- **Status**: Building
+- **Layout**: Full-width with filter bar + search + data table
+- **Filter tabs**: All / Students / Landlords / Agents (role filter)
+- **Search bar**: Search by name or email
+- **Data table columns**: ID, Full Name, Email, Phone, Role Badge, Status Badge, Joined Date, Warnings (count), Actions
+- **Actions**:
+  - Active users: Suspend + Warn + Delete
+  - Suspended users: Reactivate + Delete
+- **Suspend modal**: Warning + confirm/cancel
+- **Warn modal**: Text area for reason + confirm/cancel
+- **Delete modal**: Danger warning (permanent) + confirm/cancel
+
+#### A4. Flagged Listings (`flagged-listings.html`)
+
+- **Status**: Building
+- **Layout**: Full-width with stats bar + data table with expandable rows
+- **Stats bar**: Compact stat row — Total Flagged, Pending Review, Resolved This Week
+- **Data table columns**: Expand icon, Listing, Provider, Report Count (badge — red pulse if 5+), Top Reason, Latest Report Date, Status, Actions
+- **Expandable rows**: Click a row to expand and see all individual report entries (student name, reason, date) — styled as bordered cards
+- **Actions**: Resolve (opens modal) + Block listing
+- **Resolve modal**: Text area for resolution note + confirm/cancel
+
+#### A5. Duplicate Listing Queue (`duplicate-queue.html`)
+
+- **Status**: Building
+- **Layout**: Full-width with stacked comparison cards
+- **Duplicate group cards**: Each group shows:
+  - Header: Similarity % badge (red if 90%+, amber if 70-89%) + matched fields text
+  - Side-by-side comparison: Original listing vs Flagged duplicate (title, location, price, provider, date)
+  - VS divider between the two
+  - Action buttons: Keep Both (green) / Remove Duplicate (red outline) / Merge (blue outline)
+- **Animated dismissal**: Cards fade out and slide up on action
+- **Empty state**: When all resolved — "All Clear! 🐝 — No duplicate listings detected — the hive is clean!"
+- **Note**: Backend duplicate-detection endpoint is not yet implemented. UI shows demo data and is ready for integration.
+
+### Admin File Structure
+
+```
+frontend/admin/
+├── coming-soon.html        ← original placeholder (kept)
+├── dashboard.html
+├── manage-listings.html
+├── manage-users.html
+├── flagged-listings.html
+├── duplicate-queue.html
+├── css/
+│   └── admin.css           ← all admin page styles
+└── js/
+    └── admin.js            ← all admin page logic
+```
+
+### Shared Components (in every admin page)
+
+1. **Admin Navbar** — charcoal bg, admin-specific links, purple ADMIN badge, user avatar, notification bell
+2. **Footer** — same as landing page footer (3-column: brand, quick links, contact)
+3. **Stat Card** — reusable overview card with colored left border, icon, value, label
+4. **Data Table** — full-width with striped hover, sortable columns, action buttons
+5. **Status Badge** — color-coded badge (pending=amber, active/resolved=green, inactive/declined=gray, blocked/suspended/cancelled=red)
+6. **Role Badge** — color-coded role indicator (student=blue, landlord=amber, agent=purple)
+7. **Toast Notification** — for action confirmations and success/error/warning feedback
+8. **Confirmation Modal** — reusable modal with icon, title, description, optional textarea, confirm/cancel buttons
+9. **Filter Tabs** — pill-style filter buttons for status/role filtering
+10. **Expandable Row** — table row that expands to show nested detail content
+11. **Duplicate Comparison Card** — side-by-side listing comparison with similarity scoring
+
+### Integration Points
+
+- **Login**: Login page redirects admins to `../admin/dashboard.html` based on role (updated from coming-soon.html)
+- **Auth Guard**: All pages use `requireAuth(['admin'])` — redirects to login if not admin
+- **Backend API**: Consumes `/api/admin/*` endpoints (currently 501 Not Implemented — UI uses demo data)
+- **Shared CSS**: All pages import `variables.css`, `reset.css`, `global.css` from `../landingpage/css/`
+- **Logout**: Navbar logout links back to `../loginpage/login.html`
+- **Footer**: Contact link references `../landingpage/landingpage.html#contact`
 
 ---
 
@@ -374,7 +510,22 @@ frontend/
 │
 ├── agents/                      ← planned
 │
-└── adminconsole/                ← planned
+├── admin/
+│   ├── coming-soon.html
+│   ├── dashboard.html
+│   ├── manage-listings.html
+│   ├── manage-users.html
+│   ├── flagged-listings.html
+│   ├── duplicate-queue.html
+│   ├── css/
+│   │   └── admin.css
+│   └── js/
+│       └── admin.js
+│
+└── shared/
+    └── js/
+        ├── api.js
+        └── auth.js
 ```
 
 ## Key Conventions

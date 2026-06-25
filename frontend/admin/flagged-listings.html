@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HonnetKE Admin — Review listings with 3+ student reports pending admin review.">
+  <meta name="keywords" content="flagged listings, reports, admin moderation, HonnetKE">
+  <meta name="author" content="HonnetKE">
+  <title>Flagged Listings — HonnetKE Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../landingpage/css/variables.css">
+  <link rel="stylesheet" href="../landingpage/css/reset.css">
+  <link rel="stylesheet" href="../landingpage/css/global.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body data-page="flagged-listings">
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ADMIN NAVBAR -->
+  <nav class="admin-navbar" id="navbar" aria-label="Admin navigation">
+    <div class="navbar-inner">
+      <a href="dashboard.html" class="navbar-logo" aria-label="HonnetKE Admin Console">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M20 2L35 10.66V28.34L20 37L5 28.34V10.66L20 2Z" fill="#E8900A" fill-opacity="0.15" stroke="#E8900A" stroke-width="2" stroke-linejoin="round"/><path d="M20 10L28 14.6V23.4L20 28L12 23.4V14.6L20 10Z" fill="#E8900A" stroke="#E8900A" stroke-width="1.5" stroke-linejoin="round"/><circle cx="20" cy="19" r="3" fill="#FFF8EC"/></svg>
+        <span class="logo-text">HonnetKE</span>
+        <span class="admin-badge">Admin</span>
+      </a>
+      <ul class="navbar-nav" id="navbar-nav">
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="manage-listings.html" class="nav-link">Listings</a></li>
+        <li><a href="manage-users.html" class="nav-link">Users</a></li>
+        <li><a href="flagged-listings.html" class="nav-link active">Flagged</a></li>
+        <li><a href="duplicate-queue.html" class="nav-link">Duplicates</a></li>
+      </ul>
+      <div class="navbar-right">
+        <button class="notification-btn" id="notification-btn" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="notification-badge"></span></button>
+        <div class="user-menu">
+          <button class="user-avatar-btn" aria-label="User menu" aria-expanded="false"><div class="avatar">AD</div><svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="user-dropdown">
+            <a href="#" class="dropdown-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My Profile</a>
+            <div class="dropdown-divider"></div>
+            <a href="../loginpage/login.html" class="dropdown-item danger" data-action="logout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout</a>
+          </div>
+        </div>
+      </div>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <div class="admin-mobile-nav" id="admin-mobile-nav" aria-hidden="true">
+    <a href="dashboard.html" class="nav-link">Dashboard</a>
+    <a href="manage-listings.html" class="nav-link">Listings</a>
+    <a href="manage-users.html" class="nav-link">Users</a>
+    <a href="flagged-listings.html" class="nav-link active">Flagged</a>
+    <a href="duplicate-queue.html" class="nav-link">Duplicates</a>
+    <a href="../loginpage/login.html" class="mobile-logout" data-action="logout">Logout</a>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- MAIN CONTENT -->
+  <main class="admin-main" id="main-content">
+
+    <div class="page-header">
+      <div class="container">
+        <h1 class="page-title">Flagged Listings</h1>
+        <p class="page-subtitle">Listings with 3+ student reports pending admin review. Click a row to expand report details.</p>
+      </div>
+    </div>
+
+    <section class="dashboard-section reveal">
+      <div class="container">
+
+        <!-- Compact Stats Bar -->
+        <div class="stats-bar">
+          <div class="stats-bar-item">
+            <div class="stats-bar-value">7</div>
+            <div class="stats-bar-label">Total Flagged</div>
+          </div>
+          <div class="stats-bar-divider"></div>
+          <div class="stats-bar-item">
+            <div class="stats-bar-value">5</div>
+            <div class="stats-bar-label">Pending Review</div>
+          </div>
+          <div class="stats-bar-divider"></div>
+          <div class="stats-bar-item">
+            <div class="stats-bar-value">2</div>
+            <div class="stats-bar-label">Resolved This Week</div>
+          </div>
+        </div>
+
+        <!-- Flagged Listings Table -->
+        <div class="data-table-wrapper">
+          <table class="data-table" id="flagged-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Listing</th>
+                <th>Provider</th>
+                <th>Reports</th>
+                <th>Top Reason</th>
+                <th>Latest Report</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1 — Expandable -->
+              <tr class="expandable-row" data-status="pending">
+                <td>
+                  <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </td>
+                <td class="table-name">Sunrise Hostel</td>
+                <td class="table-muted">John Mwangi</td>
+                <td><span class="count-badge high">5</span></td>
+                <td class="table-muted">Fake listing — stolen images</td>
+                <td class="table-date">24 Jun 2026</td>
+                <td><span class="status-badge pending"><span class="status-dot"></span>Pending</span></td>
+                <td>
+                  <div class="table-actions">
+                    <button class="btn-sm btn-resolve" data-action="resolve-report">Resolve</button>
+                    <button class="btn-sm btn-danger" data-action="block-listing">Block</button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="report-detail-row">
+                <td colspan="8">
+                  <div class="report-detail-content">
+                    <div class="report-entries">
+                      <div class="report-entry">
+                        <div class="report-entry-header">
+                          <span class="report-entry-student">Jane Wanjiku</span>
+                          <span class="report-entry-date">24 Jun 2026</span>
+                        </div>
+                        <p class="report-entry-reason">Fake listing — images clearly stolen from a hotel booking site. Not a real hostel.</p>
+                      </div>
+                      <div class="report-entry">
+                        <div class="report-entry-header">
+                          <span class="report-entry-student">Kevin Njoroge</span>
+                          <span class="report-entry-date">23 Jun 2026</span>
+                        </div>
+                        <p class="report-entry-reason">I visited the location and there is no hostel there. Wrong address.</p>
+                      </div>
+                      <div class="report-entry">
+                        <div class="report-entry-header">
+                          <span class="report-entry-student">Alex Mwangi</span>
+                          <span class="report-entry-date">22 Jun 2026</span>
+                        </div>
+                        <p class="report-entry-reason">The landlord asked for a deposit before showing the property. Seems like a scam.</p>
+                      </div>
+                      <div class="report-entry">
+                        <div class="report-entry-header">
+                          <span class="report-entry-student">Faith Kamau</span>
+                          <span class="report-entry-date">21 Jun 2026</span>
+                        </div>
+                        <p class="report-entry-reason">Photos are from a different property. Misleading listing.</p>
+                      </div>
+                      <div class="report-entry">
+                        <div class="report-entry-header">
+                          <span class="report-entry-student">Mary Achieng</span>
+                          <span class="report-entry-date">20 Jun 2026</span>
+                        </div>
+                        <p class="report-entry-reason">This listing has been reported before. Still up — please take it down.</p>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 2 -->
+              <tr class="expandable-row" data-status="pending">
+                <td>
+                  <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </td>
+                <td class="table-name">Jamii Heights</td>
+                <td class="table-muted">Grace Nyambura</td>
+                <td><span class="count-badge high">4</span></td>
+                <td class="table-muted">Wrong location — not near campus</td>
+                <td class="table-date">22 Jun 2026</td>
+                <td><span class="status-badge pending"><span class="status-dot"></span>Pending</span></td>
+                <td>
+                  <div class="table-actions">
+                    <button class="btn-sm btn-resolve" data-action="resolve-report">Resolve</button>
+                    <button class="btn-sm btn-danger" data-action="block-listing">Block</button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="report-detail-row">
+                <td colspan="8">
+                  <div class="report-detail-content">
+                    <div class="report-entries">
+                      <div class="report-entry">
+                        <div class="report-entry-header">
+                          <span class="report-entry-student">Kevin Njoroge</span>
+                          <span class="report-entry-date">22 Jun 2026</span>
+                        </div>
+                        <p class="report-entry-reason">The listing says "5 mins from campus" but it's actually 30 minutes away by matatu.</p>
+                      </div>
+                      <div class="report-entry">
+                        <div class="report-entry-header">
+                          <span class="report-entry-student">Grace Otieno</span>
+                          <span class="report-entry-date">21 Jun 2026</span>
+                        </div>
+                        <p class="report-entry-reason">Location is completely wrong. The pin on the map doesn't match the actual address.</p>
+                      </div>
+                      <div class="report-entry">
+                        <div class="report-entry-header">
+                          <span class="report-entry-student">Jane Wanjiku</span>
+                          <span class="report-entry-date">20 Jun 2026</span>
+                        </div>
+                        <p class="report-entry-reason">Price shown is KES 6,000 but they told me it's actually KES 9,000 when I called.</p>
+                      </div>
+                      <div class="report-entry">
+                        <div class="report-entry-header">
+                          <span class="report-entry-student">Peter Ochieng</span>
+                          <span class="report-entry-date">19 Jun 2026</span>
+                        </div>
+                        <p class="report-entry-reason">Misleading amenities — says WiFi included but there's no internet at the hostel.</p>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 3 -->
+              <tr class="expandable-row" data-status="pending">
+                <td>
+                  <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </td>
+                <td class="table-name">Campus Gate</td>
+                <td class="table-muted">Peter Ochieng</td>
+                <td><span class="count-badge">3</span></td>
+                <td class="table-muted">Inappropriate content</td>
+                <td class="table-date">20 Jun 2026</td>
+                <td><span class="status-badge pending"><span class="status-dot"></span>Pending</span></td>
+                <td>
+                  <div class="table-actions">
+                    <button class="btn-sm btn-resolve" data-action="resolve-report">Resolve</button>
+                    <button class="btn-sm btn-danger" data-action="block-listing">Block</button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="report-detail-row">
+                <td colspan="8">
+                  <div class="report-detail-content">
+                    <div class="report-entries">
+                      <div class="report-entry">
+                        <div class="report-entry-header">
+                          <span class="report-entry-student">Alex Mwangi</span>
+                          <span class="report-entry-date">20 Jun 2026</span>
+                        </div>
+                        <p class="report-entry-reason">The listing description contains inappropriate language and offensive content.</p>
+                      </div>
+                      <div class="report-entry">
+                        <div class="report-entry-header">
+                          <span class="report-entry-student">Faith Kamau</span>
+                          <span class="report-entry-date">19 Jun 2026</span>
+                        </div>
+                        <p class="report-entry-reason">Description seems to be trying to discriminate against certain students.</p>
+                      </div>
+                      <div class="report-entry">
+                        <div class="report-entry-header">
+                          <span class="report-entry-student">Grace Otieno</span>
+                          <span class="report-entry-date">18 Jun 2026</span>
+                        </div>
+                        <p class="report-entry-reason">The contact details seem fake. Phone number doesn't work.</p>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 4 — Resolved -->
+              <tr class="expandable-row" data-status="resolved">
+                <td>
+                  <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </td>
+                <td class="table-name">Hive Residences</td>
+                <td class="table-muted">Mary Achieng</td>
+                <td><span class="count-badge">3</span></td>
+                <td class="table-muted">Misleading price</td>
+                <td class="table-date">15 Jun 2026</td>
+                <td><span class="status-badge resolved"><span class="status-dot"></span>Resolved</span></td>
+                <td>
+                  <div class="table-actions">
+                    <span class="no-action-text">Resolved</span>
+                  </div>
+                </td>
+              </tr>
+              <tr class="report-detail-row">
+                <td colspan="8">
+                  <div class="report-detail-content">
+                    <div class="report-entries">
+                      <div class="report-entry">
+                        <div class="report-entry-header">
+                          <span class="report-entry-student">Grace Otieno</span>
+                          <span class="report-entry-date">15 Jun 2026</span>
+                        </div>
+                        <p class="report-entry-reason">Misleading price — listed at KES 12,000 but actual cost is KES 18,000 with mandatory extras.</p>
+                      </div>
+                      <div class="report-entry">
+                        <div class="report-entry-header">
+                          <span class="report-entry-student">Kevin Njoroge</span>
+                          <span class="report-entry-date">14 Jun 2026</span>
+                        </div>
+                        <p class="report-entry-reason">Hidden fees not disclosed. The real price is much higher than advertised.</p>
+                      </div>
+                      <div class="report-entry">
+                        <div class="report-entry-header">
+                          <span class="report-entry-student">Jane Wanjiku</span>
+                          <span class="report-entry-date">13 Jun 2026</span>
+                        </div>
+                        <p class="report-entry-reason">Agreed — I was told the price was different when I called. Very misleading.</p>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- RESOLVE MODAL -->
+  <div class="modal-overlay" id="resolve-modal">
+    <div class="modal">
+      <div class="modal-icon success">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <h3>Resolve Reports?</h3>
+      <p>Add a resolution note explaining the action taken. The listing provider will be notified.</p>
+      <textarea class="modal-textarea" placeholder="e.g. Listing updated by provider — reports reviewed and content verified..."></textarea>
+      <div class="modal-actions">
+        <button class="modal-btn cancel">Cancel</button>
+        <button class="modal-btn confirm-action">Resolve Reports</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- FOOTER -->
+  <footer class="footer" id="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="dashboard.html" class="navbar-logo" aria-label="HonnetKE Home"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M20 2L35 10.66V28.34L20 37L5 28.34V10.66L20 2Z" fill="#E8900A" fill-opacity="0.15" stroke="#E8900A" stroke-width="2" stroke-linejoin="round"/><path d="M20 10L28 14.6V23.4L20 28L12 23.4V14.6L20 10Z" fill="#E8900A" stroke="#E8900A" stroke-width="1.5" stroke-linejoin="round"/><circle cx="20" cy="19" r="3" fill="#FFF8EC"/></svg><span class="logo-text">HonnetKE</span></a>
+          <p class="footer-tagline">Kenya's #1 student hostel discovery platform. Admin tools for managing listings, users, and platform health.</p>
+        </div>
+        <div class="footer-quick-links"><h3 class="footer-heading">Quick Links</h3><nav class="footer-links" aria-label="Footer navigation"><a href="dashboard.html" class="footer-link">Dashboard</a><a href="manage-listings.html" class="footer-link">Manage Listings</a><a href="manage-users.html" class="footer-link">Manage Users</a><a href="flagged-listings.html" class="footer-link">Flagged Listings</a><a href="../landingpage/landingpage.html#contact" class="footer-link">Contact</a></nav></div>
+        <div class="footer-contact"><h3 class="footer-heading">Get in Touch</h3><div class="footer-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>support@honnetke.co.ke</div><div class="footer-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+254 700 000 000</div><div class="footer-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Nairobi, Kenya</div></div>
+      </div>
+      <div class="footer-bottom"><p class="footer-copyright">&copy; 2026 HonnetKE. All rights reserved.</p><div class="footer-bottom-links"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div></div>
+    </div>
+  </footer>
+
+  <script src="../shared/js/api.js"></script>
+  <script src="../shared/js/auth.js"></script>
+  <script src="js/admin.js"></script>
+
+</body>
+</html>

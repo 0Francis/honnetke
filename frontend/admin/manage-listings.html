@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HonnetKE Admin — Approve, reject, or suspend property listings on the platform.">
+  <meta name="keywords" content="manage listings, admin moderation, approve listings, HonnetKE">
+  <meta name="author" content="HonnetKE">
+  <title>Manage Listings — HonnetKE Admin</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Shared Stylesheets -->
+  <link rel="stylesheet" href="../landingpage/css/variables.css">
+  <link rel="stylesheet" href="../landingpage/css/reset.css">
+  <link rel="stylesheet" href="../landingpage/css/global.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body data-page="manage-listings">
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ADMIN NAVBAR (same as dashboard) -->
+  <nav class="admin-navbar" id="navbar" aria-label="Admin navigation">
+    <div class="navbar-inner">
+      <a href="dashboard.html" class="navbar-logo" aria-label="HonnetKE Admin Console">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M20 2L35 10.66V28.34L20 37L5 28.34V10.66L20 2Z" fill="#E8900A" fill-opacity="0.15" stroke="#E8900A" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M20 10L28 14.6V23.4L20 28L12 23.4V14.6L20 10Z" fill="#E8900A" stroke="#E8900A" stroke-width="1.5" stroke-linejoin="round"/>
+          <circle cx="20" cy="19" r="3" fill="#FFF8EC"/>
+        </svg>
+        <span class="logo-text">HonnetKE</span>
+        <span class="admin-badge">Admin</span>
+      </a>
+      <ul class="navbar-nav" id="navbar-nav">
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="manage-listings.html" class="nav-link active">Listings</a></li>
+        <li><a href="manage-users.html" class="nav-link">Users</a></li>
+        <li><a href="flagged-listings.html" class="nav-link">Flagged</a></li>
+        <li><a href="duplicate-queue.html" class="nav-link">Duplicates</a></li>
+      </ul>
+      <div class="navbar-right">
+        <button class="notification-btn" id="notification-btn" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notification-badge"></span>
+        </button>
+        <div class="user-menu">
+          <button class="user-avatar-btn" aria-label="User menu" aria-expanded="false">
+            <div class="avatar">AD</div>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="user-dropdown">
+            <a href="#" class="dropdown-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My Profile</a>
+            <div class="dropdown-divider"></div>
+            <a href="../loginpage/login.html" class="dropdown-item danger" data-action="logout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout</a>
+          </div>
+        </div>
+      </div>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <div class="admin-mobile-nav" id="admin-mobile-nav" aria-hidden="true">
+    <a href="dashboard.html" class="nav-link">Dashboard</a>
+    <a href="manage-listings.html" class="nav-link active">Listings</a>
+    <a href="manage-users.html" class="nav-link">Users</a>
+    <a href="flagged-listings.html" class="nav-link">Flagged</a>
+    <a href="duplicate-queue.html" class="nav-link">Duplicates</a>
+    <a href="../loginpage/login.html" class="mobile-logout" data-action="logout">Logout</a>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- MAIN CONTENT -->
+  <main class="admin-main" id="main-content">
+
+    <div class="page-header">
+      <div class="container">
+        <h1 class="page-title">Manage Listings</h1>
+        <p class="page-subtitle">Approve, reject, or suspend property listings on the platform.</p>
+      </div>
+    </div>
+
+    <section class="dashboard-section reveal">
+      <div class="container">
+
+        <!-- Filter Tabs -->
+        <div class="filter-bar">
+          <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">All</button>
+            <button class="filter-tab" data-filter="pending">Pending</button>
+            <button class="filter-tab" data-filter="active">Active</button>
+            <button class="filter-tab" data-filter="inactive">Inactive</button>
+            <button class="filter-tab" data-filter="blocked">Blocked</button>
+          </div>
+        </div>
+
+        <!-- Listings Table -->
+        <div class="data-table-wrapper">
+          <table class="data-table" id="listings-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Provider</th>
+                <th>Location</th>
+                <th>Price (KES)</th>
+                <th>Status</th>
+                <th>Submitted</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-status="pending">
+                <td class="table-muted">#041</td>
+                <td class="table-name">Sunrise Student Hostel</td>
+                <td class="table-muted">John Mwangi</td>
+                <td class="table-muted">Ruaka, Nairobi</td>
+                <td class="table-muted">8,500</td>
+                <td><span class="status-badge pending"><span class="status-dot"></span>Pending</span></td>
+                <td class="table-date">24 Jun 2026</td>
+                <td>
+                  <div class="table-actions">
+                    <button class="btn-sm btn-approve" data-action="approve">Approve</button>
+                    <button class="btn-sm btn-decline-action" data-action="decline">Decline</button>
+                  </div>
+                </td>
+              </tr>
+              <tr data-status="pending">
+                <td class="table-muted">#040</td>
+                <td class="table-name">Jamii Heights</td>
+                <td class="table-muted">Grace Nyambura</td>
+                <td class="table-muted">Rongai, Kajiado</td>
+                <td class="table-muted">6,000</td>
+                <td><span class="status-badge pending"><span class="status-dot"></span>Pending</span></td>
+                <td class="table-date">23 Jun 2026</td>
+                <td>
+                  <div class="table-actions">
+                    <button class="btn-sm btn-approve" data-action="approve">Approve</button>
+                    <button class="btn-sm btn-decline-action" data-action="decline">Decline</button>
+                  </div>
+                </td>
+              </tr>
+              <tr data-status="pending">
+                <td class="table-muted">#039</td>
+                <td class="table-name">Campus Gate Hostel</td>
+                <td class="table-muted">Peter Ochieng</td>
+                <td class="table-muted">Juja, Kiambu</td>
+                <td class="table-muted">5,500</td>
+                <td><span class="status-badge pending"><span class="status-dot"></span>Pending</span></td>
+                <td class="table-date">22 Jun 2026</td>
+                <td>
+                  <div class="table-actions">
+                    <button class="btn-sm btn-approve" data-action="approve">Approve</button>
+                    <button class="btn-sm btn-decline-action" data-action="decline">Decline</button>
+                  </div>
+                </td>
+              </tr>
+              <tr data-status="active">
+                <td class="table-muted">#035</td>
+                <td class="table-name">Hive Residences</td>
+                <td class="table-muted">Mary Achieng</td>
+                <td class="table-muted">Kilimani, Nairobi</td>
+                <td class="table-muted">12,000</td>
+                <td><span class="status-badge active"><span class="status-dot"></span>Active</span></td>
+                <td class="table-date">18 Jun 2026</td>
+                <td>
+                  <div class="table-actions">
+                    <button class="btn-sm btn-suspend" data-action="suspend-listing">Suspend</button>
+                  </div>
+                </td>
+              </tr>
+              <tr data-status="active">
+                <td class="table-muted">#032</td>
+                <td class="table-name">Kilimani Studios</td>
+                <td class="table-muted">James Kariuki</td>
+                <td class="table-muted">Westlands, Nairobi</td>
+                <td class="table-muted">15,000</td>
+                <td><span class="status-badge active"><span class="status-dot"></span>Active</span></td>
+                <td class="table-date">15 Jun 2026</td>
+                <td>
+                  <div class="table-actions">
+                    <button class="btn-sm btn-suspend" data-action="suspend-listing">Suspend</button>
+                  </div>
+                </td>
+              </tr>
+              <tr data-status="inactive">
+                <td class="table-muted">#028</td>
+                <td class="table-name">Nyayo Hostel</td>
+                <td class="table-muted">Anne Wambui</td>
+                <td class="table-muted">Lang'ata, Nairobi</td>
+                <td class="table-muted">7,000</td>
+                <td><span class="status-badge inactive"><span class="status-dot"></span>Inactive</span></td>
+                <td class="table-date">10 Jun 2026</td>
+                <td>
+                  <div class="table-actions">
+                    <span class="no-action-text">Deactivated by owner</span>
+                  </div>
+                </td>
+              </tr>
+              <tr data-status="blocked">
+                <td class="table-muted">#022</td>
+                <td class="table-name">Fake Luxury Apartments</td>
+                <td class="table-muted">Unknown Agent</td>
+                <td class="table-muted">CBD, Nairobi</td>
+                <td class="table-muted">3,000</td>
+                <td><span class="status-badge blocked"><span class="status-dot"></span>Blocked</span></td>
+                <td class="table-date">5 Jun 2026</td>
+                <td>
+                  <div class="table-actions">
+                    <span class="no-action-text">Blocked by admin</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- APPROVE MODAL -->
+  <div class="modal-overlay" id="approve-modal">
+    <div class="modal">
+      <div class="modal-icon success">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <h3>Approve Listing?</h3>
+      <p>This listing will go live and become visible to all students on the platform.</p>
+      <div class="modal-actions">
+        <button class="modal-btn cancel">Cancel</button>
+        <button class="modal-btn confirm-action">Approve Listing</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DECLINE MODAL -->
+  <div class="modal-overlay" id="decline-modal">
+    <div class="modal">
+      <div class="modal-icon danger">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      </div>
+      <h3>Decline Listing?</h3>
+      <p>Provide a reason for declining. The landlord/agent will be notified.</p>
+      <textarea class="modal-textarea" placeholder="e.g. Images do not match the description..."></textarea>
+      <div class="modal-actions">
+        <button class="modal-btn cancel">Cancel</button>
+        <button class="modal-btn danger-action">Decline Listing</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUSPEND LISTING MODAL -->
+  <div class="modal-overlay" id="suspend-listing-modal">
+    <div class="modal">
+      <div class="modal-icon warning">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <h3>Suspend Listing?</h3>
+      <p>This listing will be removed from search results and marked as blocked. The provider will be notified.</p>
+      <div class="modal-actions">
+        <button class="modal-btn cancel">Cancel</button>
+        <button class="modal-btn danger-action">Suspend Listing</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- FOOTER -->
+  <footer class="footer" id="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="dashboard.html" class="navbar-logo" aria-label="HonnetKE Home">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M20 2L35 10.66V28.34L20 37L5 28.34V10.66L20 2Z" fill="#E8900A" fill-opacity="0.15" stroke="#E8900A" stroke-width="2" stroke-linejoin="round"/><path d="M20 10L28 14.6V23.4L20 28L12 23.4V14.6L20 10Z" fill="#E8900A" stroke="#E8900A" stroke-width="1.5" stroke-linejoin="round"/><circle cx="20" cy="19" r="3" fill="#FFF8EC"/></svg>
+            <span class="logo-text">HonnetKE</span>
+          </a>
+          <p class="footer-tagline">Kenya's #1 student hostel discovery platform. Admin tools for managing listings, users, and platform health.</p>
+        </div>
+        <div class="footer-quick-links">
+          <h3 class="footer-heading">Quick Links</h3>
+          <nav class="footer-links" aria-label="Footer navigation">
+            <a href="dashboard.html" class="footer-link">Dashboard</a>
+            <a href="manage-listings.html" class="footer-link">Manage Listings</a>
+            <a href="manage-users.html" class="footer-link">Manage Users</a>
+            <a href="flagged-listings.html" class="footer-link">Flagged Listings</a>
+            <a href="../landingpage/landingpage.html#contact" class="footer-link">Contact</a>
+          </nav>
+        </div>
+        <div class="footer-contact">
+          <h3 class="footer-heading">Get in Touch</h3>
+          <div class="footer-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>support@honnetke.co.ke</div>
+          <div class="footer-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+254 700 000 000</div>
+          <div class="footer-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Nairobi, Kenya</div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copyright">&copy; 2026 HonnetKE. All rights reserved.</p>
+        <div class="footer-bottom-links"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../shared/js/api.js"></script>
+  <script src="../shared/js/auth.js"></script>
+  <script src="js/admin.js"></script>
+
+</body>
+</html>
