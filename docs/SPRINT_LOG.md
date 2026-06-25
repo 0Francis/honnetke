@@ -11,16 +11,20 @@
 **Sprint Goal:** Establish the project foundation — backend scaffold, database, Git workflow, and docs structure.
 
 ### Committed
-- [ ] Initialize backend project (package.json, folder structure, dependencies)
-- [ ] Configure `.env` and `.env.example`
-- [ ] Create PostgreSQL database and run full schema (all 13 tables)
+- [x] Initialize backend project (package.json, folder structure, dependencies)
+- [x] Configure `.env` and `.env.example`
+- [x] Create PostgreSQL database and run full schema (all 13 tables)
 - [ ] Set up Git branching convention (`main` / `dev` / `feature/*`)
-- [ ] Create `docs/` tracking files
-- [ ] Create `appendices/` folder
-- [ ] Partner: frontend folder structure, design tokens, CSS reset
+- [x] Create `docs/` tracking files
+- [x] Create `appendices/` folder
+- [x] Partner: frontend folder structure, design tokens, CSS reset
 
 ### Completed
-- [ ] _(fill in after sprint review)_
+- [x] Backend project initialized with Express, Prisma, all dependencies
+- [x] `.env` configured with DATABASE_URL, JWT_SECRET, Cloudinary, mail credentials
+- [x] PostgreSQL schema applied — 13 models, all enums, migrations + seed
+- [x] Docs structure created (PRODUCT_BACKLOG, SPRINT_LOG, TECH_STACK, TEST_CASES, APPENDICES_INDEX)
+- [x] Frontend folder structure with shared CSS/JS, all page directories
 
 ### Carry-over
 - _(none yet)_
@@ -38,20 +42,26 @@
 **Sprint Goal:** Full auth system for all roles — register, OTP verify, login with JWT, logout, role middleware.
 
 ### Committed
-- [ ] US-01 Student register endpoint
-- [ ] US-02 Landlord register endpoint
-- [ ] US-03 Agent register endpoint
-- [ ] US-04 OTP verification endpoint
-- [ ] US-05 Login endpoint (all roles) + JWT generation
-- [ ] US-06 Role-based redirect logic (JWT payload role field)
-- [ ] US-07 Forgot password endpoint
-- [ ] US-08 Logout
-- [ ] Auth middleware (protect routes)
-- [ ] Role-based access control middleware
-- [ ] Partner: Landing page static HTML/CSS
+- [x] US-01 Student register endpoint
+- [x] US-02 Landlord register endpoint
+- [x] US-03 Agent register endpoint
+- [x] US-04 OTP verification endpoint
+- [x] US-05 Login endpoint (all roles) + JWT generation
+- [x] US-06 Role-based redirect logic (JWT payload role field)
+- [x] US-07 Forgot password endpoint
+- [x] US-08 Logout
+- [x] Auth middleware (protect routes)
+- [x] Role-based access control middleware
+- [x] Partner: Landing page static HTML/CSS
 
 ### Completed
-- [ ] _(fill in after sprint review)_
+- [x] Register endpoint — bcrypt hashing, OTP via nodemailer, role-specific table insertion
+- [x] Verify OTP endpoint — bcrypt code comparison, account activation, JWT issuance
+- [x] Login endpoint — 2FA with emailed OTP, JWT only after verification
+- [x] Forgot/reset password — reset OTP flow
+- [x] Resend OTP endpoint
+- [x] JWT auth middleware + role-based access control
+- [x] Frontend: login, signup, OTP pages all wired to real API
 
 ### Carry-over
 - _(none yet)_
@@ -69,19 +79,22 @@
 **Sprint Goal:** Full listings CRUD with Cloudinary image upload. Admin is notified on new listing submission.
 
 ### Committed
-- [ ] US-09 Landlord create listing (`POST /listings` → status: pending)
-- [ ] US-10 Agent create listing
-- [ ] US-11 Image upload to Cloudinary (`POST /listings/:id/images`)
-- [ ] US-12 Edit listing (`PATCH /listings/:id`)
-- [ ] US-13 Deactivate listing
-- [ ] US-14 Reactivate listing
-- [ ] US-15 Delete listing
+- [x] US-09 Landlord create listing (`POST /listings` → status: pending)
+- [x] US-10 Agent create listing
+- [x] US-11 Image upload to Cloudinary (`POST /listings/:id/images`)
+- [x] US-12 Edit listing (`PATCH /listings/:id`)
+- [x] US-13 Deactivate listing
+- [x] US-14 Reactivate listing
+- [x] US-15 Delete listing
 - [ ] US-16 Agent organise listings
-- [ ] Trigger notification to admin on new listing
-- [ ] Partner: US-FE-01 Landing page
+- [x] Trigger notification to admin on new listing
+- [x] Partner: US-FE-01 Landing page
 
 ### Completed
-- [ ] _(fill in after sprint review)_
+- [x] Full listings CRUD with ownership checks (landlordId/agentId match)
+- [x] Cloudinary upload — multer-storage-cloudinary, 10 images max, 5MB each, auto-resize 1200×800
+- [x] Admin notification on new listing creation
+- [x] Frontend: create-listing, manage-listings, edit mode all wired to API
 
 ### Carry-over
 - _(none yet)_
@@ -99,19 +112,22 @@
 **Sprint Goal:** Public search/filter endpoint, listing detail, pagination. Partner delivers auth pages and hostels page.
 
 ### Committed
-- [ ] US-17 Featured listings endpoint (`GET /listings?featured=true`)
-- [ ] US-18 Search & filter endpoint (`GET /listings` with query params)
-- [ ] US-19 Guest redirect logic (401 on protected listing detail)
-- [ ] US-20 Listing detail endpoint (`GET /listings/:id`)
-- [ ] US-21 Pagination on listing results
-- [ ] Partner: US-FE-02 Sign Up page
-- [ ] Partner: US-FE-03 Login page
-- [ ] Partner: US-FE-04 OTP Verification page
-- [ ] Partner: US-FE-05 Hostels page
-- [ ] Partner: US-FE-06 Listing Detail page
+- [x] US-17 Featured listings endpoint (`GET /listings?limit=6`)
+- [x] US-18 Search & filter endpoint (`GET /listings` with query params)
+- [x] US-19 Guest redirect logic (optional protect middleware)
+- [x] US-20 Listing detail endpoint (`GET /listings/:id`)
+- [x] US-21 Pagination on listing results
+- [x] Partner: US-FE-02 Sign Up page
+- [x] Partner: US-FE-03 Login page
+- [x] Partner: US-FE-04 OTP Verification page
+- [x] Partner: US-FE-05 Hostels page
+- [x] Partner: US-FE-06 Listing Detail page
 
 ### Completed
-- [ ] _(fill in after sprint review)_
+- [x] getListings with full query filters (q, area, county, campus, type, gender, room, price range, status)
+- [x] getListingById with images, amenities, view count increment, active-status enforcement
+- [x] Pagination with page/limit/total/pages metadata
+- [x] Frontend: landing page featured listings, student dashboard, listing detail page all wired
 
 ### Carry-over
 - _(none yet)_
@@ -129,18 +145,21 @@
 **Sprint Goal:** Full student interaction set — favourites, bookings, contact, reports, student dashboard data.
 
 ### Committed
-- [ ] US-22 Save listing to favourites (`POST /favourites`)
-- [ ] US-23 Remove from favourites (`DELETE /favourites/:id`)
-- [ ] US-24 Submit booking request (`POST /bookings`)
-- [ ] US-25 Contact provider (external redirect — WhatsApp/call/SMS, no backend logic)
-- [ ] US-26 Report listing (`POST /reports`)
-- [ ] US-27 Student dashboard data endpoint
-- [ ] Partner: US-FE-07 Student Dashboard
+- [x] US-22 Save listing to favourites (`POST /favourites`)
+- [x] US-23 Remove from favourites (`DELETE /favourites/:id`)
+- [x] US-24 Submit booking request (`POST /bookings`)
+- [x] US-25 Contact provider (external redirect — WhatsApp/call/SMS, no backend logic)
+- [x] US-26 Report listing (`POST /reports`)
+- [x] US-27 Student dashboard data endpoint
+- [x] Partner: US-FE-07 Student Dashboard
 - [ ] Partner: US-FE-08 Favourites page
 - [ ] Partner: US-FE-09 Visited History page
 
 ### Completed
-- [ ] _(fill in after sprint review)_
+- [x] Favourites controller — add, remove, list with listing includes
+- [x] Bookings controller — create with duplicate check, provider notification
+- [x] Reports controller — create with listing validation, admin notification
+- [x] Frontend: student dashboard, listing detail (booking modal + report modal), favourite toggle wired
 
 ### Carry-over
 - _(none yet)_
@@ -158,15 +177,19 @@
 **Sprint Goal:** Landlord/Agent booking management, analytics, notifications.
 
 ### Committed
-- [ ] US-28 View bookings for my listings (`GET /bookings?provider=me`)
-- [ ] US-29 Confirm / decline / cancel booking (`PATCH /bookings/:id`)
-- [ ] US-30 Weekly analytics endpoint (`GET /analytics/:listing_id`)
+- [x] US-28 View bookings for my listings (`GET /bookings`)
+- [x] US-29 Confirm / decline / cancel booking (`PATCH /bookings/:id`)
+- [x] US-30 Weekly analytics endpoint (`GET /analytics/:listing_id`)
 - [ ] US-31 Mark notification as read (`PATCH /notifications/:id/read`)
-- [ ] Analytics middleware (increment view count on listing detail view)
-- [ ] Partner: US-FE-10 Landlord/Agent Dashboard
+- [x] Analytics middleware (increment view count on listing detail view)
+- [x] Partner: US-FE-10 Landlord/Agent Dashboard
 
 ### Completed
-- [ ] _(fill in after sprint review)_
+- [x] getBookings — role-based filtering (landlord/agent sees own listings' bookings, student sees own, admin sees all)
+- [x] updateBookingStatus — permission checks, status transition validation, notifications
+- [x] getAnalytics — per-listing view counts and weekly breakdown
+- [x] getOverviewAnalytics — aggregated stats across provider's listings
+- [x] Frontend: landlord dashboard, bookings page (confirm/decline buttons), analytics page all wired
 
 ### Carry-over
 - _(none yet)_
@@ -238,4 +261,4 @@
 
 ---
 
-_Last updated: Sprint 0_
+_Last updated: Sprint 5 (22 Jun 2026)_

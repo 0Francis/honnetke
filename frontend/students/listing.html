@@ -31,6 +31,7 @@
         <span class="logo-text">HonnetKE</span>
       </a>
       <ul class="navbar-nav">
+        <li><a href="../landingpage/index.html" class="nav-link">Home</a></li>
         <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
         <li><a href="hostels.html" class="nav-link active">Hostels</a></li>
         <li><a href="favourites.html" class="nav-link">Favourites</a></li>
@@ -44,7 +45,7 @@
             <a href="favourites.html" class="dropdown-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Hive Saves</a>
             <a href="history.html" class="dropdown-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Visit History</a>
             <div class="dropdown-divider"></div>
-            <a href="../loginpage/login.html" class="dropdown-item danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Logout</a>
+            <a href="../loginpage/login.html" class="dropdown-item danger" id="dropdown-logout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Logout</a>
           </div>
         </div>
       </div>
@@ -53,12 +54,13 @@
   </nav>
 
   <div class="student-mobile-nav" id="student-mobile-nav" aria-hidden="true">
+    <a href="../landingpage/index.html" class="nav-link">Home</a>
     <a href="dashboard.html" class="nav-link">Dashboard</a>
     <a href="hostels.html" class="nav-link active">Hostels</a>
     <a href="favourites.html" class="nav-link">Favourites</a>
     <a href="history.html" class="nav-link">Visit History</a>
     <a href="#" class="nav-link">My Profile</a>
-    <a href="../loginpage/login.html" class="mobile-logout">Logout</a>
+    <a href="../loginpage/login.html" class="mobile-logout" id="mobile-logout">Logout</a>
   </div>
 
   <div class="toast-container" id="toast-container"></div>
@@ -205,6 +207,10 @@
                 Send SMS
               </a>
             </div>
+
+            <button id="book-now-btn" class="btn btn-primary" style="width: 100%; margin-top: var(--space-md); padding: 0.875rem 1.5rem; font-size: 1rem; font-weight: 700;">
+              Book Now
+            </button>
           </div>
 
         </div>
@@ -271,6 +277,29 @@
 
   </main>
 
+  <!-- BOOKING MODAL -->
+  <div class="modal-overlay" id="booking-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Book This Listing</h3>
+        <button class="modal-close" id="booking-modal-close" aria-label="Close modal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="booking-form">
+        <div class="modal-body">
+          <p style="margin-bottom: var(--space-md); color: var(--color-text-muted); font-size: var(--fs-caption);">Send a booking request to the property provider. They'll respond via the platform.</p>
+          <label for="booking-note">Message to provider (optional)</label>
+          <textarea id="booking-note" name="requestNote" class="input" placeholder="e.g. I need the room by 1st of next month…" rows="4"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="booking-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="booking-submit">Send Request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- REPORT LISTING MODAL -->
   <div class="modal-overlay" id="report-modal">
     <div class="modal">
@@ -326,6 +355,8 @@
     </div>
   </footer>
 
+  <script src="../shared/js/api.js"></script>
+  <script src="../shared/js/auth.js"></script>
   <script src="js/students.js"></script>
 </body>
 </html>

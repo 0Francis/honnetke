@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Wire logout
-  document.querySelectorAll('.mobile-logout, .dropdown-item.danger').forEach(btn => {
+  document.querySelectorAll('.mobile-logout, .dropdown-item.danger, #dropdown-logout, #mobile-logout').forEach(btn => {
     if (btn.textContent.trim() === 'Logout') {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const locationText = [l.area, l.nearestCampus].filter(Boolean).join(', near ');
 
             return `
-              <article class="listing-card" data-href="listing.html" role="link" tabindex="0" aria-label="View ${l.title}">
+              <article class="listing-card" data-href="listing.html" data-listing-id="${l.listingId}" role="link" tabindex="0" aria-label="View ${l.title}">
                 <div class="card-image">
                   ${img
                     ? `<img src="${img}" alt="${l.title}" loading="lazy">`
@@ -171,13 +171,21 @@ document.addEventListener('DOMContentLoaded', () => {
             card.addEventListener('click', (e) => {
               if (e.target.closest('.card-fav-btn')) return;
               const href = card.getAttribute('data-href');
-              if (href) window.location.href = href;
+              const listingId = card.getAttribute('data-listing-id');
+              if (href) {
+                const url = listingId ? `${href}?id=${listingId}` : href;
+                window.location.href = url;
+              }
             });
             card.addEventListener('keydown', (e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 const href = card.getAttribute('data-href');
-                if (href) window.location.href = href;
+                const listingId = card.getAttribute('data-listing-id');
+                if (href) {
+                  const url = listingId ? `${href}?id=${listingId}` : href;
+                  window.location.href = url;
+                }
               }
             });
           });
@@ -189,6 +197,244 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   fetchStudentListings();
+
+
+  /* ──────────────────────────────────────────
+     0c. LISTING DETAIL PAGE — Fetch + Booking + Report
+     ────────────────────────────────────────── */
+  const listingDetailPage = document.querySelector('.listing-detail');
+  let currentListingId = null;
+
+  async function fetchListingDetail() {
+    if (!listingDetailPage) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    if (!id) return;
+
+    currentListingId = Number(id);
+
+    try {
+      const listing = await window.HonnetKE.api.get(`/listings/${id}`);
+
+      // Update page title
+      document.title = `${listing.title} — HonnetKE`;
+
+      // Update gallery
+      const galleryMainImg = document.getElementById('gallery-main-img');
+      const galleryThumbs = document.querySelector('.gallery-thumbnails');
+      const images = listing.images || [];
+
+      if (images.length > 0) {
+        if (galleryMainImg) {
+          galleryMainImg.src = images[0].imageUrl;
+          galleryMainImg.alt = listing.title;
+        }
+        if (galleryThumbs) {
+          galleryThumbs.innerHTML = images.map((img, i) => `
+            <button class="gallery-thumb ${i === 0 ? 'active' : ''}" aria-label="View image ${i + 1}" data-img="${img.imageUrl}">
+              <img src="${img.imageUrl}" alt="Thumbnail ${i + 1}">
+            </button>`).join('');
+
+          galleryThumbs.querySelectorAll('.gallery-thumb').forEach((thumb, i) => {
+            thumb.addEventListener('click', () => {
+              galleryMainImg.src = thumb.dataset.img;
+              galleryThumbs.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+              thumb.classList.add('active');
+            });
+          });
+        }
+      } else {
+        if (galleryMainImg) {
+          galleryMainImg.style.display = 'none';
+        }
+        if (galleryThumbs) {
+          galleryThumbs.innerHTML = '';
+        }
+        const galleryMain = document.querySelector('.gallery-main');
+        if (galleryMain) {
+          galleryMain.innerHTML = `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--color-border-light);color:var(--color-text-muted);font-size:1rem;min-height:300px;border-radius:var(--radius-lg);">No Image Available</div>`;
+        }
+      }
+
+      // Update listing info
+      const titleEl = document.querySelector('.listing-info-title');
+      if (titleEl) titleEl.textContent = listing.title;
+
+      const locationEl = document.querySelector('.listing-info-location');
+      if (locationEl) {
+        const locationText = [listing.area, listing.county].filter(Boolean).join(', ');
+        const campusText = listing.nearestCampus ? ` — near ${listing.nearestCampus} Campus` : '';
+        locationEl.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          ${locationText}${campusText}`;
+      }
+
+      const priceEl = document.querySelector('.listing-price');
+      if (priceEl) {
+        const price = Number(listing.price).toLocaleString();
+        priceEl.innerHTML = `KES ${price} <span>/month</span>`;
+      }
+
+      const badgesEl = document.querySelector('.listing-badges');
+      if (badgesEl) {
+        const typeLabel = listing.propertyType ? listing.propertyType.charAt(0).toUpperCase() + listing.propertyType.slice(1).replace('-', ' ') : '';
+        const genderLabel = listing.genderPreference ? listing.genderPreference.charAt(0).toUpperCase() + listing.genderPreference.slice(1) : '';
+        const roomLabel = listing.roomType ? listing.roomType.charAt(0).toUpperCase() + listing.roomType.slice(1) + ' Room' : '';
+        badgesEl.innerHTML = `
+          ${typeLabel ? `<span class="badge badge-amber">${typeLabel}</span>` : ''}
+          ${genderLabel ? `<span class="badge badge-charcoal">${genderLabel}</span>` : ''}
+          ${roomLabel ? `<span class="badge badge-green">${roomLabel}</span>` : ''}`;
+      }
+
+      // Update description
+      const descEl = document.querySelector('.listing-description p');
+      if (descEl && listing.description) {
+        descEl.textContent = listing.description;
+      }
+
+      // Update amenities
+      const amenitiesGrid = document.querySelector('.amenities-grid');
+      if (amenitiesGrid && listing.amenities) {
+        const amenityIcons = {
+          'WiFi': '<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',
+          'Water': '<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>',
+          'Security': '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+          'Parking': '<rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+          'Gym': '<path d="M6 5v14M18 5v14M2 9h4M2 15h4M18 9h4M18 15h4M6 12h12"/>',
+          'Laundry': '<rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+        };
+        amenitiesGrid.innerHTML = listing.amenities.map(a => {
+          const icon = amenityIcons[a] || '<circle cx="12" cy="12" r="10"/>';
+          return `
+            <div class="amenity-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon}</svg>
+              ${a}
+            </div>`;
+        }).join('');
+      }
+
+      // Update contact card WhatsApp/call/SMS links with provider info if available
+      const whatsappLink = document.querySelector('.contact-btn.whatsapp');
+      const callLink = document.querySelector('.contact-btn.call');
+      const smsLink = document.querySelector('.contact-btn.sms');
+      // Provider contact info not in listing response — keep defaults
+
+      // Hide book button if listing is not active
+      const bookBtn = document.getElementById('book-now-btn');
+      if (bookBtn && listing.status !== 'active') {
+        bookBtn.textContent = 'Not Available';
+        bookBtn.disabled = true;
+        bookBtn.style.opacity = '0.6';
+        bookBtn.style.cursor = 'not-allowed';
+      }
+
+    } catch (err) {
+      console.warn('Could not fetch listing detail:', err.message);
+      if (listingDetailPage) {
+        listingDetailPage.innerHTML = `
+          <div class="container" style="text-align: center; padding: 4rem 1rem;">
+            <h2>Listing not found</h2>
+            <p style="color: var(--color-text-muted); margin-top: var(--space-sm);">This listing may have been removed or is no longer available.</p>
+            <a href="hostels.html" class="btn btn-primary" style="margin-top: var(--space-lg);">Browse Hostels</a>
+          </div>`;
+      }
+    }
+  }
+
+  fetchListingDetail();
+
+  // Booking modal
+  const bookingModal = document.getElementById('booking-modal');
+  const bookingBtn = document.getElementById('book-now-btn');
+  const bookingClose = document.getElementById('booking-modal-close');
+  const bookingCancel = document.getElementById('booking-cancel');
+  const bookingForm = document.getElementById('booking-form');
+  const bookingSubmit = document.getElementById('booking-submit');
+
+  if (bookingBtn && bookingModal) {
+    bookingBtn.addEventListener('click', () => {
+      bookingModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+
+    const closeBookingModal = () => {
+      bookingModal.classList.remove('active');
+      document.body.style.overflow = '';
+    };
+
+    if (bookingClose) bookingClose.addEventListener('click', closeBookingModal);
+    if (bookingCancel) bookingCancel.addEventListener('click', closeBookingModal);
+
+    bookingModal.addEventListener('click', (e) => {
+      if (e.target === bookingModal) closeBookingModal();
+    });
+
+    if (bookingForm) {
+      bookingForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!currentListingId) return;
+
+        bookingSubmit.disabled = true;
+        bookingSubmit.textContent = 'Sending...';
+
+        const note = document.getElementById('booking-note').value.trim();
+
+        try {
+          await window.HonnetKE.api.post('/bookings', {
+            listingId: currentListingId,
+            requestNote: note || undefined,
+          }, true);
+
+          closeBookingModal();
+          showToast('Booking Request Sent! 🐝', 'The provider will respond via the platform.');
+          bookingForm.reset();
+        } catch (err) {
+          showToast('Error', err.message || 'Could not submit booking request');
+        } finally {
+          bookingSubmit.disabled = false;
+          bookingSubmit.textContent = 'Send Request';
+        }
+      });
+    }
+  }
+
+  // Wire report form to API (modal open/close handled by existing section 9 code)
+  const reportFormEl = document.getElementById('report-form');
+  if (reportFormEl) {
+    // Remove old static handler and add real API handler
+    const newReportForm = reportFormEl.cloneNode(true);
+    reportFormEl.parentNode.replaceChild(newReportForm, reportFormEl);
+    newReportForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!currentListingId) return;
+
+      const reason = document.getElementById('report-reason').value.trim();
+      if (!reason) return;
+
+      const submitBtn = newReportForm.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+
+      try {
+        await window.HonnetKE.api.post('/reports', {
+          listingId: currentListingId,
+          reason,
+        }, true);
+
+        const rm = document.getElementById('report-modal');
+        if (rm) rm.classList.remove('active');
+        document.body.style.overflow = '';
+        showToast('Report Submitted', 'An admin will review this listing.');
+        newReportForm.reset();
+      } catch (err) {
+        showToast('Error', err.message || 'Could not submit report');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Report';
+      }
+    });
+  }
 
   /* ── DOM References ── */
   const navbar        = document.querySelector('.student-navbar');
@@ -441,15 +687,36 @@ document.addEventListener('DOMContentLoaded', () => {
   const favBtns = document.querySelectorAll('.card-fav-btn');
 
   favBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
+    btn.addEventListener('click', async (e) => {
       e.stopPropagation();
       e.preventDefault();
+
+      const card = btn.closest('.listing-card, [data-listing-id]');
+      const listingId = card?.dataset?.listingId || card?.getAttribute('data-listing-id');
+
+      if (!listingId) {
+        // Static card without listing ID — just toggle visual
+        btn.classList.toggle('active');
+        showToast(btn.classList.contains('active') ? 'Saved! 💛' : 'Removed',
+                   btn.classList.contains('active') ? 'Added to your Hive Saves' : 'Listing removed from Hive Saves');
+        return;
+      }
+
+      const wasActive = btn.classList.contains('active');
       btn.classList.toggle('active');
 
-      if (btn.classList.contains('active')) {
-        showToast('Saved! 💛', 'Added to your Hive Saves');
-      } else {
-        showToast('Removed', 'Listing removed from Hive Saves');
+      try {
+        if (!wasActive) {
+          await window.HonnetKE.api.post('/favourites', { listingId: Number(listingId) }, true);
+          showToast('Saved! 💛', 'Added to your Hive Saves');
+        } else {
+          await window.HonnetKE.api.del(`/favourites/${listingId}`, true);
+          showToast('Removed', 'Listing removed from Hive Saves');
+        }
+      } catch (err) {
+        // Revert on error
+        btn.classList.toggle('active');
+        showToast('Error', err.message || 'Could not update favourites');
       }
     });
   });
@@ -492,12 +759,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (reportForm) {
-      reportForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        closeReportModal();
-        showToast('Report submitted', 'Our team will review this listing');
-        reportForm.reset();
-      });
+      // Report form submit is handled by the API wiring in section 0c above
     }
   }
 
@@ -509,17 +771,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   listingCards.forEach(card => {
     card.addEventListener('click', (e) => {
-      // Don't navigate if clicking fav button
       if (e.target.closest('.card-fav-btn')) return;
       const href = card.getAttribute('data-href');
-      if (href) window.location.href = href;
+      const listingId = card.getAttribute('data-listing-id');
+      if (href) {
+        const url = listingId ? `${href}?id=${listingId}` : href;
+        window.location.href = url;
+      }
     });
 
     card.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         const href = card.getAttribute('data-href');
-        if (href) window.location.href = href;
+        const listingId = card.getAttribute('data-listing-id');
+        if (href) {
+          const url = listingId ? `${href}?id=${listingId}` : href;
+          window.location.href = url;
+        }
       }
     });
   });

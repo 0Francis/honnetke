@@ -1401,9 +1401,31 @@
 
 .btn-prev svg,
 .btn-next svg,
-.btn-submit svg {
+.btn-submit svg,
+.btn-cancel svg {
   width: 16px;
   height: 16px;
+}
+
+.btn-cancel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition);
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1.5px solid var(--color-border);
+  padding: 0.85rem 1.5rem;
+}
+
+.btn-cancel:hover {
+  border-color: #e74c3c;
+  color: #e74c3c;
 }
 
 /* Review Summary */
