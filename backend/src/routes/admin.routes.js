@@ -3,6 +3,8 @@ const router = express.Router();
 const { protect } = require('../middleware/auth.middleware');
 const { allowRoles } = require('../middleware/role.middleware');
 const {
+  getStats,
+  getUsers,
   getPendingListings,
   approveListing,
   declineListing,
@@ -16,6 +18,9 @@ const {
 } = require('../controllers/admin.controller');
 
 router.use(protect, allowRoles('admin'));
+
+router.get('/stats', getStats);
+router.get('/users', getUsers);
 
 router.get('/listings', getPendingListings);
 router.patch('/listings/:id/approve', approveListing);

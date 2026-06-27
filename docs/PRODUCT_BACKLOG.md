@@ -67,7 +67,7 @@
 | US-28 | As a landlord/agent, I can view all booking requests for my listings | Landlord / Agent | 5 | Done |
 | US-29 | As a landlord/agent, I can confirm, decline, or cancel a booking request | Landlord / Agent | 5 | Done |
 | US-30 | As a landlord/agent, I can view weekly analytics (view counts) for my listings | Landlord / Agent | 5 | Done |
-| US-31 | As a landlord/agent, I can mark notifications as read | Landlord / Agent | 5 | Backlog |
+| US-31 | As a landlord/agent, I can mark notifications as read | Landlord / Agent | 5 | Done |
 
 ---
 
@@ -75,16 +75,16 @@
 
 | ID | User Story | Role | Sprint | Status |
 |---|---|---|---|---|
-| US-32 | As an admin, I receive a notification when a new listing is submitted for review | Admin | 6 | Backlog |
-| US-33 | As an admin, I can view all listings pending approval | Admin | 6 | Backlog |
-| US-34 | As an admin, I can approve a listing so it becomes publicly visible | Admin | 6 | Backlog |
-| US-35 | As an admin, I can decline a listing with a stated reason | Admin | 6 | Backlog |
-| US-36 | As an admin, I can review reports filed by students | Admin | 6 | Backlog |
-| US-37 | As an admin, I can issue a warning to a student, landlord, or agent | Admin | 6 | Backlog |
-| US-38 | As an admin, I can suspend a user account | Admin | 6 | Backlog |
-| US-39 | As an admin, I can reactivate a suspended account | Admin | 6 | Backlog |
-| US-40 | As an admin, I can view system error logs | Admin | 6 | Backlog |
-| US-41 | As an admin, I can view daily traffic logs | Admin | 6 | Backlog |
+| US-32 | As an admin, I receive a notification when a new listing is submitted for review | Admin | 6 | Done |
+| US-33 | As an admin, I can view all listings pending approval | Admin | 6 | Done |
+| US-34 | As an admin, I can approve a listing so it becomes publicly visible | Admin | 6 | Done |
+| US-35 | As an admin, I can decline a listing with a stated reason | Admin | 6 | Done |
+| US-36 | As an admin, I can review reports filed by students | Admin | 6 | Done |
+| US-37 | As an admin, I can issue a warning to a student, landlord, or agent | Admin | 6 | Done |
+| US-38 | As an admin, I can suspend a user account | Admin | 6 | Done |
+| US-39 | As an admin, I can reactivate a suspended account | Admin | 6 | Done |
+| US-40 | As an admin, I can view system error logs | Admin | 6 | Done |
+| US-41 | As an admin, I can view daily traffic logs | Admin | 6 | Done |
 
 ---
 
@@ -92,8 +92,8 @@
 
 | ID | User Story | Role | Sprint | Status |
 |---|---|---|---|---|
-| US-42 | As any logged-in user, I can view my notifications | All roles | 7 | Backlog |
-| US-43 | As any logged-in user, I can mark a notification as read | All roles | 7 | Backlog |
+| US-42 | As any logged-in user, I can view my notifications | All roles | 7 | Done |
+| US-43 | As any logged-in user, I can mark a notification as read | All roles | 7 | Done |
 
 ---
 
@@ -111,5 +111,5 @@
 | US-FE-08 | Favourites page — saved card grid, empty state | Student | 4 | Backlog |
 | US-FE-09 | Visited History page — list view, empty state | Student | 4 | Backlog |
 | US-FE-10 | Landlord/Agent Dashboard — listing management, bookings, analytics | Landlord / Agent | 5 | Done |
-| US-FE-11 | Admin Dashboard — pending listings, reports, user management, logs | Admin | 6 | Backlog |
+| US-FE-11 | Admin Dashboard — pending listings, reports, user management, logs | Admin | 6 | Done |
 | US-FE-12 | 404 / Error page — lost hornet illustration | All | 7 | Backlog |
