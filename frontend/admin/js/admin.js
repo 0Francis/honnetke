@@ -562,4 +562,70 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+
+  // ════════════════════════════════════════════════
+  //  PAGE: PROFILE — Admin Profile Handlers
+  // ════════════════════════════════════════════════
+
+  if (page === 'profile') {
+    // Populate profile with auth data
+    if (user) {
+      const profileName = document.getElementById('profile-name');
+      const profileEmail = document.getElementById('profile-email');
+      const profileAvatar = document.getElementById('profile-avatar-large');
+      const fullnameInput = document.getElementById('profile-fullname');
+      const emailInput = document.getElementById('profile-email-field');
+
+      if (profileName && user.fullName) profileName.textContent = user.fullName;
+      if (profileEmail && user.email) profileEmail.textContent = user.email;
+      if (fullnameInput && user.fullName) fullnameInput.value = user.fullName;
+      if (emailInput && user.email) emailInput.value = user.email;
+      if (profileAvatar && user.fullName) {
+        const initials = user.fullName.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+        profileAvatar.textContent = initials;
+      }
+    }
+
+    // Personal info form
+    const personalForm = document.getElementById('personal-info-form');
+    if (personalForm) {
+      personalForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        showToast('Profile Updated', 'Your personal information has been saved.', 'success');
+      });
+    }
+
+    // Password form
+    const passwordForm = document.getElementById('password-form');
+    if (passwordForm) {
+      passwordForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const newPwd = document.getElementById('new-password')?.value;
+        const confirmPwd = document.getElementById('confirm-password')?.value;
+        if (!newPwd || !confirmPwd) {
+          showToast('Missing Fields', 'Please fill in all password fields.', 'warning');
+          return;
+        }
+        if (newPwd !== confirmPwd) {
+          showToast('Mismatch', 'New passwords do not match.', 'error');
+          return;
+        }
+        showToast('Password Updated', 'Your password has been changed successfully.', 'success');
+        passwordForm.reset();
+      });
+    }
+
+    // 2FA toggle feedback
+    const twoFaToggle = document.getElementById('toggle-2fa');
+    if (twoFaToggle) {
+      twoFaToggle.addEventListener('change', () => {
+        if (twoFaToggle.checked) {
+          showToast('2FA Enabled', 'Two-factor authentication is now active.', 'success');
+        } else {
+          showToast('2FA Disabled', 'Two-factor authentication has been turned off.', 'warning');
+        }
+      });
+    }
+  }
+
 });

@@ -109,7 +109,25 @@ Each page then adds its own page-specific stylesheet.
 - **Folder**: `frontend/landlord/` (analytics.html)
 - **Status**: 🔨 Building
 
-### 13. Agent Dashboard
+### 13. Student Profile Page
+
+- **Folder**: `frontend/students/` (profile.html)
+- **Features**: Profile header card, personal info form, university/campus details, notification preferences, change password, deactivation with confirmation modal
+- **Status**: ✅ Complete
+
+### 14. Landlord Profile Page
+
+- **Folder**: `frontend/landlord/` (profile.html)
+- **Features**: Profile header card with verified badge, personal info + business name, contact preferences (WhatsApp/Call/SMS toggles), portfolio stats, change password, deactivation modal
+- **Status**: ✅ Complete
+
+### 15. Admin Profile Page
+
+- **Folder**: `frontend/admin/` (profile.html)
+- **Features**: Profile header card with purple admin badge, personal info, 2FA toggle, notification preferences, activity stats, admin-only note (no self-deactivation)
+- **Status**: ✅ Complete
+
+### 16. Agent Dashboard
 
 - **Folder**: `frontend/agents/` (planned)
 - **Status**: 📋 Not started
@@ -192,6 +210,18 @@ Charcoal bg, sticky, glassmorphism on scroll. Different from guest navbar:
 - **Content**: List view of visited properties (thumbnail, title, location, date visited)
 - **Empty state**: "No visits logged yet" + CTA button to hostels page
 
+#### S6. Student Profile Page (`profile.html`)
+
+- **Status**: ✅ Complete
+- **Layout**: Full-width page with stacked profile cards
+- **Profile Header Card**: Large avatar (initials), name, email, role badge (blue "Student"), verified badge, join date
+- **Stats Row**: 4 stats — Searches, Favourites, Reviews, Days Active
+- **Personal Info Form**: Full name (editable), email (read-only), phone, university, campus
+- **Account Settings Card**:
+  - Change Password: Current/New/Confirm password fields
+  - Notification Preferences: Email alerts, SMS alerts, push notifications (toggle switches)
+- **Danger Zone Card**: Red-bordered card with "Deactivate Account" button → confirmation modal
+
 ### Student File Structure
 
 ```
@@ -201,10 +231,11 @@ frontend/students/
 ├── listing.html
 ├── favourites.html
 ├── history.html
+├── profile.html             ← NEW — student profile page
 ├── css/
-│   └── students.css         ← all student page styles
+│   └── students.css         ← all student page styles (incl. profile section)
 ├── js/
-│   └── students.js          ← all student page logic
+│   └── students.js          ← all student page logic (incl. profile handlers)
 └── assets/
     └── images/              ← student-specific images
 ```
@@ -290,6 +321,19 @@ Charcoal bg, sticky, glassmorphism on scroll. Different from guest and student n
 - **Per-listing performance table**: Listing name, views this week, total views, status badge
 - **Note**: Analytics stored as weekly aggregates per the database schema, purged after 30 days
 
+#### L6. Landlord Profile Page (`profile.html`)
+
+- **Status**: ✅ Complete
+- **Layout**: Full-width page with stacked profile cards
+- **Profile Header Card**: Large avatar (initials, amber gradient), name, email, role badge (amber "Landlord"), verified badge, join date
+- **Portfolio Stats Row**: 4 stats — Total Listings, Active Listings, Total Bookings, Profile Views
+- **Personal Info Form**: Full name (editable), email (read-only), phone, business/property name
+- **Contact Preferences Card**: Toggle switches for WhatsApp, Phone Calls, SMS
+- **Account Settings Card**:
+  - Change Password: Current/New/Confirm password fields
+  - Notification Preferences: Booking alerts, listing updates, analytics reports (toggle switches)
+- **Danger Zone Card**: Red-bordered card with "Deactivate Account" button → confirmation modal
+
 ### Landlord File Structure
 
 ```
@@ -299,10 +343,11 @@ frontend/landlord/
 ├── manage-listings.html
 ├── bookings.html
 ├── analytics.html
+├── profile.html             ← NEW — landlord profile page
 ├── css/
-│   └── landlord.css         ← all landlord page styles
+│   └── landlord.css         ← all landlord page styles (incl. profile section)
 └── js/
-    └── landlord.js          ← all landlord page logic
+    └── landlord.js          ← all landlord page logic (incl. profile handlers)
 ```
 
 ### Shared Components (in every landlord page)
@@ -415,6 +460,19 @@ Charcoal bg, sticky, glassmorphism on scroll. Distinct from guest/student/landlo
 - **Empty state**: When all resolved — "All Clear! 🐝 — No duplicate listings detected — the hive is clean!"
 - **Note**: Backend duplicate-detection endpoint is not yet implemented. UI shows demo data and is ready for integration.
 
+#### A6. Admin Profile Page (`profile.html`)
+
+- **Status**: ✅ Complete
+- **Layout**: Full-width page with stacked profile cards
+- **Profile Header Card**: Large avatar (initials, purple gradient), name, email, role badge (purple "Admin"), join date
+- **Admin Activity Stats Row**: 3 stats — Users Managed, Listings Reviewed, Reports Resolved
+- **Personal Info Form**: Full name (editable), email (read-only), phone
+- **Account Settings Card**:
+  - Change Password: Current/New/Confirm password fields
+  - Security: Two-Factor Authentication toggle (with toast feedback)
+  - Notification Preferences: New reports, pending listings, system alerts (toggle switches)
+- **Administrator Note Card**: Purple-bordered card explaining admin accounts cannot be self-deactivated
+
 ### Admin File Structure
 
 ```
@@ -425,10 +483,11 @@ frontend/admin/
 ├── manage-users.html
 ├── flagged-listings.html
 ├── duplicate-queue.html
+├── profile.html            ← NEW — admin profile page
 ├── css/
-│   └── admin.css           ← all admin page styles
+│   └── admin.css           ← all admin page styles (incl. profile section)
 └── js/
-    └── admin.js            ← all admin page logic
+    └── admin.js            ← all admin page logic (incl. profile handlers)
 ```
 
 ### Shared Components (in every admin page)
@@ -492,6 +551,7 @@ frontend/
 │   ├── listing.html
 │   ├── favourites.html
 │   ├── history.html
+│   ├── profile.html
 │   ├── css/
 │   │   └── students.css
 │   └── js/
@@ -503,6 +563,7 @@ frontend/
 │   ├── manage-listings.html
 │   ├── bookings.html
 │   ├── analytics.html
+│   ├── profile.html
 │   ├── css/
 │   │   └── landlord.css
 │   └── js/
@@ -517,6 +578,7 @@ frontend/
 │   ├── manage-users.html
 │   ├── flagged-listings.html
 │   ├── duplicate-queue.html
+│   ├── profile.html
 │   ├── css/
 │   │   └── admin.css
 │   └── js/

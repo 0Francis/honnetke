@@ -28,6 +28,7 @@ app.use(cors({
     return cb(new Error('Not allowed by CORS'));
   },
 }));
+
 app.use(express.json());
 app.use(trafficLogger);
 

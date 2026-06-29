@@ -1182,4 +1182,98 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+
+  /* ──────────────────────────────────────────
+     PROFILE PAGE
+     ────────────────────────────────────────── */
+  const profilePage = document.body.dataset.page === 'profile';
+
+  if (profilePage) {
+    // Populate profile with auth data
+    const user = window.HonnetKE?.auth?.getUser();
+    if (user) {
+      const profileName = document.getElementById('profile-name');
+      const profileEmail = document.getElementById('profile-email');
+      const profileAvatar = document.getElementById('profile-avatar-large');
+      const fullnameInput = document.getElementById('profile-fullname');
+      const emailInput = document.getElementById('profile-email-field');
+
+      if (profileName && user.fullName) profileName.textContent = user.fullName;
+      if (profileEmail && user.email) profileEmail.textContent = user.email;
+      if (fullnameInput && user.fullName) fullnameInput.value = user.fullName;
+      if (emailInput && user.email) emailInput.value = user.email;
+      if (profileAvatar && user.fullName) {
+        const initials = user.fullName.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+        profileAvatar.textContent = initials;
+      }
+    }
+
+    // Personal info form
+    const personalForm = document.getElementById('personal-info-form');
+    if (personalForm) {
+      personalForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        showToast('Profile Updated 🏠', 'Your personal information has been saved.');
+      });
+    }
+
+    // Password form
+    const passwordForm = document.getElementById('password-form');
+    if (passwordForm) {
+      passwordForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const newPwd = document.getElementById('new-password')?.value;
+        const confirmPwd = document.getElementById('confirm-password')?.value;
+        if (!newPwd || !confirmPwd) {
+          showToast('Missing Fields', 'Please fill in all password fields.');
+          return;
+        }
+        if (newPwd !== confirmPwd) {
+          showToast('Mismatch', 'New passwords do not match.');
+          return;
+        }
+        showToast('Password Updated 🔒', 'Your password has been changed successfully.');
+        passwordForm.reset();
+      });
+    }
+
+    // Deactivation modal
+    const deactivateBtn = document.getElementById('deactivate-account');
+    const deactivateModal = document.getElementById('deactivate-modal');
+    const deactivateCancel = document.getElementById('deactivate-cancel');
+    const deactivateConfirm = document.getElementById('deactivate-confirm');
+
+    if (deactivateBtn && deactivateModal) {
+      deactivateBtn.addEventListener('click', () => {
+        deactivateModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+
+      const closeDM = () => {
+        deactivateModal.classList.remove('active');
+        document.body.style.overflow = '';
+      };
+
+      if (deactivateCancel) deactivateCancel.addEventListener('click', closeDM);
+
+      deactivateModal.addEventListener('click', (e) => {
+        if (e.target === deactivateModal) closeDM();
+      });
+
+      if (deactivateConfirm) {
+        deactivateConfirm.addEventListener('click', () => {
+          closeDM();
+          showToast('Account Deactivated', 'You will be logged out shortly.');
+          setTimeout(() => {
+            if (window.HonnetKE?.auth) {
+              window.HonnetKE.auth.logout();
+            } else {
+              window.location.href = '../loginpage/login.html';
+            }
+          }, 2000);
+        });
+      }
+    }
+  }
+
 });
