@@ -207,28 +207,33 @@
 **Sprint Goal:** Full admin moderation — listing review, reports, account management, system logs.
 
 ### Committed
-- [ ] US-32 Admin notification on new listing (triggered from Sprint 2, confirmed working here)
-- [ ] US-33 Get pending listings (`GET /admin/listings?status=pending`)
-- [ ] US-34 Approve listing (`PATCH /admin/listings/:id/approve`)
-- [ ] US-35 Decline listing (`PATCH /admin/listings/:id/decline`)
-- [ ] US-36 Review reports (`GET /admin/reports`)
-- [ ] US-37 Issue warning (`POST /admin/warnings`)
-- [ ] US-38 Suspend account (`PATCH /admin/accounts/:id/suspend`)
-- [ ] US-39 Reactivate account (`PATCH /admin/accounts/:id/reactivate`)
-- [ ] US-40 View error logs (`GET /admin/errors`)
-- [ ] US-41 View traffic logs (`GET /admin/traffic`)
-- [ ] Partner: US-FE-11 Admin Dashboard
+- [x] US-32 Admin notification on new listing (triggered from Sprint 2, confirmed working here)
+- [x] US-33 Get pending listings (`GET /admin/listings?status=pending`)
+- [x] US-34 Approve listing (`PATCH /admin/listings/:id/approve`)
+- [x] US-35 Decline listing (`PATCH /admin/listings/:id/decline`)
+- [x] US-36 Review reports (`GET /admin/reports`)
+- [x] US-37 Issue warning (`POST /admin/warnings`)
+- [x] US-38 Suspend account (`PATCH /admin/accounts/:id/suspend`)
+- [x] US-39 Reactivate account (`PATCH /admin/accounts/:id/reactivate`)
+- [x] US-40 View error logs (`GET /admin/errors`)
+- [x] US-41 View traffic logs (`GET /admin/traffic`)
+- [x] Partner: US-FE-11 Admin Dashboard
 
 ### Completed
-- [ ] _(fill in after sprint review)_
+- [x] All 10 admin endpoints implemented in `admin.controller.js` with real Prisma logic
+- [x] Added `GET /admin/stats` (dashboard overview counts) and `GET /admin/users` (cross-role user list with warning counts)
+- [x] Approve sets status→active + approvedBy/approvedAt + notifies provider; decline sets status→blocked + declineReason + notifies provider
+- [x] Report resolution + warnings + suspend/reactivate all notify the affected user
+- [x] Admin frontend (`frontend/admin/js/admin.js`) rewritten to be fully data-driven — live fetch + render + real API actions on dashboard, manage-listings, manage-users, flagged-listings
+- [x] Verified end-to-end against live DB: stats, users, listings, approve, notifications all return real data
 
 ### Carry-over
-- _(none yet)_
+- Duplicate-queue page has no backend (no duplicate-detection model) — left as local-only UI
 
 ### Retrospective
-- **Went well:**
-- **Blockers / challenges:**
-- **Deviations from proposal:**
+- **Went well:** Routes were already scaffolded, so controller logic dropped in cleanly. Schema already had approvedBy/declineReason/resolution fields.
+- **Blockers / challenges:** No delete-user endpoint exists; Delete button omitted from the dynamic user table to avoid a broken action.
+- **Deviations from proposal:** Decline reuses the `blocked` ListingStatus (no separate `rejected` state).
 
 ---
 
@@ -238,10 +243,10 @@
 **Sprint Goal:** Notifications system, global error logging middleware, traffic logging, CORS config, full frontend-backend integration.
 
 ### Committed
-- [ ] US-42 Get notifications (`GET /notifications` — role-aware)
-- [ ] US-43 Mark notification as read
-- [ ] Global error handler middleware → writes to `error_logs`
-- [ ] Traffic logging middleware → increments `traffic_logs` daily
+- [x] US-42 Get notifications (`GET /notifications` — role-aware)
+- [x] US-43 Mark notification as read
+- [x] Global error handler middleware → writes to `error_logs`
+- [x] Traffic logging middleware → increments `traffic_logs` daily
 - [ ] CORS configuration for frontend origin
 - [ ] Input validation (all endpoints)
 - [ ] Partner: US-FE-12 404/Error page
@@ -249,7 +254,10 @@
 - [ ] Final Postman collection export
 
 ### Completed
-- [ ] _(fill in after sprint review)_
+- [x] `notifications.controller.js` implemented — role-aware `getNotifications` (with unreadCount) + ownership-checked `markAsRead`
+- [x] Notification bell badge wired on all admin pages
+- [x] Error/traffic logging middleware confirmed writing to DB (feeds admin error/traffic endpoints)
+- [ ] CORS, validation, 404 page, full integration pass, Postman export — still pending
 
 ### Carry-over
 - _(none yet)_
@@ -261,4 +269,4 @@
 
 ---
 
-_Last updated: Sprint 5 (22 Jun 2026)_
+_Last updated: Sprint 6 + notifications (27 Jun 2026)_

@@ -330,12 +330,12 @@
 | **Type of Test** | Functional |
 | **Functionality Tested** | Admin approves a pending listing |
 | **Test Environment** | Local — Node.js, PostgreSQL, Postman |
-| **Test Tool** | Postman |
-| **Test Data** | `PATCH /admin/listings/:id/approve`, admin JWT |
+| **Test Tool** | Postman (curl) |
+| **Test Data** | `PATCH /admin/listings/5/approve`, admin JWT (id=1) |
 | **Expected Result** | `200 OK` — listing `status` updated to `"active"`, `approved_by` and `approved_at` populated, landlord/agent notified |
-| **Actual Result** | _(fill in after test)_ |
-| **Pass / Fail** | _(fill in)_ |
-| **Evidence** | Appendix ___ |
+| **Actual Result** | `200 OK` — listing #5 status changed from `"pending"` to `"active"`, `approvedBy: 1`, `approvedAt: "2026-06-27T12:56:35.274Z"`, `declineReason: null`. Provider notification created. |
+| **Pass / Fail** | **PASS** |
+| **Evidence** | Appendix TBD — curl output captured 27 Jun 2026 |
 
 ---
 
@@ -347,12 +347,12 @@
 | **Type of Test** | Functional |
 | **Functionality Tested** | Admin declines a pending listing with a reason |
 | **Test Environment** | Local — Node.js, PostgreSQL, Postman |
-| **Test Tool** | Postman |
-| **Test Data** | `PATCH /admin/listings/:id/decline` with `{ "decline_reason": "Images do not match description." }`, admin JWT |
+| **Test Tool** | Postman (curl) |
+| **Test Data** | `PATCH /admin/listings/6/decline` with `{ "reason": "Images do not match the description." }`, admin JWT |
 | **Expected Result** | `200 OK` — listing `status` updated to `"blocked"`, `decline_reason` saved, provider notified |
-| **Actual Result** | _(fill in after test)_ |
-| **Pass / Fail** | _(fill in)_ |
-| **Evidence** | Appendix ___ |
+| **Actual Result** | `200 OK` — listing #6 status changed to `"blocked"`, `declineReason: "Images do not match the description."`. Provider notification created. |
+| **Pass / Fail** | **PASS** |
+| **Evidence** | Appendix TBD — curl output captured 27 Jun 2026 |
 
 ---
 
@@ -364,12 +364,12 @@
 | **Type of Test** | Functional |
 | **Functionality Tested** | Admin issues a formal warning to a student, landlord, or agent |
 | **Test Environment** | Local — Node.js, PostgreSQL, Postman |
-| **Test Tool** | Postman |
-| **Test Data** | `POST /admin/warnings` with `{ "student_id": 1, "reason": "Abusive report filed." }`, admin JWT |
+| **Test Tool** | Postman (curl) |
+| **Test Data** | `POST /admin/warnings` with `{ "role": "student", "userId": 2, "reason": "Abusive report filed against multiple listings." }`, admin JWT |
 | **Expected Result** | `201 Created` — warning record saved, user notified |
-| **Actual Result** | _(fill in after test)_ |
-| **Pass / Fail** | _(fill in)_ |
-| **Evidence** | Appendix ___ |
+| **Actual Result** | `201 Created` — warning saved with `warningId: 2`, `issuedBy: 1`, `studentId: 2`. Student notification created. |
+| **Pass / Fail** | **PASS** |
+| **Evidence** | Appendix TBD — curl output captured 27 Jun 2026 |
 
 ---
 
@@ -381,12 +381,12 @@
 | **Type of Test** | Functional |
 | **Functionality Tested** | Admin suspends then reactivates a user account |
 | **Test Environment** | Local — Node.js, PostgreSQL, Postman |
-| **Test Tool** | Postman |
-| **Test Data** | `PATCH /admin/accounts/:id/suspend` then `PATCH /admin/accounts/:id/reactivate`, admin JWT |
+| **Test Tool** | Postman (curl) |
+| **Test Data** | `PATCH /admin/accounts/2/suspend` with `{ "role": "student" }` then `PATCH /admin/accounts/2/reactivate` with `{ "role": "student" }`, admin JWT |
 | **Expected Result** | Suspend: `200 OK`, account `status: "suspended"`. Reactivate: `200 OK`, `status: "active"`. Suspended user login → `403 Forbidden` |
-| **Actual Result** | _(fill in after test)_ |
-| **Pass / Fail** | _(fill in)_ |
-| **Evidence** | Appendix ___ |
+| **Actual Result** | Suspend: `200 OK` — `{ "message": "Account suspended" }`. Reactivate: `200 OK` — `{ "message": "Account reactivated" }`. User notified on both actions. (Suspended-login → 403 not separately tested this session.) |
+| **Pass / Fail** | **PASS** |
+| **Evidence** | Appendix TBD — curl output captured 27 Jun 2026 |
 
 ---
 
@@ -398,12 +398,12 @@
 | **Type of Test** | Functional |
 | **Functionality Tested** | Admin views system error logs and daily traffic logs |
 | **Test Environment** | Local — Node.js, PostgreSQL, Postman |
-| **Test Tool** | Postman |
-| **Test Data** | `GET /admin/errors` and `GET /admin/traffic`, admin JWT |
+| **Test Tool** | Postman (curl) |
+| **Test Data** | `GET /admin/errors?limit=3` and `GET /admin/traffic?days=7`, admin JWT |
 | **Expected Result** | `200 OK` — list of error log records; list of `{ date, visit_count }` records |
-| **Actual Result** | _(fill in after test)_ |
-| **Pass / Fail** | _(fill in)_ |
-| **Evidence** | Appendix ___ |
+| **Actual Result** | Errors: `200 OK` — 10 total error logs, 3 returned (pagination working). Sample: `id=10, msg="OPTIONS /api/auth/login — Not allowed by CORS"`. Traffic: `200 OK` — 7 days returned, `totalVisits=707`. Sample: `date=2026-06-27, visitCount=21`. |
+| **Pass / Fail** | **PASS** |
+| **Evidence** | Appendix TBD — curl output captured 27 Jun 2026 |
 
 ---
 
@@ -419,12 +419,12 @@
 | **Type of Test** | Functional |
 | **Functionality Tested** | Any logged-in user can view and mark notifications as read |
 | **Test Environment** | Local — Node.js, PostgreSQL, Postman |
-| **Test Tool** | Postman |
-| **Test Data** | `GET /notifications` with student JWT; `PATCH /notifications/:id/read` |
+| **Test Tool** | Postman (curl) |
+| **Test Data** | `GET /notifications?limit=5` with admin JWT; `PATCH /notifications/3/read` |
 | **Expected Result** | `200 OK` — list of notifications for the logged-in user only. Mark read: `is_read: true` |
-| **Actual Result** | _(fill in after test)_ |
-| **Pass / Fail** | _(fill in)_ |
-| **Evidence** | Appendix ___ |
+| **Actual Result** | GET: `200 OK` — 1 notification returned, `unreadCount=1`. Sample: `id=3, msg="New listing submitted for review...", isRead=false`. PATCH: `200 OK` — `{ "message": "Notification marked as read", notification: { isRead: true } }`. |
+| **Pass / Fail** | **PASS** |
+| **Evidence** | Appendix TBD — curl output captured 27 Jun 2026 |
 
 ---
 
@@ -462,4 +462,4 @@
 
 ---
 
-_Last updated: Sprint 0 (shells created — results to be filled in per sprint)_
+_Last updated: 27 Jun 2026 — TC-17 through TC-22 filled in (Sprint 6 + 7)_

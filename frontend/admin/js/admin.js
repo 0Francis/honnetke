@@ -1,26 +1,57 @@
 /* ===================================================
-   HonnetKE Admin Pages — JavaScript
-   Covers: Auth guard, Navbar, Toasts, Filter Tabs,
-   Modals, Data Tables, Dashboard, Manage Listings,
-   Manage Users, Flagged Listings, Duplicate Queue
+   HonnetKE Admin Pages — JavaScript (API-wired)
+   Auth guard, Navbar, Toasts, Modals, Notifications,
+   and live data for Dashboard, Manage Listings,
+   Manage Users, and Flagged Listings.
    =================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
+  const api = window.HonnetKE.api;
+  const auth = window.HonnetKE.auth;
+
   // ── Auth Guard ──
-  const user = window.HonnetKE.auth.requireAuth(['admin']);
+  const user = auth.requireAuth(['admin']);
   if (!user) return;
 
-  // Populate admin name in navbar
+  // Populate admin initials in navbar
   const avatarEl = document.querySelector('.avatar');
   if (avatarEl && user.fullName) {
-    const initials = user.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-    avatarEl.textContent = initials;
+    avatarEl.textContent = user.fullName
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
   }
 
-  // ── Detect Current Page ──
   const page = document.body.dataset.page;
 
-  // ── Navbar Scroll Behavior ──
+  // ════════════════════════════════════════════════
+  //  Shared UI helpers
+  // ════════════════════════════════════════════════
+
+  function esc(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function formatDate(value) {
+    if (!value) return '—';
+    const d = new Date(value);
+    if (isNaN(d)) return '—';
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  function statusBadge(status) {
+    const label = status.charAt(0).toUpperCase() + status.slice(1);
+    return `<span class="status-badge ${esc(status)}"><span class="status-dot"></span>${esc(label)}</span>`;
+  }
+
+  // ── Navbar scroll ──
   const navbar = document.getElementById('navbar');
   if (navbar) {
     window.addEventListener('scroll', () => {
@@ -28,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ── Mobile Menu Toggle ──
+  // ── Mobile menu ──
   const menuToggle = document.getElementById('menu-toggle');
   const mobileNav = document.getElementById('admin-mobile-nav');
   if (menuToggle && mobileNav) {
@@ -40,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ── User Dropdown ──
+  // ── User dropdown ──
   const userMenu = document.querySelector('.user-menu');
   const userAvatarBtn = document.querySelector('.user-avatar-btn');
   if (userMenu && userAvatarBtn) {
@@ -49,37 +80,34 @@ document.addEventListener('DOMContentLoaded', () => {
       userMenu.classList.toggle('open');
     });
     document.addEventListener('click', (e) => {
-      if (!userMenu.contains(e.target)) {
-        userMenu.classList.remove('open');
-      }
+      if (!userMenu.contains(e.target)) userMenu.classList.remove('open');
     });
   }
 
-  // ── Logout Buttons ──
+  // ── Logout ──
   document.querySelectorAll('[data-action="logout"]').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
-      window.HonnetKE.auth.logout();
+      auth.logout();
     });
   });
 
-  // ── Scroll Reveal ──
+  // ── Scroll reveal ──
   const reveals = document.querySelectorAll('.reveal');
   if (reveals.length > 0) {
-    const revealObserver = new IntersectionObserver((entries) => {
+    const obs = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('revealed');
-          revealObserver.unobserve(entry.target);
+          obs.unobserve(entry.target);
         }
       });
     }, { threshold: 0.1 });
-    reveals.forEach(el => revealObserver.observe(el));
+    reveals.forEach(el => obs.observe(el));
   }
 
-  // ── Toast System ──
+  // ── Toast system ──
   const toastContainer = document.getElementById('toast-container');
-
   function showToast(title, message, type = 'success') {
     if (!toastContainer) return;
     const icons = {
@@ -92,82 +120,22 @@ document.addEventListener('DOMContentLoaded', () => {
     toast.innerHTML = `
       <div class="toast-icon">${icons[type] || icons.success}</div>
       <div class="toast-content">
-        <div class="toast-title">${title}</div>
-        <div class="toast-message">${message}</div>
+        <div class="toast-title">${esc(title)}</div>
+        <div class="toast-message">${esc(message)}</div>
       </div>
       <button class="toast-close" aria-label="Close notification">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    `;
+      </button>`;
     toastContainer.appendChild(toast);
-    const closeBtn = toast.querySelector('.toast-close');
     const dismiss = () => {
       toast.classList.add('toast-exit');
       setTimeout(() => toast.remove(), 300);
     };
-    closeBtn.addEventListener('click', dismiss);
+    toast.querySelector('.toast-close').addEventListener('click', dismiss);
     setTimeout(dismiss, 4000);
   }
 
-  // ── Welcome Toast (dashboard only, once per session) ──
-  if (page === 'dashboard' && !sessionStorage.getItem('admin_welcomed')) {
-    sessionStorage.setItem('admin_welcomed', 'true');
-    setTimeout(() => {
-      showToast('Welcome back!', `Logged in as ${user.fullName || 'Admin'}`, 'success');
-    }, 500);
-  }
-
-  // ── Filter Tabs ──
-  document.querySelectorAll('.filter-tabs').forEach(tabGroup => {
-    const tabs = tabGroup.querySelectorAll('.filter-tab');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        const filter = tab.dataset.filter;
-        filterTable(filter, tabGroup.closest('.dashboard-section, .admin-main'));
-      });
-    });
-  });
-
-  function filterTable(filter, container) {
-    if (!container) return;
-    const rows = container.querySelectorAll('tbody tr[data-status]');
-    rows.forEach(row => {
-      if (filter === 'all' || row.dataset.status === filter) {
-        row.style.display = '';
-      } else {
-        row.style.display = 'none';
-      }
-    });
-    // Filter role tabs for manage-users
-    const roleRows = container.querySelectorAll('tbody tr[data-role]');
-    if (roleRows.length > 0 && ['student', 'landlord', 'agent'].includes(filter)) {
-      roleRows.forEach(row => {
-        if (filter === 'all' || row.dataset.role === filter) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
-      });
-    }
-  }
-
-  // ── Search (Manage Users) ──
-  const searchInput = document.getElementById('user-search');
-  if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      const q = e.target.value.toLowerCase();
-      const rows = document.querySelectorAll('#users-table tbody tr');
-      rows.forEach(row => {
-        const name = (row.querySelector('.table-name')?.textContent || '').toLowerCase();
-        const email = (row.querySelector('.table-email')?.textContent || '').toLowerCase();
-        row.style.display = (name.includes(q) || email.includes(q)) ? '' : 'none';
-      });
-    });
-  }
-
-  // ── Modal System ──
+  // ── Modal system ──
   let activeModal = null;
   let modalCallback = null;
 
@@ -178,299 +146,570 @@ document.addEventListener('DOMContentLoaded', () => {
     modalCallback = callback || null;
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
-    // Clear textarea
     const textarea = modal.querySelector('.modal-textarea');
     if (textarea) textarea.value = '';
   }
 
   function closeModal() {
-    if (activeModal) {
-      activeModal.classList.remove('open');
-      document.body.style.overflow = '';
-      activeModal = null;
-      modalCallback = null;
-    }
+    if (!activeModal) return;
+    activeModal.classList.remove('open');
+    document.body.style.overflow = '';
+    activeModal = null;
+    modalCallback = null;
   }
 
-  // Close modal on cancel buttons
-  document.querySelectorAll('.modal-btn.cancel').forEach(btn => {
-    btn.addEventListener('click', closeModal);
-  });
+  function modalTextValue() {
+    if (!activeModal) return '';
+    const textarea = activeModal.querySelector('.modal-textarea');
+    return textarea ? textarea.value.trim() : '';
+  }
 
-  // Close modal on overlay click
+  document.querySelectorAll('.modal-btn.cancel').forEach(btn => btn.addEventListener('click', closeModal));
   document.querySelectorAll('.modal-overlay').forEach(overlay => {
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) closeModal();
-    });
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
   });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
-  // Close modal on Escape key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
-  });
-
-
-  // ════════════════════════════════════════════════
-  //  PAGE: MANAGE LISTINGS — Action Handlers
-  // ════════════════════════════════════════════════
-
-  if (page === 'manage-listings') {
-    // Approve button
-    document.querySelectorAll('[data-action="approve"]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const row = btn.closest('tr');
-        const title = row.querySelector('.table-name')?.textContent || 'listing';
-        openModal('approve-modal', () => {
-          // Update the status badge in the row
-          const badge = row.querySelector('.status-badge');
-          if (badge) {
-            badge.className = 'status-badge active';
-            badge.innerHTML = '<span class="status-dot"></span>Active';
-          }
-          // Hide action buttons
-          const actions = row.querySelector('.table-actions');
-          if (actions) actions.innerHTML = '<span class="no-action-text">Approved</span>';
-          row.dataset.status = 'active';
-          showToast('Listing Approved', `"${title}" is now live on the platform.`, 'success');
-        });
-        // Update modal title
-        const modalTitle = document.querySelector('#approve-modal h3');
-        if (modalTitle) modalTitle.textContent = `Approve "${title}"?`;
-      });
-    });
-
-    // Decline button
-    document.querySelectorAll('[data-action="decline"]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const row = btn.closest('tr');
-        const title = row.querySelector('.table-name')?.textContent || 'listing';
-        openModal('decline-modal', () => {
-          const badge = row.querySelector('.status-badge');
-          if (badge) {
-            badge.className = 'status-badge blocked';
-            badge.innerHTML = '<span class="status-dot"></span>Blocked';
-          }
-          const actions = row.querySelector('.table-actions');
-          if (actions) actions.innerHTML = '<span class="no-action-text">Declined</span>';
-          row.dataset.status = 'blocked';
-          showToast('Listing Declined', `"${title}" has been blocked.`, 'warning');
-        });
-        const modalTitle = document.querySelector('#decline-modal h3');
-        if (modalTitle) modalTitle.textContent = `Decline "${title}"?`;
-      });
-    });
-
-    // Suspend listing button
-    document.querySelectorAll('[data-action="suspend-listing"]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const row = btn.closest('tr');
-        const title = row.querySelector('.table-name')?.textContent || 'listing';
-        openModal('suspend-listing-modal', () => {
-          const badge = row.querySelector('.status-badge');
-          if (badge) {
-            badge.className = 'status-badge blocked';
-            badge.innerHTML = '<span class="status-dot"></span>Blocked';
-          }
-          const actions = row.querySelector('.table-actions');
-          if (actions) actions.innerHTML = '<span class="no-action-text">Suspended</span>';
-          row.dataset.status = 'blocked';
-          showToast('Listing Suspended', `"${title}" has been suspended.`, 'warning');
-        });
-      });
-    });
-
-    // Modal confirm buttons
-    document.querySelectorAll('#approve-modal .confirm-action, #approve-modal .modal-btn.confirm-action').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (modalCallback) modalCallback();
-        closeModal();
-      });
-    });
-
-    document.querySelectorAll('#decline-modal .danger-action, #decline-modal .modal-btn.danger-action').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (modalCallback) modalCallback();
-        closeModal();
-      });
-    });
-
-    document.querySelectorAll('#suspend-listing-modal .danger-action, #suspend-listing-modal .modal-btn.danger-action').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (modalCallback) modalCallback();
+  // Generic confirm-button wiring: any confirm/danger/warn action button runs modalCallback
+  function wireModalConfirm(modalId) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+    modal.querySelectorAll('.confirm-action, .danger-action, .warn-action').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const cb = modalCallback;
+        const text = modalTextValue();
+        if (cb) await cb(text);
         closeModal();
       });
     });
   }
-
+  ['approve-modal', 'decline-modal', 'suspend-listing-modal', 'suspend-user-modal',
+    'warn-user-modal', 'resolve-modal'].forEach(wireModalConfirm);
 
   // ════════════════════════════════════════════════
-  //  PAGE: MANAGE USERS — Action Handlers
+  //  Notification bell (all pages)
   // ════════════════════════════════════════════════
-
-  if (page === 'manage-users') {
-    // Suspend user
-    document.querySelectorAll('[data-action="suspend-user"]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const row = btn.closest('tr');
-        const name = row.querySelector('.table-name')?.textContent || 'user';
-        openModal('suspend-user-modal', () => {
-          const badge = row.querySelector('.status-badge');
-          if (badge) {
-            badge.className = 'status-badge suspended';
-            badge.innerHTML = '<span class="status-dot"></span>Suspended';
-          }
-          // Swap buttons
-          btn.textContent = 'Reactivate';
-          btn.className = 'btn-sm btn-reactivate';
-          btn.dataset.action = 'reactivate-user';
-          bindReactivate(btn);
-          row.dataset.status = 'suspended';
-          showToast('Account Suspended', `${name}'s account has been suspended.`, 'warning');
-        });
-        const modalTitle = document.querySelector('#suspend-user-modal h3');
-        if (modalTitle) modalTitle.textContent = `Suspend ${name}?`;
-      });
-    });
-
-    function bindReactivate(btn) {
-      btn.addEventListener('click', () => {
-        const row = btn.closest('tr');
-        const name = row.querySelector('.table-name')?.textContent || 'user';
-        const badge = row.querySelector('.status-badge');
-        if (badge) {
-          badge.className = 'status-badge active';
-          badge.innerHTML = '<span class="status-dot"></span>Active';
-        }
-        btn.textContent = 'Suspend';
-        btn.className = 'btn-sm btn-suspend';
-        btn.dataset.action = 'suspend-user';
-        row.dataset.status = 'active';
-        showToast('Account Reactivated', `${name}'s account is now active.`, 'success');
-      });
+  async function loadNotificationBadge() {
+    const badge = document.querySelector('.notification-badge');
+    if (!badge) return;
+    try {
+      const { unreadCount } = await api.get('/notifications?unread=true&limit=1', true);
+      badge.style.display = unreadCount > 0 ? '' : 'none';
+    } catch (_) {
+      badge.style.display = 'none';
     }
+  }
+  loadNotificationBadge();
 
-    // Reactivate user (already suspended rows)
-    document.querySelectorAll('[data-action="reactivate-user"]').forEach(btn => {
-      bindReactivate(btn);
-    });
-
-    // Warn user
-    document.querySelectorAll('[data-action="warn-user"]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const row = btn.closest('tr');
-        const name = row.querySelector('.table-name')?.textContent || 'user';
-        openModal('warn-user-modal', () => {
-          // Increment warning count
-          const warnCount = row.querySelector('.warning-count');
-          if (warnCount) {
-            const current = parseInt(warnCount.textContent) || 0;
-            warnCount.textContent = current + 1;
-          }
-          showToast('Warning Issued', `A warning has been sent to ${name}.`, 'warning');
-        });
-        const modalTitle = document.querySelector('#warn-user-modal h3');
-        if (modalTitle) modalTitle.textContent = `Warn ${name}?`;
-      });
-    });
-
-    // Delete user
-    document.querySelectorAll('[data-action="delete-user"]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const row = btn.closest('tr');
-        const name = row.querySelector('.table-name')?.textContent || 'user';
-        openModal('delete-user-modal', () => {
-          row.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-          row.style.opacity = '0';
-          row.style.transform = 'translateX(20px)';
-          setTimeout(() => row.remove(), 300);
-          showToast('Account Deleted', `${name}'s account has been permanently removed.`, 'error');
-        });
-        const modalTitle = document.querySelector('#delete-user-modal h3');
-        if (modalTitle) modalTitle.textContent = `Delete ${name}?`;
-      });
-    });
-
-    // Modal confirm handlers for manage-users
-    ['suspend-user-modal', 'warn-user-modal', 'delete-user-modal'].forEach(modalId => {
-      const modal = document.getElementById(modalId);
-      if (!modal) return;
-      const confirmBtn = modal.querySelector('.modal-btn.danger-action, .modal-btn.warn-action, .modal-btn.confirm-action');
-      if (confirmBtn) {
-        confirmBtn.addEventListener('click', () => {
-          if (modalCallback) modalCallback();
-          closeModal();
-        });
+  // ════════════════════════════════════════════════
+  //  Filter tabs (client-side row show/hide)
+  // ════════════════════════════════════════════════
+  function applyFilter(filter, container) {
+    if (!container) return;
+    container.querySelectorAll('tbody tr[data-status], tbody tr[data-role]').forEach(row => {
+      if (row.classList.contains('report-detail-row')) return;
+      const matchStatus = row.dataset.status === filter;
+      const matchRole = row.dataset.role === filter;
+      const show = filter === 'all' || matchStatus || matchRole;
+      row.style.display = show ? '' : 'none';
+      // Keep detail rows in sync (flagged page)
+      const detail = row.nextElementSibling;
+      if (detail && detail.classList.contains('report-detail-row')) {
+        detail.style.display = show ? detail.style.display : 'none';
+        if (!show) { row.classList.remove('expanded'); detail.classList.remove('open'); }
       }
     });
   }
 
+  document.querySelectorAll('.filter-tabs').forEach(group => {
+    const tabs = group.querySelectorAll('.filter-tab');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        applyFilter(tab.dataset.filter, group.closest('.dashboard-section, .admin-main'));
+      });
+    });
+  });
+
+  function tableLoading(tbody, cols, text = 'Loading…') {
+    tbody.innerHTML = `<tr><td colspan="${cols}" class="table-muted" style="text-align:center;padding:2rem;">${esc(text)}</td></tr>`;
+  }
+  function tableEmpty(tbody, cols, text) {
+    tbody.innerHTML = `<tr><td colspan="${cols}" class="table-muted" style="text-align:center;padding:2rem;">${esc(text)}</td></tr>`;
+  }
 
   // ════════════════════════════════════════════════
-  //  PAGE: FLAGGED LISTINGS — Expandable Rows
+  //  PAGE: DASHBOARD
   // ════════════════════════════════════════════════
+  if (page === 'dashboard') {
+    if (!sessionStorage.getItem('admin_welcomed')) {
+      sessionStorage.setItem('admin_welcomed', 'true');
+      setTimeout(() => showToast('Welcome back!', `Logged in as ${user.fullName || 'Admin'}`, 'success'), 500);
+    }
+    loadDashboardStats();
+    loadDashboardReports();
+  }
 
-  if (page === 'flagged-listings') {
+  async function loadDashboardStats() {
+    try {
+      const s = await api.get('/admin/stats', true);
+      const setStat = (id, val) => {
+        const el = document.querySelector(`#${id} .stat-value`);
+        if (el) el.textContent = Number(val).toLocaleString();
+      };
+      setStat('stat-users', s.totalUsers);
+      setStat('stat-total-listings', s.totalListings);
+      setStat('stat-active-listings', s.activeListings);
+      setStat('stat-pending', s.pendingListings);
+      setStat('stat-flagged', s.pendingReports);
+      setStat('stat-errors', s.errorsToday);
+
+      const visits = document.querySelector('#health-traffic .health-value');
+      if (visits) visits.textContent = Number(s.visitsToday).toLocaleString();
+      const errs = document.querySelector('#health-errors .health-value');
+      if (errs) errs.textContent = Number(s.errorsToday).toLocaleString();
+
+      const reviewDesc = document.querySelector('#action-review .action-desc');
+      if (reviewDesc) reviewDesc.textContent = `${s.pendingListings} listings awaiting approval`;
+      const flaggedDesc = document.querySelector('#action-flagged .action-desc');
+      if (flaggedDesc) flaggedDesc.textContent = `${s.pendingReports} pending student reports`;
+    } catch (err) {
+      showToast('Error', err.message || 'Could not load stats', 'error');
+    }
+  }
+
+  async function loadDashboardReports() {
+    const tbody = document.querySelector('#dashboard-reports-table tbody');
+    if (!tbody) return;
+    tableLoading(tbody, 6);
+    try {
+      const { reports } = await api.get('/admin/reports?limit=5', true);
+      if (!reports.length) { tableEmpty(tbody, 6, 'No reports filed yet.'); return; }
+      tbody.innerHTML = reports.map(r => `
+        <tr data-report-id="${r.reportId}" data-status="${esc(r.status)}">
+          <td class="table-name">${esc(r.student?.fullName || 'Student')}</td>
+          <td class="table-name">${esc(r.listing?.title || 'Listing')}</td>
+          <td class="table-muted">${esc(r.reason)}</td>
+          <td class="table-date">${formatDate(r.createdAt)}</td>
+          <td>${statusBadge(r.status)}</td>
+          <td><div class="table-actions">${r.status === 'pending'
+            ? '<button class="btn-sm btn-resolve" data-action="resolve-dash">Resolve</button>'
+            : '<span class="no-action-text">Resolved</span>'}</div></td>
+        </tr>`).join('');
+      bindDashboardResolve();
+    } catch (err) {
+      tableEmpty(tbody, 6, err.message || 'Could not load reports.');
+    }
+  }
+
+  function bindDashboardResolve() {
+    document.querySelectorAll('[data-action="resolve-dash"]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const row = btn.closest('tr');
+        const id = row.dataset.reportId;
+        const listing = row.querySelector('.table-name')?.textContent || 'listing';
+        try {
+          await api.patch(`/admin/reports/${id}/resolve`, {}, true);
+          row.querySelector('td:nth-child(5)').innerHTML = statusBadge('resolved');
+          row.querySelector('.table-actions').innerHTML = '<span class="no-action-text">Resolved</span>';
+          row.dataset.status = 'resolved';
+          showToast('Report Resolved', `Report for "${listing}" resolved.`, 'success');
+        } catch (err) {
+          showToast('Error', err.message, 'error');
+        }
+      });
+    });
+  }
+
+  // ════════════════════════════════════════════════
+  //  PAGE: MANAGE LISTINGS
+  // ════════════════════════════════════════════════
+  if (page === 'manage-listings') loadListings();
+
+  async function loadListings() {
+    const tbody = document.querySelector('#listings-table tbody');
+    if (!tbody) return;
+    tableLoading(tbody, 8);
+    try {
+      const { listings } = await api.get('/admin/listings?status=all&limit=50', true);
+      if (!listings.length) { tableEmpty(tbody, 8, 'No listings found.'); return; }
+      tbody.innerHTML = listings.map(l => {
+        const provider = l.landlord?.fullName || l.agent?.fullName || 'Unknown';
+        const price = Number(l.price).toLocaleString();
+        let actions;
+        if (l.status === 'pending') {
+          actions = `<button class="btn-sm btn-approve" data-action="approve">Approve</button>
+                     <button class="btn-sm btn-decline-action" data-action="decline">Decline</button>`;
+        } else if (l.status === 'active') {
+          actions = `<button class="btn-sm btn-suspend" data-action="suspend-listing">Suspend</button>`;
+        } else if (l.status === 'inactive') {
+          actions = '<span class="no-action-text">Deactivated by owner</span>';
+        } else {
+          actions = '<span class="no-action-text">Blocked by admin</span>';
+        }
+        return `
+          <tr data-status="${esc(l.status)}" data-listing-id="${l.listingId}">
+            <td class="table-muted">#${l.listingId}</td>
+            <td class="table-name">${esc(l.title)}</td>
+            <td class="table-muted">${esc(provider)}</td>
+            <td class="table-muted">${esc(l.area)}, ${esc(l.county)}</td>
+            <td class="table-muted">${price}</td>
+            <td>${statusBadge(l.status)}</td>
+            <td class="table-date">${formatDate(l.createdAt)}</td>
+            <td><div class="table-actions">${actions}</div></td>
+          </tr>`;
+      }).join('');
+      bindListingActions();
+    } catch (err) {
+      tableEmpty(tbody, 8, err.message || 'Could not load listings.');
+    }
+  }
+
+  function setRowBlocked(row, label) {
+    row.querySelector('td:nth-child(6)').innerHTML = statusBadge('blocked');
+    row.querySelector('.table-actions').innerHTML = `<span class="no-action-text">${esc(label)}</span>`;
+    row.dataset.status = 'blocked';
+  }
+
+  function bindListingActions() {
+    document.querySelectorAll('[data-action="approve"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const row = btn.closest('tr');
+        const id = row.dataset.listingId;
+        const title = row.querySelector('.table-name')?.textContent || 'listing';
+        const modalTitle = document.querySelector('#approve-modal h3');
+        if (modalTitle) modalTitle.textContent = `Approve "${title}"?`;
+        openModal('approve-modal', async () => {
+          try {
+            await api.patch(`/admin/listings/${id}/approve`, {}, true);
+            row.querySelector('td:nth-child(6)').innerHTML = statusBadge('active');
+            row.querySelector('.table-actions').innerHTML = '<button class="btn-sm btn-suspend" data-action="suspend-listing">Suspend</button>';
+            row.dataset.status = 'active';
+            bindListingActions();
+            showToast('Listing Approved', `"${title}" is now live.`, 'success');
+          } catch (err) { showToast('Error', err.message, 'error'); }
+        });
+      });
+    });
+
+    document.querySelectorAll('[data-action="decline"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const row = btn.closest('tr');
+        const id = row.dataset.listingId;
+        const title = row.querySelector('.table-name')?.textContent || 'listing';
+        const modalTitle = document.querySelector('#decline-modal h3');
+        if (modalTitle) modalTitle.textContent = `Decline "${title}"?`;
+        openModal('decline-modal', async (reason) => {
+          if (!reason) { showToast('Reason required', 'Please provide a decline reason.', 'warning'); return; }
+          try {
+            await api.patch(`/admin/listings/${id}/decline`, { reason }, true);
+            setRowBlocked(row, 'Declined');
+            showToast('Listing Declined', `"${title}" has been blocked.`, 'warning');
+          } catch (err) { showToast('Error', err.message, 'error'); }
+        });
+      });
+    });
+
+    document.querySelectorAll('[data-action="suspend-listing"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const row = btn.closest('tr');
+        const id = row.dataset.listingId;
+        const title = row.querySelector('.table-name')?.textContent || 'listing';
+        openModal('suspend-listing-modal', async () => {
+          try {
+            await api.patch(`/admin/listings/${id}/decline`, { reason: 'Suspended by admin' }, true);
+            setRowBlocked(row, 'Suspended');
+            showToast('Listing Suspended', `"${title}" has been suspended.`, 'warning');
+          } catch (err) { showToast('Error', err.message, 'error'); }
+        });
+      });
+    });
+  }
+
+  // ════════════════════════════════════════════════
+  //  PAGE: MANAGE USERS
+  // ════════════════════════════════════════════════
+  if (page === 'manage-users') loadUsers();
+
+  let allUsers = [];
+
+  async function loadUsers() {
+    const tbody = document.querySelector('#users-table tbody');
+    if (!tbody) return;
+    tableLoading(tbody, 9);
+    try {
+      const { users } = await api.get('/admin/users', true);
+      allUsers = users;
+      renderUsers(users);
+      wireUserSearch();
+    } catch (err) {
+      tableEmpty(tbody, 9, err.message || 'Could not load users.');
+    }
+  }
+
+  function renderUsers(users) {
+    const tbody = document.querySelector('#users-table tbody');
+    if (!users.length) { tableEmpty(tbody, 9, 'No users found.'); return; }
+    const roleLabel = { student: 'Student', landlord: 'Landlord', agent: 'Agent' };
+    tbody.innerHTML = users.map(u => {
+      const suspended = u.status === 'suspended';
+      const toggleBtn = suspended
+        ? `<button class="btn-sm btn-reactivate" data-action="reactivate-user">Reactivate</button>`
+        : `<button class="btn-sm btn-suspend" data-action="suspend-user">Suspend</button>
+           <button class="btn-sm btn-warn" data-action="warn-user">Warn</button>`;
+      return `
+        <tr data-role="${esc(u.role)}" data-status="${esc(u.status)}" data-user-id="${u.id}">
+          <td class="table-muted">#${u.id}</td>
+          <td class="table-name">${esc(u.fullName)}</td>
+          <td class="table-email table-muted">${esc(u.email)}</td>
+          <td class="table-muted">${esc(u.phoneNumber || '—')}</td>
+          <td><span class="role-badge ${esc(u.role)}">${esc(roleLabel[u.role] || u.role)}</span></td>
+          <td>${statusBadge(u.status)}</td>
+          <td class="table-date">${formatDate(u.createdAt)}</td>
+          <td><span class="warning-count">${u.warningCount || 0}</span></td>
+          <td><div class="table-actions">${toggleBtn}</div></td>
+        </tr>`;
+    }).join('');
+    bindUserActions();
+  }
+
+  function wireUserSearch() {
+    const input = document.getElementById('user-search');
+    if (!input) return;
+    input.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase();
+      const filtered = allUsers.filter(u =>
+        u.fullName.toLowerCase().includes(q) || u.email.toLowerCase().includes(q));
+      renderUsers(filtered);
+      // Re-apply the active role tab
+      const activeTab = document.querySelector('.filter-tab.active');
+      if (activeTab && activeTab.dataset.filter !== 'all') {
+        applyFilter(activeTab.dataset.filter, document.querySelector('.admin-main'));
+      }
+    });
+  }
+
+  function refreshUserRow(row, status) {
+    const id = row.dataset.userId;
+    const u = allUsers.find(x => String(x.id) === String(id) && x.role === row.dataset.role);
+    if (u) u.status = status;
+    row.querySelector('td:nth-child(6)').innerHTML = statusBadge(status);
+    row.dataset.status = status;
+    row.querySelector('.table-actions').innerHTML = status === 'suspended'
+      ? `<button class="btn-sm btn-reactivate" data-action="reactivate-user">Reactivate</button>`
+      : `<button class="btn-sm btn-suspend" data-action="suspend-user">Suspend</button>
+         <button class="btn-sm btn-warn" data-action="warn-user">Warn</button>`;
+    bindUserActions();
+  }
+
+  function bindUserActions() {
+    document.querySelectorAll('[data-action="suspend-user"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const row = btn.closest('tr');
+        const name = row.querySelector('.table-name')?.textContent || 'user';
+        const modalTitle = document.querySelector('#suspend-user-modal h3');
+        if (modalTitle) modalTitle.textContent = `Suspend ${name}?`;
+        openModal('suspend-user-modal', async () => {
+          try {
+            await api.patch(`/admin/accounts/${row.dataset.userId}/suspend`, { role: row.dataset.role }, true);
+            refreshUserRow(row, 'suspended');
+            showToast('Account Suspended', `${name}'s account suspended.`, 'warning');
+          } catch (err) { showToast('Error', err.message, 'error'); }
+        });
+      });
+    });
+
+    document.querySelectorAll('[data-action="reactivate-user"]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const row = btn.closest('tr');
+        const name = row.querySelector('.table-name')?.textContent || 'user';
+        try {
+          await api.patch(`/admin/accounts/${row.dataset.userId}/reactivate`, { role: row.dataset.role }, true);
+          refreshUserRow(row, 'active');
+          showToast('Account Reactivated', `${name}'s account is active.`, 'success');
+        } catch (err) { showToast('Error', err.message, 'error'); }
+      });
+    });
+
+    document.querySelectorAll('[data-action="warn-user"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const row = btn.closest('tr');
+        const name = row.querySelector('.table-name')?.textContent || 'user';
+        const modalTitle = document.querySelector('#warn-user-modal h3');
+        if (modalTitle) modalTitle.textContent = `Warn ${name}?`;
+        openModal('warn-user-modal', async (reason) => {
+          if (!reason) { showToast('Reason required', 'Please provide a warning reason.', 'warning'); return; }
+          try {
+            await api.post('/admin/warnings', { role: row.dataset.role, userId: row.dataset.userId, reason }, true);
+            const wc = row.querySelector('.warning-count');
+            if (wc) wc.textContent = (parseInt(wc.textContent) || 0) + 1;
+            showToast('Warning Issued', `A warning was sent to ${name}.`, 'warning');
+          } catch (err) { showToast('Error', err.message, 'error'); }
+        });
+      });
+    });
+  }
+
+  // ════════════════════════════════════════════════
+  //  PAGE: FLAGGED LISTINGS (group reports by listing)
+  // ════════════════════════════════════════════════
+  if (page === 'flagged-listings') loadFlagged();
+
+  async function loadFlagged() {
+    const tbody = document.querySelector('#flagged-table tbody');
+    if (!tbody) return;
+    tableLoading(tbody, 8);
+    try {
+      const { reports } = await api.get('/admin/reports?limit=50', true);
+      // Group by listing
+      const groups = {};
+      reports.forEach(r => {
+        const key = r.listingId;
+        if (!groups[key]) {
+          groups[key] = {
+            listingId: key,
+            title: r.listing?.title || 'Listing',
+            provider: '—',
+            entries: [],
+            pending: 0,
+            latest: r.createdAt,
+          };
+        }
+        groups[key].entries.push(r);
+        if (r.status === 'pending') groups[key].pending++;
+        if (new Date(r.createdAt) > new Date(groups[key].latest)) groups[key].latest = r.createdAt;
+      });
+      const list = Object.values(groups).sort((a, b) => b.entries.length - a.entries.length);
+      if (!list.length) { tableEmpty(tbody, 8, 'No reported listings. The hive is clean!'); return; }
+
+      tbody.innerHTML = list.map(g => {
+        const status = g.pending > 0 ? 'pending' : 'resolved';
+        const topReason = g.entries[0]?.reason || '—';
+        const countClass = g.entries.length >= 4 ? 'count-badge high' : 'count-badge';
+        const pendingIds = g.entries.filter(e => e.status === 'pending').map(e => e.reportId).join(',');
+        const actions = status === 'pending'
+          ? `<button class="btn-sm btn-resolve" data-action="resolve-report">Resolve</button>
+             <button class="btn-sm btn-danger" data-action="block-listing">Block</button>`
+          : '<span class="no-action-text">Resolved</span>';
+        const entriesHtml = g.entries.map(e => `
+          <div class="report-entry">
+            <div class="report-entry-header">
+              <span class="report-entry-student">${esc(e.student?.fullName || 'Student')}</span>
+              <span class="report-entry-date">${formatDate(e.createdAt)}</span>
+            </div>
+            <p class="report-entry-reason">${esc(e.reason)}</p>
+          </div>`).join('');
+        return `
+          <tr class="expandable-row" data-status="${status}" data-listing-id="${g.listingId}" data-report-ids="${pendingIds}">
+            <td><svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></td>
+            <td class="table-name">${esc(g.title)}</td>
+            <td class="table-muted">${esc(g.provider)}</td>
+            <td><span class="${countClass}">${g.entries.length}</span></td>
+            <td class="table-muted">${esc(topReason)}</td>
+            <td class="table-date">${formatDate(g.latest)}</td>
+            <td>${statusBadge(status)}</td>
+            <td><div class="table-actions">${actions}</div></td>
+          </tr>
+          <tr class="report-detail-row">
+            <td colspan="8"><div class="report-detail-content"><div class="report-entries">${entriesHtml}</div></div></td>
+          </tr>`;
+      }).join('');
+      bindFlaggedActions();
+    } catch (err) {
+      tableEmpty(tbody, 8, err.message || 'Could not load flagged listings.');
+    }
+  }
+
+  function bindFlaggedActions() {
     document.querySelectorAll('.expandable-row').forEach(row => {
       row.addEventListener('click', (e) => {
-        // Don't toggle if clicking an action button
         if (e.target.closest('.btn-sm')) return;
-        const detailRow = row.nextElementSibling;
-        if (detailRow && detailRow.classList.contains('report-detail-row')) {
+        const detail = row.nextElementSibling;
+        if (detail && detail.classList.contains('report-detail-row')) {
           row.classList.toggle('expanded');
-          detailRow.classList.toggle('open');
+          detail.classList.toggle('open');
         }
       });
     });
 
-    // Resolve report
     document.querySelectorAll('[data-action="resolve-report"]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         const row = btn.closest('tr');
         const title = row.querySelector('.table-name')?.textContent || 'listing';
-        openModal('resolve-modal', () => {
-          const badge = row.querySelector('.status-badge');
-          if (badge) {
-            badge.className = 'status-badge resolved';
-            badge.innerHTML = '<span class="status-dot"></span>Resolved';
-          }
-          const actions = row.querySelector('.table-actions');
-          if (actions) actions.innerHTML = '<span class="no-action-text">Resolved</span>';
-          showToast('Report Resolved', `Reports for "${title}" have been resolved.`, 'success');
+        const ids = (row.dataset.reportIds || '').split(',').filter(Boolean);
+        openModal('resolve-modal', async (note) => {
+          try {
+            await Promise.all(ids.map(id => api.patch(`/admin/reports/${id}/resolve`, { resolutionNote: note }, true)));
+            row.querySelector('td:nth-child(7)').innerHTML = statusBadge('resolved');
+            row.querySelector('.table-actions').innerHTML = '<span class="no-action-text">Resolved</span>';
+            row.dataset.status = 'resolved';
+            showToast('Report Resolved', `Reports for "${title}" resolved.`, 'success');
+          } catch (err) { showToast('Error', err.message, 'error'); }
         });
       });
     });
 
-    // Block listing from flagged page
     document.querySelectorAll('[data-action="block-listing"]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
+      btn.addEventListener('click', async (e) => {
         e.stopPropagation();
         const row = btn.closest('tr');
+        const id = row.dataset.listingId;
         const title = row.querySelector('.table-name')?.textContent || 'listing';
-        const badge = row.querySelector('.status-badge');
-        if (badge) {
-          badge.className = 'status-badge blocked';
-          badge.innerHTML = '<span class="status-dot"></span>Blocked';
-        }
-        const actions = row.querySelector('.table-actions');
-        if (actions) actions.innerHTML = '<span class="no-action-text">Blocked</span>';
-        showToast('Listing Blocked', `"${title}" has been blocked and removed from search.`, 'warning');
+        const ids = (row.dataset.reportIds || '').split(',').filter(Boolean);
+        try {
+          await api.patch(`/admin/listings/${id}/decline`, { reason: 'Blocked following student reports' }, true);
+          await Promise.all(ids.map(rid => api.patch(`/admin/reports/${rid}/resolve`, { resolutionNote: 'Listing blocked' }, true)));
+          row.querySelector('td:nth-child(7)').innerHTML = statusBadge('resolved');
+          row.querySelector('.table-actions').innerHTML = '<span class="no-action-text">Blocked</span>';
+          row.dataset.status = 'resolved';
+          showToast('Listing Blocked', `"${title}" blocked and reports resolved.`, 'warning');
+        } catch (err) { showToast('Error', err.message, 'error'); }
       });
     });
+  }
 
-    // Modal confirm for flagged
-    const resolveModal = document.getElementById('resolve-modal');
-    if (resolveModal) {
-      const confirmBtn = resolveModal.querySelector('.modal-btn.confirm-action');
-      if (confirmBtn) {
-        confirmBtn.addEventListener('click', () => {
-          if (modalCallback) modalCallback();
-          closeModal();
+  // ════════════════════════════════════════════════
+  //  PAGE: DUPLICATE QUEUE (no backend yet — local UI)
+  // ════════════════════════════════════════════════
+  if (page === 'duplicate-queue') {
+    const dedupe = (action, msg, type) => {
+      document.querySelectorAll(`[data-action="${action}"]`).forEach(btn => {
+        btn.addEventListener('click', () => {
+          const group = btn.closest('.duplicate-group');
+          if (!group) return;
+          group.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+          group.style.opacity = '0';
+          group.style.transform = 'translateY(-10px)';
+          setTimeout(() => { group.remove(); checkEmptyQueue(); }, 400);
+          showToast(msg.title, msg.body, type);
         });
+      });
+    };
+    dedupe('keep-both', { title: 'Kept Both', body: 'Both listings marked as unique.' }, 'success');
+    dedupe('remove-duplicate', { title: 'Duplicate Removed', body: 'The flagged duplicate was removed.' }, 'warning');
+    dedupe('merge-listings', { title: 'Listings Merged', body: 'Listings merged — best data retained.' }, 'success');
+
+    function checkEmptyQueue() {
+      const remaining = document.querySelectorAll('.duplicate-group');
+      if (remaining.length === 0) {
+        const queue = document.querySelector('.duplicate-queue');
+        if (queue) {
+          queue.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <h3>All Clear!</h3>
+              <p>No duplicate listings detected — the hive is clean!</p>
+            </div>`;
+        }
       }
     }
   }
 
+<<<<<<< HEAD
 
   // ════════════════════════════════════════════════
   //  PAGE: DUPLICATE QUEUE — Action Handlers
@@ -628,4 +867,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+=======
+>>>>>>> 20e284982f3cd05840554e84da8320cd8f66285a
 });
