@@ -1,4 +1,4 @@
-const prisma = require('../config/prisma');
+﻿const prisma = require('../config/prisma');
 const { cloudinary, upload } = require('../config/cloudinary');
 
 /* ── Helper: resolve the provider's table + id field from JWT role ── */
@@ -23,7 +23,7 @@ async function getOwnedListing(req, id) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   GET /api/listings  — public list with filters + pagination
+   GET /api/listings  - public list with filters + pagination
    Query: county, area, type, gender, room, minPrice, maxPrice,
           status (default active), page, limit, search
    ═══════════════════════════════════════════════════════ */
@@ -45,7 +45,7 @@ const getListings = async (req, res, next) => {
       Object.assign(where, providerFilter(req));
       if (status && status !== 'all') where.status = status;
     } else if (req.user) {
-      // Authenticated user browsing — can see statuses if they pass status=all
+      // Authenticated user browsing - can see statuses if they pass status=all
       if (status && status !== 'all') where.status = status;
     } else {
       where.status = 'active';
@@ -98,7 +98,7 @@ const getListings = async (req, res, next) => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   GET /api/listings/:id  — single listing detail (public)
+   GET /api/listings/:id  - single listing detail (public)
    ═══════════════════════════════════════════════════════ */
 const getListingById = async (req, res, next) => {
   try {
@@ -128,7 +128,7 @@ const getListingById = async (req, res, next) => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   POST /api/listings  — create (landlord/agent only)
+   POST /api/listings  - create (landlord/agent only)
    Body: title, description, propertyType, price, genderPreference,
          roomType, amenities[], county, area, nearestCampus, address
    ═══════════════════════════════════════════════════════ */
@@ -174,7 +174,7 @@ const createListing = async (req, res, next) => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   PATCH /api/listings/:id  — update (owner only)
+   PATCH /api/listings/:id  - update (owner only)
    ═══════════════════════════════════════════════════════ */
 const updateListing = async (req, res, next) => {
   try {
@@ -216,7 +216,7 @@ const updateListing = async (req, res, next) => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   DELETE /api/listings/:id  — hard delete (owner only)
+   DELETE /api/listings/:id  - hard delete (owner only)
    ═══════════════════════════════════════════════════════ */
 const deleteListing = async (req, res, next) => {
   try {
@@ -233,7 +233,7 @@ const deleteListing = async (req, res, next) => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   PATCH /api/listings/:id/deactivate  — owner sets inactive
+   PATCH /api/listings/:id/deactivate  - owner sets inactive
    ═══════════════════════════════════════════════════════ */
 const deactivateListing = async (req, res, next) => {
   try {
@@ -254,7 +254,7 @@ const deactivateListing = async (req, res, next) => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   PATCH /api/listings/:id/reactivate  — owner puts back to pending
+   PATCH /api/listings/:id/reactivate  - owner puts back to pending
    ═══════════════════════════════════════════════════════ */
 const reactivateListing = async (req, res, next) => {
   try {
@@ -275,7 +275,7 @@ const reactivateListing = async (req, res, next) => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   POST /api/listings/:id/images  — upload images via Cloudinary
+   POST /api/listings/:id/images  - upload images via Cloudinary
    Expects multipart/form-data with field "images" (up to 10 files)
    ═══════════════════════════════════════════════════════ */
 const uploadImages = async (req, res, next) => {

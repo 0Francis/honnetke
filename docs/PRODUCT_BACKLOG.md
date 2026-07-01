@@ -1,11 +1,11 @@
-# HonnetKE — Product Backlog
+﻿# HonnetKE - Product Backlog
 
 > Update the **Status** and **Sprint** columns as work progresses.
 > Statuses: `Backlog` | `In Progress` | `Done`
 
 ---
 
-## Epic 1 — Auth & Account Management
+## Epic 1 - Auth & Account Management
 
 | ID | User Story | Role | Sprint | Status |
 |---|---|---|---|---|
@@ -20,7 +20,7 @@
 
 ---
 
-## Epic 2 — Listings (Core)
+## Epic 2 - Listings (Core)
 
 | ID | User Story | Role | Sprint | Status |
 |---|---|---|---|---|
@@ -35,7 +35,7 @@
 
 ---
 
-## Epic 3 — Search & Discovery
+## Epic 3 - Search & Discovery
 
 | ID | User Story | Role | Sprint | Status |
 |---|---|---|---|---|
@@ -47,7 +47,7 @@
 
 ---
 
-## Epic 4 — Student Features
+## Epic 4 - Student Features
 
 | ID | User Story | Role | Sprint | Status |
 |---|---|---|---|---|
@@ -60,7 +60,7 @@
 
 ---
 
-## Epic 5 — Provider Features (Landlord & Agent)
+## Epic 5 - Provider Features (Landlord & Agent)
 
 | ID | User Story | Role | Sprint | Status |
 |---|---|---|---|---|
@@ -71,7 +71,7 @@
 
 ---
 
-## Epic 6 — Admin Features
+## Epic 6 - Admin Features
 
 | ID | User Story | Role | Sprint | Status |
 |---|---|---|---|---|
@@ -88,7 +88,7 @@
 
 ---
 
-## Epic 7 — Notifications
+## Epic 7 - Notifications
 
 | ID | User Story | Role | Sprint | Status |
 |---|---|---|---|---|
@@ -97,19 +97,19 @@
 
 ---
 
-## Epic 8 — Frontend (Partner)
+## Epic 8 - Frontend (Partner)
 
 | ID | User Story | Role | Sprint | Status |
 |---|---|---|---|---|
-| US-FE-01 | Landing page — navbar, hero, featured hostels, contact section, footer | Guest | 2 | Done |
-| US-FE-02 | Sign Up page — two-column layout, role dropdown, OTP redirect | Guest | 3 | Done |
-| US-FE-03 | Login page — two-column layout, forgot password modal | Guest | 3 | Done |
-| US-FE-04 | OTP Verification page — 6-digit input, resend countdown | Guest | 3 | Done |
-| US-FE-05 | Hostels page — search bar, filter sidebar, listing card grid, pagination | Guest / Student | 3 | Done |
-| US-FE-06 | Listing Detail page — image carousel, details, contact card, report link | Student | 3 | Done |
-| US-FE-07 | Student Dashboard — quick actions, recent activity, featured listings | Student | 4 | Done |
-| US-FE-08 | Favourites page — saved card grid, empty state | Student | 4 | Backlog |
-| US-FE-09 | Visited History page — list view, empty state | Student | 4 | Backlog |
-| US-FE-10 | Landlord/Agent Dashboard — listing management, bookings, analytics | Landlord / Agent | 5 | Done |
-| US-FE-11 | Admin Dashboard — pending listings, reports, user management, logs | Admin | 6 | Done |
-| US-FE-12 | 404 / Error page — lost hornet illustration | All | 7 | Backlog |
+| US-FE-01 | Landing page - navbar, hero, featured hostels, contact section, footer | Guest | 2 | Done |
+| US-FE-02 | Sign Up page - two-column layout, role dropdown, OTP redirect | Guest | 3 | Done |
+| US-FE-03 | Login page - two-column layout, forgot password modal | Guest | 3 | Done |
+| US-FE-04 | OTP Verification page - 6-digit input, resend countdown | Guest | 3 | Done |
+| US-FE-05 | Hostels page - search bar, filter sidebar, listing card grid, pagination | Guest / Student | 3 | Done |
+| US-FE-06 | Listing Detail page - image carousel, details, contact card, report link | Student | 3 | Done |
+| US-FE-07 | Student Dashboard - quick actions, recent activity, featured listings | Student | 4 | Done |
+| US-FE-08 | Favourites page - saved card grid, empty state | Student | 4 | Backlog |
+| US-FE-09 | Visited History page - list view, empty state | Student | 4 | Backlog |
+| US-FE-10 | Landlord/Agent Dashboard - listing management, bookings, analytics | Landlord / Agent | 5 | Done |
+| US-FE-11 | Admin Dashboard - pending listings, reports, user management, logs | Admin | 6 | Done |
+| US-FE-12 | 404 / Error page - lost hornet illustration | All | 7 | Backlog |

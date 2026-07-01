@@ -5,6 +5,6 @@ const { allowRoles } = require('../middleware/role.middleware');
 const { getAnalytics, getOverviewAnalytics } = require('../controllers/analytics.controller');
 
 router.get('/', protect, allowRoles('landlord', 'agent'), getOverviewAnalytics);
-router.get('/:listingId', protect, allowRoles('landlord', 'agent'), getAnalytics);
+router.get('/:propertyId', protect, allowRoles('landlord', 'agent'), getAnalytics);
 
 module.exports = router;

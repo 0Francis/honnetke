@@ -5,9 +5,9 @@ const { allowRoles } = require('../middleware/role.middleware');
 const {
   getStats,
   getUsers,
-  getPendingListings,
-  approveListing,
-  declineListing,
+  getPendingProperties,
+  approveProperty,
+  rejectProperty,
   getReports,
   resolveReport,
   issueWarning,
@@ -22,9 +22,9 @@ router.use(protect, allowRoles('admin'));
 router.get('/stats', getStats);
 router.get('/users', getUsers);
 
-router.get('/listings', getPendingListings);
-router.patch('/listings/:id/approve', approveListing);
-router.patch('/listings/:id/decline', declineListing);
+router.get('/properties', getPendingProperties);
+router.patch('/properties/:id/approve', approveProperty);
+router.patch('/properties/:id/reject', rejectProperty);
 
 router.get('/reports', getReports);
 router.patch('/reports/:id/resolve', resolveReport);

@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="HonnetKE Admin Console — Platform statistics, moderation tools, and system health overview.">
+  <meta name="description" content="HonnetKE Admin Console - Platform statistics, moderation tools, and system health overview.">
   <meta name="keywords" content="admin dashboard, platform management, moderation, HonnetKE">
   <meta name="author" content="HonnetKE">
-  <title>Admin Console — HonnetKE</title>
+  <title>Admin Console - HonnetKE</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="../landingpage/css/global.css">
   <!-- Page-specific -->
   <link rel="stylesheet" href="css/admin.css">
-</head>
+<link rel="stylesheet" href="../shared/css/notifications.css"></head>
 <body data-page="dashboard">
 
   <!-- Skip to main content (accessibility) -->
@@ -45,7 +45,7 @@
       <!-- Center Nav -->
       <ul class="navbar-nav" id="navbar-nav">
         <li><a href="dashboard.html" class="nav-link active">Dashboard</a></li>
-        <li><a href="manage-listings.html" class="nav-link">Listings</a></li>
+        <li><a href="manage-listings.html" class="nav-link">Properties</a></li>
         <li><a href="manage-users.html" class="nav-link">Users</a></li>
         <li><a href="flagged-listings.html" class="nav-link">Flagged</a></li>
         <li><a href="duplicate-queue.html" class="nav-link">Duplicates</a></li>
@@ -77,7 +77,7 @@
             </a>
             <a href="manage-listings.html" class="dropdown-item">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-              Manage Listings
+              Manage Properties
             </a>
             <a href="manage-users.html" class="dropdown-item">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -105,7 +105,7 @@
   <!-- Admin Mobile Nav Overlay -->
   <div class="admin-mobile-nav" id="admin-mobile-nav" aria-hidden="true">
     <a href="dashboard.html" class="nav-link active">Dashboard</a>
-    <a href="manage-listings.html" class="nav-link">Listings</a>
+    <a href="manage-listings.html" class="nav-link">Properties</a>
     <a href="manage-users.html" class="nav-link">Users</a>
     <a href="flagged-listings.html" class="nav-link">Flagged</a>
     <a href="duplicate-queue.html" class="nav-link">Duplicates</a>
@@ -117,7 +117,7 @@
   <div class="toast-container" id="toast-container"></div>
 
   <!-- ═══════════════════════════════════════════
-       MAIN CONTENT — ADMIN DASHBOARD
+       MAIN CONTENT - ADMIN DASHBOARD
        ═══════════════════════════════════════════ -->
   <main class="admin-main" id="main-content">
 
@@ -139,7 +139,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
             <div class="stat-info">
-              <div class="stat-value">1,247</div>
+              <div class="stat-value">0</div>
               <div class="stat-label">Total Users</div>
             </div>
           </div>
@@ -149,8 +149,8 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             </div>
             <div class="stat-info">
-              <div class="stat-value">342</div>
-              <div class="stat-label">Total Listings</div>
+              <div class="stat-value">0</div>
+              <div class="stat-label">Total Properties</div>
             </div>
           </div>
 
@@ -159,8 +159,8 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             </div>
             <div class="stat-info">
-              <div class="stat-value">289</div>
-              <div class="stat-label">Active Listings</div>
+              <div class="stat-value">0</div>
+              <div class="stat-label">Active Properties</div>
             </div>
           </div>
 
@@ -169,7 +169,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             </div>
             <div class="stat-info">
-              <div class="stat-value">18</div>
+              <div class="stat-value">0</div>
               <div class="stat-label">Pending Approvals</div>
             </div>
           </div>
@@ -179,8 +179,8 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
             </div>
             <div class="stat-info">
-              <div class="stat-value">7</div>
-              <div class="stat-label">Flagged Listings</div>
+              <div class="stat-value">0</div>
+              <div class="stat-label">Flagged Properties</div>
             </div>
           </div>
 
@@ -189,7 +189,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </div>
             <div class="stat-info">
-              <div class="stat-value">3</div>
+              <div class="stat-value">0</div>
               <div class="stat-label">System Errors (24h)</div>
             </div>
           </div>
@@ -214,7 +214,7 @@
               </svg>
             </div>
             <h3 class="action-title">Review Pending</h3>
-            <p class="action-desc">18 listings awaiting approval</p>
+            <p class="action-desc">18 properties awaiting approval</p>
           </a>
 
           <!-- Manage Users -->
@@ -236,7 +236,7 @@
               </svg>
             </div>
             <h3 class="action-title">View Flagged</h3>
-            <p class="action-desc">7 listings with 3+ student reports</p>
+            <p class="action-desc">7 properties with 3+ student reports</p>
           </a>
 
           <!-- View Duplicates -->
@@ -247,7 +247,7 @@
               </svg>
             </div>
             <h3 class="action-title">Duplicate Queue</h3>
-            <p class="action-desc">Review potential duplicate listings</p>
+            <p class="action-desc">Review potential duplicate properties</p>
           </a>
 
         </div>
@@ -270,7 +270,7 @@
             <thead>
               <tr>
                 <th>Student</th>
-                <th>Listing</th>
+                <th>Property</th>
                 <th>Reason</th>
                 <th>Date</th>
                 <th>Status</th>
@@ -281,7 +281,7 @@
               <tr>
                 <td class="table-name">Jane Wanjiku</td>
                 <td class="table-name">Sunrise Hostel</td>
-                <td class="table-muted">Fake listing — images stolen from another site</td>
+                <td class="table-muted">Fake property - images stolen from another site</td>
                 <td class="table-date">24 Jun 2026</td>
                 <td><span class="status-badge pending"><span class="status-dot"></span>Pending</span></td>
                 <td>
@@ -293,7 +293,7 @@
               <tr>
                 <td class="table-name">Kevin Njoroge</td>
                 <td class="table-name">Jamii Heights</td>
-                <td class="table-muted">Wrong location — not near campus as listed</td>
+                <td class="table-muted">Wrong location - not near campus as listed</td>
                 <td class="table-date">23 Jun 2026</td>
                 <td><span class="status-badge pending"><span class="status-dot"></span>Pending</span></td>
                 <td>
@@ -305,7 +305,7 @@
               <tr>
                 <td class="table-name">Grace Otieno</td>
                 <td class="table-name">Hive Residences</td>
-                <td class="table-muted">Misleading price — actual cost much higher</td>
+                <td class="table-muted">Misleading price - actual cost much higher</td>
                 <td class="table-date">22 Jun 2026</td>
                 <td><span class="status-badge resolved"><span class="status-dot"></span>Resolved</span></td>
                 <td>
@@ -329,7 +329,7 @@
               <tr>
                 <td class="table-name">Faith Kamau</td>
                 <td class="table-name">Kilimani Studios</td>
-                <td class="table-muted">Suspected scam — requests payment before viewing</td>
+                <td class="table-muted">Suspected scam - requests payment before viewing</td>
                 <td class="table-date">20 Jun 2026</td>
                 <td><span class="status-badge resolved"><span class="status-dot"></span>Resolved</span></td>
                 <td>
@@ -395,7 +395,7 @@
             <span class="logo-text">HonnetKE</span>
           </a>
           <p class="footer-tagline">
-            Kenya's #1 student hostel discovery platform. Admin tools for managing listings, users, and platform health — keeping the hive safe.
+            Kenya's #1 student hostel discovery platform. Admin tools for managing properties, users, and platform health - keeping the hive safe.
           </p>
         </div>
 
@@ -404,7 +404,7 @@
           <h3 class="footer-heading">Quick Links</h3>
           <nav class="footer-links" aria-label="Footer navigation">
             <a href="dashboard.html" class="footer-link">Dashboard</a>
-            <a href="manage-listings.html" class="footer-link">Manage Listings</a>
+            <a href="manage-listings.html" class="footer-link">Manage Properties</a>
             <a href="manage-users.html" class="footer-link">Manage Users</a>
             <a href="flagged-listings.html" class="footer-link">Flagged Listings</a>
             <a href="../landingpage/landingpage.html#contact" class="footer-link">Contact</a>
@@ -460,5 +460,5 @@
   <script src="../shared/js/auth.js"></script>
   <script src="js/admin.js"></script>
 
-</body>
+<script src="../shared/js/notifications.js"></script></body>
 </html>

@@ -1,16 +1,16 @@
-const prisma = require('../config/prisma');
+﻿const prisma = require('../config/prisma');
 
 /* ═══════════════════════════════════════════════════════
-   GET /api/favourites  — list student's favourites
+   GET /api/favourites  - list student's favourites
    ═══════════════════════════════════════════════════════ */
 const getFavourites = async (req, res, next) => {
   try {
     const favourites = await prisma.favourite.findMany({
       where: { studentId: req.user.id },
       include: {
-        listing: {
+        property: {
           include: {
-            images: { take: 1, orderBy: { isPrimary: 'desc' } },
+            images: { take: 1, orderBy: [{ isPrimary: 'desc' }, { sortOrder: 'asc' }] },
           },
         },
       },
@@ -24,31 +24,31 @@ const getFavourites = async (req, res, next) => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   POST /api/favourites  — add a listing to favourites
+   POST /api/favourites  - add a listing to favourites
    Body: listingId
    ═══════════════════════════════════════════════════════ */
 const addFavourite = async (req, res, next) => {
   try {
-    const { listingId } = req.body;
+    const propertyId = Number(req.body.propertyId || req.body.listingId);
 
-    if (!listingId) {
-      return res.status(400).json({ message: 'listingId is required' });
+    if (!propertyId) {
+      return res.status(400).json({ message: 'propertyId is required' });
     }
 
-    const listing = await prisma.listing.findUnique({
-      where: { listingId: Number(listingId) },
+    const property = await prisma.property.findUnique({
+      where: { propertyId },
     });
 
-    if (!listing) {
-      return res.status(404).json({ message: 'Listing not found' });
+    if (!property) {
+      return res.status(404).json({ message: 'Property not found' });
     }
 
     // Check for duplicate
     const existing = await prisma.favourite.findUnique({
       where: {
-        studentId_listingId: {
+        studentId_propertyId: {
           studentId: req.user.id,
-          listingId: Number(listingId),
+          propertyId,
         },
       },
     });
@@ -60,7 +60,7 @@ const addFavourite = async (req, res, next) => {
     const favourite = await prisma.favourite.create({
       data: {
         studentId: req.user.id,
-        listingId: Number(listingId),
+        propertyId,
       },
     });
 
@@ -74,18 +74,18 @@ const addFavourite = async (req, res, next) => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   DELETE /api/favourites/:id  — remove a favourite
+   DELETE /api/favourites/:id  - remove a favourite
    :id is the listingId (not favouriteId) for easier frontend use
    ═══════════════════════════════════════════════════════ */
 const removeFavourite = async (req, res, next) => {
   try {
-    const listingId = Number(req.params.id);
+    const propertyId = Number(req.params.id);
 
     const favourite = await prisma.favourite.findUnique({
       where: {
-        studentId_listingId: {
+        studentId_propertyId: {
           studentId: req.user.id,
-          listingId,
+          propertyId,
         },
       },
     });

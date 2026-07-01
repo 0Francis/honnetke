@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="HonnetKE Student Profile — Manage your personal information, account settings, and preferences.">
+  <meta name="description" content="HonnetKE Student Profile - Manage your personal information, account settings, and preferences.">
   <meta name="keywords" content="student profile, account settings, HonnetKE">
   <meta name="author" content="HonnetKE">
-  <title>My Profile — HonnetKE</title>
+  <title>My Profile - HonnetKE</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,15 +19,15 @@
   <link rel="stylesheet" href="../landingpage/css/global.css">
   <!-- Page-specific -->
   <link rel="stylesheet" href="css/students.css">
-</head>
+<link rel="stylesheet" href="../shared/css/notifications.css"></head>
 <body data-page="profile">
 
   <!-- Skip to main content (accessibility) -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- ═══════════════════════════════════════════
+  <!-- -------------------------------------------
        STUDENT NAVBAR
-       ═══════════════════════════════════════════ -->
+       ------------------------------------------- -->
   <nav class="student-navbar" id="navbar" aria-label="Student navigation">
     <div class="navbar-inner">
 
@@ -43,7 +43,7 @@
 
       <!-- Center Nav -->
       <ul class="navbar-nav" id="navbar-nav">
-        <li><a href="../landingpage/index.html" class="nav-link">Home</a></li>
+        <li><a href="../landingpage/landingpage.html" class="nav-link">Home</a></li>
         <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
         <li><a href="hostels.html" class="nav-link">Hostels</a></li>
         <li><a href="favourites.html" class="nav-link">Favourites</a></li>
@@ -102,7 +102,7 @@
 
   <!-- Student Mobile Nav Overlay -->
   <div class="student-mobile-nav" id="student-mobile-nav" aria-hidden="true">
-    <a href="../landingpage/index.html" class="nav-link">Home</a>
+    <a href="../landingpage/landingpage.html" class="nav-link">Home</a>
     <a href="dashboard.html" class="nav-link">Dashboard</a>
     <a href="hostels.html" class="nav-link">Hostels</a>
     <a href="favourites.html" class="nav-link">Favourites</a>
@@ -114,9 +114,9 @@
   <!-- Toast Container -->
   <div class="toast-container" id="toast-container"></div>
 
-  <!-- ═══════════════════════════════════════════
-       MAIN CONTENT — PROFILE
-       ═══════════════════════════════════════════ -->
+  <!-- -------------------------------------------
+       MAIN CONTENT - PROFILE
+       ------------------------------------------- -->
   <main class="student-main" id="main-content">
 
     <!-- Page Header -->
@@ -131,15 +131,15 @@
     <section class="profile-section reveal">
       <div class="container">
         <div class="profile-header-card" id="profile-header-card">
-          <div class="profile-avatar-large" id="profile-avatar-large">JW</div>
+          <div class="profile-avatar-large" id="profile-avatar-large">-</div>
           <div class="profile-header-info">
-            <h2 class="profile-name" id="profile-name">Jane Wanjiku</h2>
-            <p class="profile-email" id="profile-email">jane.wanjiku@student.edu</p>
+            <h2 class="profile-name" id="profile-name">-</h2>
+            <p class="profile-email" id="profile-email">-</p>
             <div class="profile-meta">
               <span class="profile-role-badge student">Student</span>
               <span class="profile-joined">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                Joined June 2026
+                Joined -
               </span>
             </div>
           </div>
@@ -152,15 +152,15 @@
       <div class="container">
         <div class="profile-stats-row">
           <div class="profile-stat">
-            <div class="profile-stat-value" id="stat-favourites">5</div>
+            <div class="profile-stat-value" id="stat-favourites">0</div>
             <div class="profile-stat-label">Hive Saves</div>
           </div>
           <div class="profile-stat">
-            <div class="profile-stat-value" id="stat-viewed">23</div>
+            <div class="profile-stat-value" id="stat-viewed">0</div>
             <div class="profile-stat-label">Hostels Viewed</div>
           </div>
           <div class="profile-stat">
-            <div class="profile-stat-value" id="stat-age">1 mo</div>
+            <div class="profile-stat-value" id="stat-age">-</div>
             <div class="profile-stat-label">Account Age</div>
           </div>
         </div>
@@ -181,29 +181,30 @@
             <div class="form-row">
               <div class="form-group">
                 <label for="profile-fullname">Full Name</label>
-                <input type="text" id="profile-fullname" class="form-input" value="Jane Wanjiku" placeholder="Your full name">
+                <input type="text" id="profile-fullname" class="form-input" value="" placeholder="Your full name">
               </div>
               <div class="form-group">
                 <label for="profile-email-field">Email Address</label>
-                <input type="email" id="profile-email-field" class="form-input" value="jane.wanjiku@student.edu" readonly disabled>
+                <input type="email" id="profile-email-field" class="form-input" value="" readonly disabled>
                 <span class="form-hint">Email cannot be changed</span>
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
                 <label for="profile-phone">Phone Number</label>
-                <input type="tel" id="profile-phone" class="form-input" value="+254 712 345 678" placeholder="+254 7XX XXX XXX">
+                <input type="tel" id="profile-phone" class="form-input" value="" placeholder="+254 7XX XXX XXX">
               </div>
               <div class="form-group">
                 <label for="profile-university">University / Campus</label>
-                <input type="text" id="profile-university" class="form-input" value="MMUST" placeholder="Your university">
+                <input type="text" id="profile-university" class="form-input" value="" placeholder="Your university">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
                 <label for="profile-gender">Gender</label>
                 <select id="profile-gender" class="form-select">
-                  <option value="female" selected>Female</option>
+                  <option value="" selected>Select...</option>
+                  <option value="female">Female</option>
                   <option value="male">Male</option>
                   <option value="other">Other</option>
                 </select>
@@ -322,9 +323,9 @@
   </main>
 
 
-  <!-- ═══════════════════════════════════════════
+  <!-- -------------------------------------------
        DEACTIVATION CONFIRMATION MODAL
-       ═══════════════════════════════════════════ -->
+       ------------------------------------------- -->
   <div class="modal-overlay" id="deactivate-modal">
     <div class="modal">
       <div class="modal-icon warning">
@@ -340,9 +341,9 @@
   </div>
 
 
-  <!-- ═══════════════════════════════════════════
+  <!-- -------------------------------------------
        FOOTER
-       ═══════════════════════════════════════════ -->
+       ------------------------------------------- -->
   <footer class="footer" id="footer">
     <div class="container">
 
@@ -359,7 +360,7 @@
             <span class="logo-text">HonnetKE</span>
           </a>
           <p class="footer-tagline">
-            Kenya's #1 student hostel discovery platform. Find affordable, verified accommodation near your campus — join the hive.
+            Kenya's #1 student hostel discovery platform. Find affordable, verified accommodation near your campus - join the hive.
           </p>
         </div>
 
@@ -424,5 +425,5 @@
   <script src="../shared/js/auth.js"></script>
   <script src="js/students.js"></script>
 
-</body>
+<script src="../shared/js/notifications.js"></script></body>
 </html>

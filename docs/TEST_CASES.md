@@ -1,31 +1,31 @@
-# HonnetKE — Test Cases
+# HonnetKE - Test Cases
 
 > One test case table per core functionality.
 > Fill in **Actual Result**, **Pass/Fail**, and **Appendix** after each feature is implemented and tested.
 > Tool: Postman (backend) / Browser (frontend).
-> Screenshots saved in `appendices/` — referenced in the Appendix column.
-> This file feeds directly into **Chapter 5.3 — Testing**.
+> Screenshots saved in `appendices/` - referenced in the Appendix column.
+> This file feeds directly into **Chapter 5.3 - Testing**.
 
 ---
 
-## Sprint 1 — Auth
+## Sprint 1 - Auth
 
 ---
 
-### TC-01 | Functional Test — Student Registration
+### TC-01 | Functional Test - Student Registration
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-01 |
 | **Type of Test** | Functional |
 | **Functionality Tested** | Student account registration |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman |
 | **Test Data** | `{ "full_name": "Jane Doe", "email": "jane@test.com", "phone_number": "0712345678", "password": "Test@1234", "role": "student" }` |
-| **Expected Result** | `201 Created` — student record saved, OTP sent to phone number |
+| **Expected Result** | `201 Created` - student record saved, OTP sent to phone number |
 | **Actual Result** | _(fill in after test)_ |
 | **Pass / Fail** | _(fill in)_ |
-| **Evidence** | Appendix ___ — see `APPENDICES_INDEX.md` |
+| **Evidence** | Appendix ___ - see `APPENDICES_INDEX.md` |
 
 **Edge Cases to Also Test:**
 - Duplicate email → expect `409 Conflict`
@@ -34,17 +34,17 @@
 
 ---
 
-### TC-02 | Functional Test — OTP Verification
+### TC-02 | Functional Test - OTP Verification
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-02 |
 | **Type of Test** | Functional |
 | **Functionality Tested** | Phone number verification via OTP |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman |
 | **Test Data** | `{ "phone_number": "0712345678", "otp": "123456" }` |
-| **Expected Result** | `200 OK` — account verified, user can now log in |
+| **Expected Result** | `200 OK` - account verified, user can now log in |
 | **Actual Result** | _(fill in after test)_ |
 | **Pass / Fail** | _(fill in)_ |
 | **Evidence** | Appendix ___ |
@@ -55,17 +55,17 @@
 
 ---
 
-### TC-03 | Functional Test — User Login (Student)
+### TC-03 | Functional Test - User Login (Student)
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-03 |
 | **Type of Test** | Functional |
 | **Functionality Tested** | Student login and JWT generation |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman |
 | **Test Data** | `{ "email": "jane@test.com", "password": "Test@1234" }` |
-| **Expected Result** | `200 OK` — JWT returned, payload contains `role: "student"` |
+| **Expected Result** | `200 OK` - JWT returned, payload contains `role: "student"` |
 | **Actual Result** | _(fill in after test)_ |
 | **Pass / Fail** | _(fill in)_ |
 | **Evidence** | Appendix ___ |
@@ -77,14 +77,14 @@
 
 ---
 
-### TC-04 | Functional Test — Landlord Registration & Login
+### TC-04 | Functional Test - Landlord Registration & Login
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-04 |
 | **Type of Test** | Functional |
 | **Functionality Tested** | Landlord account registration and login |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman |
 | **Test Data** | `{ "full_name": "John Mwangi", "email": "john@landlord.com", "phone_number": "0722345678", "password": "Test@1234", "role": "landlord" }` |
 | **Expected Result** | Register: `201 Created`. Login: `200 OK`, `role: "landlord"` in JWT |
@@ -94,14 +94,14 @@
 
 ---
 
-### TC-05 | Functional Test — Role-Based Access Control
+### TC-05 | Functional Test - Role-Based Access Control
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-05 |
 | **Type of Test** | Security / Functional |
 | **Functionality Tested** | Protected routes reject unauthorised roles |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman |
 | **Test Data** | Student JWT used on a landlord-only endpoint (e.g. `POST /listings`) |
 | **Expected Result** | `403 Forbidden` |
@@ -115,327 +115,327 @@
 
 ---
 
-### TC-06 | Functional Test — Forgot Password
+### TC-06 | Functional Test - Forgot Password
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-06 |
 | **Type of Test** | Functional |
 | **Functionality Tested** | Password reset email/link trigger |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman |
 | **Test Data** | `{ "email": "jane@test.com" }` |
-| **Expected Result** | `200 OK` — reset link sent to registered email |
+| **Expected Result** | `200 OK` - reset link sent to registered email |
 | **Actual Result** | _(fill in after test)_ |
 | **Pass / Fail** | _(fill in)_ |
 | **Evidence** | Appendix ___ |
 
 ---
 
-## Sprint 2 — Listings Core
+## Sprint 2 - Listings Core
 
 ---
 
-### TC-07 | Functional Test — Create Listing (Landlord)
+### TC-07 | Functional Test - Create Listing (Landlord)
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-07 |
 | **Type of Test** | Functional |
 | **Functionality Tested** | Landlord creates a new property listing |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman |
 | **Test Data** | `{ "title": "Sunny Bedsitter", "description": "...", "price": 8000, "county": "Nairobi", "area": "Ruaka", "nearest_campus": "USIU", "room_type": "single", "gender_preference": "mixed", "property_type": "bedsitter", "amenities": ["WiFi", "Water"] }` |
-| **Expected Result** | `201 Created` — listing saved with `status: "pending"`, admin notification triggered |
+| **Expected Result** | `201 Created` - listing saved with `status: "pending"`, admin notification triggered |
 | **Actual Result** | _(fill in after test)_ |
 | **Pass / Fail** | _(fill in)_ |
 | **Evidence** | Appendix ___ |
 
 ---
 
-### TC-08 | Functional Test — Listing Image Upload (Cloudinary)
+### TC-08 | Functional Test - Listing Image Upload (Cloudinary)
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-08 |
 | **Type of Test** | Functional / Integration |
 | **Functionality Tested** | Image upload to Cloudinary, URL stored in `listing_images` |
-| **Test Environment** | Local — Node.js, Cloudinary API, Postman |
+| **Test Environment** | Local - Node.js, Cloudinary API, Postman |
 | **Test Tool** | Postman (multipart/form-data) |
 | **Test Data** | Image file attached to `POST /listings/:id/images` |
-| **Expected Result** | `201 Created` — Cloudinary URL saved in `listing_images` table |
+| **Expected Result** | `201 Created` - Cloudinary URL saved in `listing_images` table |
 | **Actual Result** | _(fill in after test)_ |
 | **Pass / Fail** | _(fill in)_ |
 | **Evidence** | Appendix ___ |
 
 ---
 
-### TC-09 | Functional Test — Edit Listing
+### TC-09 | Functional Test - Edit Listing
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-09 |
 | **Type of Test** | Functional |
 | **Functionality Tested** | Landlord/agent edits their own listing |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman |
 | **Test Data** | `PATCH /listings/:id` with `{ "price": 9500 }` |
-| **Expected Result** | `200 OK` — listing updated. Editing another owner's listing → `403 Forbidden` |
+| **Expected Result** | `200 OK` - listing updated. Editing another owner's listing → `403 Forbidden` |
 | **Actual Result** | _(fill in after test)_ |
 | **Pass / Fail** | _(fill in)_ |
 | **Evidence** | Appendix ___ |
 
 ---
 
-## Sprint 3 — Search & Discovery
+## Sprint 3 - Search & Discovery
 
 ---
 
-### TC-10 | Functional Test — Search & Filter Listings
+### TC-10 | Functional Test - Search & Filter Listings
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-10 |
 | **Type of Test** | Functional |
 | **Functionality Tested** | Public listing search with filters |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman |
 | **Test Data** | `GET /listings?county=Nairobi&price_max=10000&room_type=single&gender=mixed` |
-| **Expected Result** | `200 OK` — filtered list of active listings only, paginated |
+| **Expected Result** | `200 OK` - filtered list of active listings only, paginated |
 | **Actual Result** | _(fill in after test)_ |
 | **Pass / Fail** | _(fill in)_ |
 | **Evidence** | Appendix ___ |
 
 ---
 
-### TC-11 | Functional Test — View Listing Detail (Student)
+### TC-11 | Functional Test - View Listing Detail (Student)
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-11 |
 | **Type of Test** | Functional |
 | **Functionality Tested** | Student views full listing detail |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman |
 | **Test Data** | `GET /listings/:id` with student JWT |
-| **Expected Result** | `200 OK` — listing data including images, amenities, and provider contact info |
+| **Expected Result** | `200 OK` - listing data including images, amenities, and provider contact info |
 | **Actual Result** | _(fill in after test)_ |
 | **Pass / Fail** | _(fill in)_ |
 | **Evidence** | Appendix ___ |
 
 ---
 
-## Sprint 4 — Student Features
+## Sprint 4 - Student Features
 
 ---
 
-### TC-12 | Functional Test — Save Listing to Favourites
+### TC-12 | Functional Test - Save Listing to Favourites
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-12 |
 | **Type of Test** | Functional |
 | **Functionality Tested** | Student saves a listing to favourites |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman |
 | **Test Data** | `POST /favourites` with `{ "listing_id": 1 }`, student JWT |
-| **Expected Result** | `201 Created` — favourite record saved. Duplicate save → `409 Conflict` |
+| **Expected Result** | `201 Created` - favourite record saved. Duplicate save → `409 Conflict` |
 | **Actual Result** | _(fill in after test)_ |
 | **Pass / Fail** | _(fill in)_ |
 | **Evidence** | Appendix ___ |
 
 ---
 
-### TC-13 | Functional Test — Submit Booking Request
+### TC-13 | Functional Test - Submit Booking Request
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-13 |
 | **Type of Test** | Functional |
 | **Functionality Tested** | Student submits a booking request for a listing |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman |
 | **Test Data** | `POST /bookings` with `{ "listing_id": 1, "request_note": "I need the room by 1st." }`, student JWT |
-| **Expected Result** | `201 Created` — booking saved with `status: "pending"`, provider notified |
+| **Expected Result** | `201 Created` - booking saved with `status: "pending"`, provider notified |
 | **Actual Result** | _(fill in after test)_ |
 | **Pass / Fail** | _(fill in)_ |
 | **Evidence** | Appendix ___ |
 
 ---
 
-### TC-14 | Functional Test — Report a Listing
+### TC-14 | Functional Test - Report a Listing
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-14 |
 | **Type of Test** | Functional |
 | **Functionality Tested** | Student reports a listing for admin review |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman |
 | **Test Data** | `POST /reports` with `{ "listing_id": 1, "reason": "Fake listing, images stolen." }`, student JWT |
-| **Expected Result** | `201 Created` — report saved with `status: "pending"`, admin notified |
+| **Expected Result** | `201 Created` - report saved with `status: "pending"`, admin notified |
 | **Actual Result** | _(fill in after test)_ |
 | **Pass / Fail** | _(fill in)_ |
 | **Evidence** | Appendix ___ |
 
 ---
 
-## Sprint 5 — Provider Features
+## Sprint 5 - Provider Features
 
 ---
 
-### TC-15 | Functional Test — Provider Responds to Booking
+### TC-15 | Functional Test - Provider Responds to Booking
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-15 |
 | **Type of Test** | Functional |
 | **Functionality Tested** | Landlord/agent confirms or declines a booking request |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman |
 | **Test Data** | `PATCH /bookings/:id` with `{ "status": "confirmed", "provider_response": "Room is available." }`, landlord JWT |
-| **Expected Result** | `200 OK` — booking status updated, student notified |
+| **Expected Result** | `200 OK` - booking status updated, student notified |
 | **Actual Result** | _(fill in after test)_ |
 | **Pass / Fail** | _(fill in)_ |
 | **Evidence** | Appendix ___ |
 
 ---
 
-### TC-16 | Functional Test — View Listing Analytics
+### TC-16 | Functional Test - View Listing Analytics
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-16 |
 | **Type of Test** | Functional |
 | **Functionality Tested** | Landlord/agent views weekly view count analytics for a listing |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman |
 | **Test Data** | `GET /analytics/:listing_id`, landlord JWT |
-| **Expected Result** | `200 OK` — array of `{ week_start, view_count }` records for last 30 days |
+| **Expected Result** | `200 OK` - array of `{ week_start, view_count }` records for last 30 days |
 | **Actual Result** | _(fill in after test)_ |
 | **Pass / Fail** | _(fill in)_ |
 | **Evidence** | Appendix ___ |
 
 ---
 
-## Sprint 6 — Admin Features
+## Sprint 6 - Admin Features
 
 ---
 
-### TC-17 | Functional Test — Admin Approves a Listing
+### TC-17 | Functional Test - Admin Approves a Listing
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-17 |
 | **Type of Test** | Functional |
 | **Functionality Tested** | Admin approves a pending listing |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman (curl) |
 | **Test Data** | `PATCH /admin/listings/5/approve`, admin JWT (id=1) |
-| **Expected Result** | `200 OK` — listing `status` updated to `"active"`, `approved_by` and `approved_at` populated, landlord/agent notified |
-| **Actual Result** | `200 OK` — listing #5 status changed from `"pending"` to `"active"`, `approvedBy: 1`, `approvedAt: "2026-06-27T12:56:35.274Z"`, `declineReason: null`. Provider notification created. |
+| **Expected Result** | `200 OK` - listing `status` updated to `"active"`, `approved_by` and `approved_at` populated, landlord/agent notified |
+| **Actual Result** | `200 OK` - listing #5 status changed from `"pending"` to `"active"`, `approvedBy: 1`, `approvedAt: "2026-06-27T12:56:35.274Z"`, `declineReason: null`. Provider notification created. |
 | **Pass / Fail** | **PASS** |
-| **Evidence** | Appendix TBD — curl output captured 27 Jun 2026 |
+| **Evidence** | Appendix TBD - curl output captured 27 Jun 2026 |
 
 ---
 
-### TC-18 | Functional Test — Admin Declines a Listing
+### TC-18 | Functional Test - Admin Declines a Listing
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-18 |
 | **Type of Test** | Functional |
 | **Functionality Tested** | Admin declines a pending listing with a reason |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman (curl) |
 | **Test Data** | `PATCH /admin/listings/6/decline` with `{ "reason": "Images do not match the description." }`, admin JWT |
-| **Expected Result** | `200 OK` — listing `status` updated to `"blocked"`, `decline_reason` saved, provider notified |
-| **Actual Result** | `200 OK` — listing #6 status changed to `"blocked"`, `declineReason: "Images do not match the description."`. Provider notification created. |
+| **Expected Result** | `200 OK` - listing `status` updated to `"blocked"`, `decline_reason` saved, provider notified |
+| **Actual Result** | `200 OK` - listing #6 status changed to `"blocked"`, `declineReason: "Images do not match the description."`. Provider notification created. |
 | **Pass / Fail** | **PASS** |
-| **Evidence** | Appendix TBD — curl output captured 27 Jun 2026 |
+| **Evidence** | Appendix TBD - curl output captured 27 Jun 2026 |
 
 ---
 
-### TC-19 | Functional Test — Admin Warns a User
+### TC-19 | Functional Test - Admin Warns a User
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-19 |
 | **Type of Test** | Functional |
 | **Functionality Tested** | Admin issues a formal warning to a student, landlord, or agent |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman (curl) |
 | **Test Data** | `POST /admin/warnings` with `{ "role": "student", "userId": 2, "reason": "Abusive report filed against multiple listings." }`, admin JWT |
-| **Expected Result** | `201 Created` — warning record saved, user notified |
-| **Actual Result** | `201 Created` — warning saved with `warningId: 2`, `issuedBy: 1`, `studentId: 2`. Student notification created. |
+| **Expected Result** | `201 Created` - warning record saved, user notified |
+| **Actual Result** | `201 Created` - warning saved with `warningId: 2`, `issuedBy: 1`, `studentId: 2`. Student notification created. |
 | **Pass / Fail** | **PASS** |
-| **Evidence** | Appendix TBD — curl output captured 27 Jun 2026 |
+| **Evidence** | Appendix TBD - curl output captured 27 Jun 2026 |
 
 ---
 
-### TC-20 | Functional Test — Admin Suspends and Reactivates Account
+### TC-20 | Functional Test - Admin Suspends and Reactivates Account
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-20 |
 | **Type of Test** | Functional |
 | **Functionality Tested** | Admin suspends then reactivates a user account |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman (curl) |
 | **Test Data** | `PATCH /admin/accounts/2/suspend` with `{ "role": "student" }` then `PATCH /admin/accounts/2/reactivate` with `{ "role": "student" }`, admin JWT |
 | **Expected Result** | Suspend: `200 OK`, account `status: "suspended"`. Reactivate: `200 OK`, `status: "active"`. Suspended user login → `403 Forbidden` |
-| **Actual Result** | Suspend: `200 OK` — `{ "message": "Account suspended" }`. Reactivate: `200 OK` — `{ "message": "Account reactivated" }`. User notified on both actions. (Suspended-login → 403 not separately tested this session.) |
+| **Actual Result** | Suspend: `200 OK` - `{ "message": "Account suspended" }`. Reactivate: `200 OK` - `{ "message": "Account reactivated" }`. User notified on both actions. (Suspended-login → 403 not separately tested this session.) |
 | **Pass / Fail** | **PASS** |
-| **Evidence** | Appendix TBD — curl output captured 27 Jun 2026 |
+| **Evidence** | Appendix TBD - curl output captured 27 Jun 2026 |
 
 ---
 
-### TC-21 | Functional Test — Admin Views Error Logs & Traffic Logs
+### TC-21 | Functional Test - Admin Views Error Logs & Traffic Logs
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-21 |
 | **Type of Test** | Functional |
 | **Functionality Tested** | Admin views system error logs and daily traffic logs |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman (curl) |
 | **Test Data** | `GET /admin/errors?limit=3` and `GET /admin/traffic?days=7`, admin JWT |
-| **Expected Result** | `200 OK` — list of error log records; list of `{ date, visit_count }` records |
-| **Actual Result** | Errors: `200 OK` — 10 total error logs, 3 returned (pagination working). Sample: `id=10, msg="OPTIONS /api/auth/login — Not allowed by CORS"`. Traffic: `200 OK` — 7 days returned, `totalVisits=707`. Sample: `date=2026-06-27, visitCount=21`. |
+| **Expected Result** | `200 OK` - list of error log records; list of `{ date, visit_count }` records |
+| **Actual Result** | Errors: `200 OK` - 10 total error logs, 3 returned (pagination working). Sample: `id=10, msg="OPTIONS /api/auth/login - Not allowed by CORS"`. Traffic: `200 OK` - 7 days returned, `totalVisits=707`. Sample: `date=2026-06-27, visitCount=21`. |
 | **Pass / Fail** | **PASS** |
-| **Evidence** | Appendix TBD — curl output captured 27 Jun 2026 |
+| **Evidence** | Appendix TBD - curl output captured 27 Jun 2026 |
 
 ---
 
-## Sprint 7 — Notifications & Integration
+## Sprint 7 - Notifications & Integration
 
 ---
 
-### TC-22 | Functional Test — View & Read Notifications
+### TC-22 | Functional Test - View & Read Notifications
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-22 |
 | **Type of Test** | Functional |
 | **Functionality Tested** | Any logged-in user can view and mark notifications as read |
-| **Test Environment** | Local — Node.js, PostgreSQL, Postman |
+| **Test Environment** | Local - Node.js, PostgreSQL, Postman |
 | **Test Tool** | Postman (curl) |
 | **Test Data** | `GET /notifications?limit=5` with admin JWT; `PATCH /notifications/3/read` |
-| **Expected Result** | `200 OK` — list of notifications for the logged-in user only. Mark read: `is_read: true` |
-| **Actual Result** | GET: `200 OK` — 1 notification returned, `unreadCount=1`. Sample: `id=3, msg="New listing submitted for review...", isRead=false`. PATCH: `200 OK` — `{ "message": "Notification marked as read", notification: { isRead: true } }`. |
+| **Expected Result** | `200 OK` - list of notifications for the logged-in user only. Mark read: `is_read: true` |
+| **Actual Result** | GET: `200 OK` - 1 notification returned, `unreadCount=1`. Sample: `id=3, msg="New listing submitted for review...", isRead=false`. PATCH: `200 OK` - `{ "message": "Notification marked as read", notification: { isRead: true } }`. |
 | **Pass / Fail** | **PASS** |
-| **Evidence** | Appendix TBD — curl output captured 27 Jun 2026 |
+| **Evidence** | Appendix TBD - curl output captured 27 Jun 2026 |
 
 ---
 
-### TC-23 | Integration Test — Full User Journey (Student)
+### TC-23 | Integration Test - Full User Journey (Student)
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-23 |
 | **Type of Test** | Integration / End-to-End |
 | **Functionality Tested** | Complete student flow: register → verify OTP → login → search → view listing → book → receive notification |
-| **Test Environment** | Local — Frontend + Backend running together, Browser |
+| **Test Environment** | Local - Frontend + Backend running together, Browser |
 | **Test Tool** | Browser (Chrome), Postman (backend verification) |
 | **Test Data** | New student account, live listing in DB |
 | **Expected Result** | All steps complete without error, booking appears in DB with `status: "pending"`, notification created |
@@ -445,14 +445,14 @@
 
 ---
 
-### TC-24 | Integration Test — Full Provider Journey (Landlord)
+### TC-24 | Integration Test - Full Provider Journey (Landlord)
 
 | Field | Detail |
 |---|---|
 | **Test Case ID** | TC-24 |
 | **Type of Test** | Integration / End-to-End |
 | **Functionality Tested** | Landlord flow: register → login → create listing → upload image → listing approved by admin → booking received → booking confirmed |
-| **Test Environment** | Local — Frontend + Backend, Browser |
+| **Test Environment** | Local - Frontend + Backend, Browser |
 | **Test Tool** | Browser (Chrome), Postman |
 | **Test Data** | New landlord account, admin account seeded in DB |
 | **Expected Result** | All steps complete. Listing moves from `pending` → `active`. Booking moves from `pending` → `confirmed` |
@@ -462,4 +462,4 @@
 
 ---
 
-_Last updated: 27 Jun 2026 — TC-17 through TC-22 filled in (Sprint 6 + 7)_
+_Last updated: 27 Jun 2026 - TC-17 through TC-22 filled in (Sprint 6 + 7)_

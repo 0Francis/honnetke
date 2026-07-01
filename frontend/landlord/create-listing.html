@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Create a new hostel or property listing on HonnetKE — fill in details, location, amenities, and upload images.">
+  <meta name="description" content="Create a new hostel or property listing on HonnetKE - fill in details, location, amenities, and upload images.">
   <meta name="keywords" content="create listing, add property, hostel listing, HonnetKE landlord">
   <meta name="author" content="HonnetKE">
-  <title>Create Listing — HonnetKE</title>
+  <title>Create Listing - HonnetKE</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,14 +18,14 @@
   <link rel="stylesheet" href="../landingpage/css/reset.css">
   <link rel="stylesheet" href="../landingpage/css/global.css">
   <link rel="stylesheet" href="css/landlord.css">
-</head>
+<link rel="stylesheet" href="../shared/css/notifications.css"></head>
 <body>
 
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- ═══════════════════════════════════════════
+  <!-- -------------------------------------------
        LANDLORD NAVBAR
-       ═══════════════════════════════════════════ -->
+       ------------------------------------------- -->
   <nav class="landlord-navbar" id="navbar" aria-label="Landlord navigation">
     <div class="navbar-inner">
       <a href="dashboard.html" class="navbar-logo" aria-label="HonnetKE Landlord Dashboard">
@@ -37,7 +37,7 @@
         <span class="logo-text">HonnetKE</span>
       </a>
       <ul class="navbar-nav" id="navbar-nav">
-        <li><a href="../landingpage/index.html" class="nav-link">Home</a></li>
+        <li><a href="../landingpage/landingpage.html" class="nav-link">Home</a></li>
         <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
         <li><a href="manage-listings.html" class="nav-link">My Listings</a></li>
         <li><a href="bookings.html" class="nav-link">Bookings</a></li>
@@ -67,7 +67,7 @@
   </nav>
 
   <div class="landlord-mobile-nav" id="landlord-mobile-nav" aria-hidden="true">
-    <a href="../landingpage/index.html" class="nav-link">Home</a>
+    <a href="../landingpage/landingpage.html" class="nav-link">Home</a>
     <a href="dashboard.html" class="nav-link">Dashboard</a>
     <a href="manage-listings.html" class="nav-link">My Listings</a>
     <a href="bookings.html" class="nav-link">Bookings</a>
@@ -79,9 +79,9 @@
 
   <div class="toast-container" id="toast-container"></div>
 
-  <!-- ═══════════════════════════════════════════
-       MAIN CONTENT — CREATE LISTING
-       ═══════════════════════════════════════════ -->
+  <!-- -------------------------------------------
+       MAIN CONTENT - CREATE LISTING
+       ------------------------------------------- -->
   <main class="landlord-main" id="main-content">
 
     <div class="page-header">
@@ -128,7 +128,7 @@
           <!-- Step 1: Basic Info -->
           <div class="form-step active" id="step-1">
             <h2>Basic Information</h2>
-            <p class="step-description">Tell us about your property — name, type, pricing, and preferences.</p>
+            <p class="step-description">Tell us about your property - name, type, pricing, and preferences.</p>
 
             <div class="form-group">
               <label class="form-label" for="listing-title">Property Title *</label>
@@ -137,7 +137,7 @@
 
             <div class="form-group">
               <label class="form-label" for="listing-description">Description *</label>
-              <textarea class="form-textarea" id="listing-description" placeholder="Describe your property — rooms, facilities, what makes it great for students..." required></textarea>
+              <textarea class="form-textarea" id="listing-description" placeholder="Describe your property - rooms, facilities, what makes it great for students..." required></textarea>
             </div>
 
             <div class="form-row">
@@ -145,10 +145,18 @@
                 <label class="form-label" for="property-type">Property Type *</label>
                 <select class="form-select" id="property-type" required>
                   <option value="" disabled selected>Select type</option>
-                  <option value="hostel">Hostel</option>
-                  <option value="apartment">Apartment</option>
+                  <option value="hostel_room">Hostel Room</option>
+                  <option value="shared_room">Shared Room</option>
+                  <option value="studio">Studio</option>
                   <option value="bedsitter">Bedsitter</option>
-                  <option value="single-room">Single Room</option>
+                  <option value="sq">Servant Quarter (SQ)</option>
+                  <option value="one_bedroom">1 Bedroom</option>
+                  <option value="two_bedroom">2 Bedroom</option>
+                  <option value="three_bedroom">3 Bedroom</option>
+                  <option value="suite">Suite</option>
+                  <option value="apartment">Apartment</option>
+                  <option value="maisonette">Maisonette</option>
+                  <option value="other">Other</option>
                 </select>
               </div>
               <div class="form-group">
@@ -167,7 +175,7 @@
                   <option value="" disabled selected>Select preference</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
-                  <option value="mixed">Mixed</option>
+                  <option value="any">Any</option>
                 </select>
               </div>
               <div class="form-group">
@@ -178,6 +186,20 @@
                   <option value="ensuite">Ensuite</option>
                   <option value="shared">Shared</option>
                 </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="listing-capacity">Capacity (total slots) *</label>
+                <input type="number" class="form-input" id="listing-capacity" placeholder="e.g. 4" min="1" value="1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="listing-deposit">Deposit (KES)</label>
+                <div class="input-prefix">
+                  <span class="prefix">KES</span>
+                  <input type="number" class="form-input" id="listing-deposit" placeholder="e.g. 5000" min="0">
+                </div>
               </div>
             </div>
 
@@ -193,7 +215,7 @@
           <!-- Step 2: Location -->
           <div class="form-step" id="step-2">
             <h2>Location Details</h2>
-            <p class="step-description">Help students find your property — provide accurate location information.</p>
+            <p class="step-description">Help students find your property - provide accurate location information.</p>
 
             <div class="form-row">
               <div class="form-group">
@@ -216,6 +238,11 @@
                 <label class="form-label" for="listing-area">Area / Town *</label>
                 <input type="text" class="form-input" id="listing-area" placeholder="e.g. Juja, Rongai, Kikuyu" required>
               </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="listing-estate">Estate / Neighbourhood</label>
+              <input type="text" class="form-input" id="listing-estate" placeholder="e.g. Gachie, Kahawa Sukari">
             </div>
 
             <div class="form-group">
@@ -323,7 +350,7 @@
               </svg>
               <h3>Drag & drop images here</h3>
               <p>or <span class="browse-link">browse files</span> from your device</p>
-              <p style="margin-top: var(--space-sm); font-size: 0.7rem; color: var(--color-text-light);">Supports JPG, PNG, WebP — Max 5MB per image</p>
+              <p style="margin-top: var(--space-sm); font-size: 0.7rem; color: var(--color-text-light);">Supports JPG, PNG, WebP - Max 5MB per image</p>
             </div>
             <input type="file" id="listing-images" accept="image/*" multiple hidden>
 
@@ -355,27 +382,27 @@
               <div class="review-grid">
                 <div class="review-item">
                   <div class="review-label">Title</div>
-                  <div class="review-value" id="review-title">—</div>
+                  <div class="review-value" id="review-title">-</div>
                 </div>
                 <div class="review-item">
                   <div class="review-label">Property Type</div>
-                  <div class="review-value" id="review-property-type">—</div>
+                  <div class="review-value" id="review-property-type">-</div>
                 </div>
                 <div class="review-item">
                   <div class="review-label">Price</div>
-                  <div class="review-value" id="review-price">—</div>
+                  <div class="review-value" id="review-price">-</div>
                 </div>
                 <div class="review-item">
                   <div class="review-label">Gender Preference</div>
-                  <div class="review-value" id="review-gender">—</div>
+                  <div class="review-value" id="review-gender">-</div>
                 </div>
                 <div class="review-item">
                   <div class="review-label">Room Type</div>
-                  <div class="review-value" id="review-room-type">—</div>
+                  <div class="review-value" id="review-room-type">-</div>
                 </div>
                 <div class="review-item">
                   <div class="review-label">Description</div>
-                  <div class="review-value" id="review-description">—</div>
+                  <div class="review-value" id="review-description">-</div>
                 </div>
               </div>
             </div>
@@ -389,19 +416,19 @@
               <div class="review-grid">
                 <div class="review-item">
                   <div class="review-label">County</div>
-                  <div class="review-value" id="review-county">—</div>
+                  <div class="review-value" id="review-county">-</div>
                 </div>
                 <div class="review-item">
                   <div class="review-label">Area</div>
-                  <div class="review-value" id="review-area">—</div>
+                  <div class="review-value" id="review-area">-</div>
                 </div>
                 <div class="review-item">
                   <div class="review-label">Nearest Campus</div>
-                  <div class="review-value" id="review-campus">—</div>
+                  <div class="review-value" id="review-campus">-</div>
                 </div>
                 <div class="review-item">
                   <div class="review-label">Address</div>
-                  <div class="review-value" id="review-address">—</div>
+                  <div class="review-value" id="review-address">-</div>
                 </div>
               </div>
             </div>
@@ -449,7 +476,7 @@
             <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M20 2L35 10.66V28.34L20 37L5 28.34V10.66L20 2Z" fill="#E8900A" fill-opacity="0.15" stroke="#E8900A" stroke-width="2" stroke-linejoin="round"/><path d="M20 10L28 14.6V23.4L20 28L12 23.4V14.6L20 10Z" fill="#E8900A" stroke="#E8900A" stroke-width="1.5" stroke-linejoin="round"/><circle cx="20" cy="19" r="3" fill="#FFF8EC"/></svg>
             <span class="logo-text">HonnetKE</span>
           </a>
-          <p class="footer-tagline">Kenya's #1 student hostel discovery platform. List your properties and connect with thousands of students — join the hive.</p>
+          <p class="footer-tagline">Kenya's #1 student hostel discovery platform. List your properties and connect with thousands of students - join the hive.</p>
         </div>
         <div class="footer-quick-links">
           <h3 class="footer-heading">Quick Links</h3>
@@ -483,5 +510,5 @@
   <script src="../shared/js/api.js"></script>
   <script src="../shared/js/auth.js"></script>
   <script src="js/landlord.js"></script>
-</body>
+<script src="../shared/js/notifications.js"></script></body>
 </html>

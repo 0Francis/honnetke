@@ -1,5 +1,5 @@
-/* ===================================================
-   HonnetKE — Shared auth/session helpers
+﻿/* ===================================================
+   HonnetKE - Shared auth/session helpers
    Token lives in localStorage (persists across sessions →
    "remember this device"). A short-lived 'pending' record in
    sessionStorage carries the in-progress OTP flow.

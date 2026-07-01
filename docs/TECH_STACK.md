@@ -1,7 +1,7 @@
-# HonnetKE — Tech Stack & Justifications
+﻿# HonnetKE - Tech Stack & Justifications
 
 > Fill in the **Justification** fields as decisions are finalised.
-> This file feeds directly into **Chapter 5.2 — Technical Stack and Environment**.
+> This file feeds directly into **Chapter 5.2 - Technical Stack and Environment**.
 
 ---
 
@@ -32,7 +32,7 @@
 |---|---|
 | **DBMS** | PostgreSQL |
 | **ORM / Query Builder** | Prisma v5 |
-| **Justification** | _(Why PostgreSQL over alternatives? e.g. relational integrity enforced via FK constraints — critical for listings that belong to either a landlord OR agent but not both, CHECK constraints enforce role and status enumerations at the DB level, SERIAL primary keys, UNIQUE constraints prevent duplicate accounts)_ |
+| **Justification** | _(Why PostgreSQL over alternatives? e.g. relational integrity enforced via FK constraints - critical for listings that belong to either a landlord OR agent but not both, CHECK constraints enforce role and status enumerations at the DB level, SERIAL primary keys, UNIQUE constraints prevent duplicate accounts)_ |
 
 ---
 
@@ -41,7 +41,7 @@
 | Field | Detail |
 |---|---|
 | **Service** | Cloudinary |
-| **Integration** | Cloudinary SDK — images uploaded via backend, only URLs stored in `listing_images` table |
+| **Integration** | Cloudinary SDK - images uploaded via backend, only URLs stored in `listing_images` table |
 | **Justification** | _(Why offload image storage? e.g. free tier sufficient for MVP, offloads bandwidth from server, CDN delivery improves image load speed for students browsing on mobile, avoids storing binary data in PostgreSQL)_ |
 
 ---
@@ -53,7 +53,7 @@
 | **Method** | JWT (JSON Web Tokens) |
 | **Storage** | _(e.g. HttpOnly cookie / Authorization header)_ |
 | **Role Encoding** | Role field included in JWT payload for middleware guards |
-| **Justification** | _(Why JWT over sessions? e.g. stateless — no server-side session store needed, role embedded in token avoids extra DB lookup per request, supports multiple client types — browser and potential mobile)_ |
+| **Justification** | _(Why JWT over sessions? e.g. stateless - no server-side session store needed, role embedded in token avoids extra DB lookup per request, supports multiple client types - browser and potential mobile)_ |
 
 ---
 
@@ -62,8 +62,8 @@
 | Field | Detail |
 |---|---|
 | **Service** | _(e.g. Africa's Talking SMS API / Twilio / custom)_ |
-| **Trigger** | On successful registration — OTP sent to registered phone number |
-| **Justification** | _(Why SMS OTP? e.g. phone number is a required unique field — OTP verifies real ownership, SMS delivery does not depend on email access which students may not check promptly, aligns with Kenyan mobile-first usage patterns)_ |
+| **Trigger** | On successful registration - OTP sent to registered phone number |
+| **Justification** | _(Why SMS OTP? e.g. phone number is a required unique field - OTP verifies real ownership, SMS delivery does not depend on email access which students may not check promptly, aligns with Kenyan mobile-first usage patterns)_ |
 
 ---
 
@@ -96,7 +96,7 @@
 
 | Field | Detail |
 |---|---|
-| **Code Backup** | GitHub remote repository — every push backs up the codebase |
+| **Code Backup** | GitHub remote repository - every push backs up the codebase |
 | **Database Backup** | _(e.g. `pg_dump` scheduled daily / Supabase automatic backups / Railway managed backups)_ |
 | **Image Backup** | Cloudinary manages redundancy for uploaded images |
 | **Justification** | _(How does this strategy protect against data loss or corruption? e.g. Git history allows rollback to any previous commit, database dumps enable point-in-time recovery, Cloudinary CDN replication ensures images are not lost if a single server fails)_ |
@@ -109,15 +109,15 @@
 
 | NFR | How It Was Addressed | Status |
 |---|---|---|
-| **Security** — passwords not stored in plaintext | `bcrypt` hashing before storing in `password_hash` column | _(fill in)_ |
-| **Security** — route protection | JWT middleware on all non-public routes | _(fill in)_ |
-| **Integrity** — one listing per owner type | `CHECK` constraint in `listings` table (landlord XOR agent) | _(fill in)_ |
-| **Integrity** — no duplicate accounts | `UNIQUE` on `email` and `phone_number` in all user tables | _(fill in)_ |
-| **Scalability** — image storage | Cloudinary offloads image load from server | _(fill in)_ |
-| **Usability** — role-based navigation | Navbar and dashboard routes change based on JWT role | _(fill in)_ |
-| **Reliability** — error capture | Global error handler writes to `error_logs` table | _(fill in)_ |
-| **Traceability** — traffic monitoring | Middleware increments `traffic_logs` per day | _(fill in)_ |
+| **Security** - passwords not stored in plaintext | `bcrypt` hashing before storing in `password_hash` column | _(fill in)_ |
+| **Security** - route protection | JWT middleware on all non-public routes | _(fill in)_ |
+| **Integrity** - one listing per owner type | `CHECK` constraint in `listings` table (landlord XOR agent) | _(fill in)_ |
+| **Integrity** - no duplicate accounts | `UNIQUE` on `email` and `phone_number` in all user tables | _(fill in)_ |
+| **Scalability** - image storage | Cloudinary offloads image load from server | _(fill in)_ |
+| **Usability** - role-based navigation | Navbar and dashboard routes change based on JWT role | _(fill in)_ |
+| **Reliability** - error capture | Global error handler writes to `error_logs` table | _(fill in)_ |
+| **Traceability** - traffic monitoring | Middleware increments `traffic_logs` per day | _(fill in)_ |
 
 ---
 
-_Last updated: Sprint 0 — stack confirmed (Node.js + Express + Prisma + PostgreSQL)_
+_Last updated: Sprint 0 - stack confirmed (Node.js + Express + Prisma + PostgreSQL)_

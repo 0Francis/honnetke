@@ -1,31 +1,31 @@
-HonnetKE: general notes NBs
+﻿HonnetKE: general notes NBs
 
 Design Notes (Wireframes/Figma)
 
-Navbar changes based on role — guest, student, landlord/agent, admin
+Navbar changes based on role - guest, student, landlord/agent, admin
 Footer only on guest pages, student pages, and homepage for all roles
 Guest clicking listing detail card → redirected to login
-Hornet animation on splash screen, sign up page, 404 page — annotate in Figma, implement with Lottie/CSS in dev
+Hornet animation on splash screen, sign up page, 404 page - annotate in Figma, implement with Lottie/CSS in dev
 Popups/modals drawn as overlays on parent page in Figma, not separate frames
 Forgot password flow as modal on login page
 
 
 Development Notes
 
-Proximity/location feature (Haversine + Google Maps) — excluded from MVP, post-MVP enhancement
-Search sessions — not stored, search is stateless
-Dark mode — post-MVP enhancement
-Google Distance Matrix API — post-MVP enhancement
+Proximity/location feature (Haversine + Google Maps) - excluded from MVP, post-MVP enhancement
+Search sessions - not stored, search is stateless
+Dark mode - post-MVP enhancement
+Google Distance Matrix API - post-MVP enhancement
 Admin accounts created directly in database, no self-registration UI
 Contact flow is external redirect (WhatsApp/call/SMS), no in-app messaging
 Analytics stored as weekly aggregates, purged after 30 days
 Duplicate listing detection flagged to admin, not auto-blocked
 
 Proximity Feature:
-MVP: Free tier only — Haversine formula for straight-line distance computation, no Google API calls
+MVP: Free tier only - Haversine formula for straight-line distance computation, no Google API calls
 Location input: simple text field for address/location, stored as coordinates in database
 Post-MVP consideration: Google Places API for autocomplete and verified location selection
-Google Distance Matrix API — post-MVP
+Google Distance Matrix API - post-MVP
 
 Schema Notes
 

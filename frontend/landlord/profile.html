@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="HonnetKE Landlord Profile — Manage your personal information, business details, and account settings.">
+  <meta name="description" content="HonnetKE Landlord Profile - Manage your personal information, business details, and account settings.">
   <meta name="keywords" content="landlord profile, property manager, account settings, HonnetKE">
   <meta name="author" content="HonnetKE">
-  <title>My Profile — HonnetKE</title>
+  <title>My Profile - HonnetKE</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,15 +19,15 @@
   <link rel="stylesheet" href="../landingpage/css/global.css">
   <!-- Page-specific -->
   <link rel="stylesheet" href="css/landlord.css">
-</head>
+<link rel="stylesheet" href="../shared/css/notifications.css"></head>
 <body data-page="profile">
 
   <!-- Skip to main content (accessibility) -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- ═══════════════════════════════════════════
+  <!-- -------------------------------------------
        LANDLORD NAVBAR
-       ═══════════════════════════════════════════ -->
+       ------------------------------------------- -->
   <nav class="landlord-navbar" id="navbar" aria-label="Landlord navigation">
     <div class="navbar-inner">
 
@@ -43,7 +43,7 @@
 
       <!-- Center Nav -->
       <ul class="navbar-nav" id="navbar-nav">
-        <li><a href="../landingpage/index.html" class="nav-link">Home</a></li>
+        <li><a href="../landingpage/landingpage.html" class="nav-link">Home</a></li>
         <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
         <li><a href="manage-listings.html" class="nav-link">My Listings</a></li>
         <li><a href="bookings.html" class="nav-link">Bookings</a></li>
@@ -103,7 +103,7 @@
 
   <!-- Landlord Mobile Nav Overlay -->
   <div class="landlord-mobile-nav" id="landlord-mobile-nav" aria-hidden="true">
-    <a href="../landingpage/index.html" class="nav-link">Home</a>
+    <a href="../landingpage/landingpage.html" class="nav-link">Home</a>
     <a href="dashboard.html" class="nav-link">Dashboard</a>
     <a href="manage-listings.html" class="nav-link">My Listings</a>
     <a href="bookings.html" class="nav-link">Bookings</a>
@@ -115,9 +115,9 @@
   <!-- Toast Container -->
   <div class="toast-container" id="toast-container"></div>
 
-  <!-- ═══════════════════════════════════════════
-       MAIN CONTENT — PROFILE
-       ═══════════════════════════════════════════ -->
+  <!-- -------------------------------------------
+       MAIN CONTENT - PROFILE
+       ------------------------------------------- -->
   <main class="landlord-main" id="main-content">
 
     <!-- Page Header -->
@@ -132,10 +132,10 @@
     <section class="profile-section reveal">
       <div class="container">
         <div class="profile-header-card" id="profile-header-card">
-          <div class="profile-avatar-large" id="profile-avatar-large">PK</div>
+          <div class="profile-avatar-large" id="profile-avatar-large">-</div>
           <div class="profile-header-info">
-            <h2 class="profile-name" id="profile-name">Peter Kamau</h2>
-            <p class="profile-email" id="profile-email">peter.kamau@email.com</p>
+            <h2 class="profile-name" id="profile-name">-</h2>
+            <p class="profile-email" id="profile-email">-</p>
             <div class="profile-meta">
               <span class="profile-role-badge landlord">Landlord</span>
               <span class="profile-verified">
@@ -144,7 +144,7 @@
               </span>
               <span class="profile-joined">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                Joined May 2026
+                Joined -
               </span>
             </div>
           </div>
@@ -157,20 +157,20 @@
       <div class="container">
         <div class="profile-stats-row">
           <div class="profile-stat">
-            <div class="profile-stat-value" id="stat-total-listings">12</div>
-            <div class="profile-stat-label">Total Listings</div>
+            <div class="profile-stat-value" id="stat-total-properties">0</div>
+            <div class="profile-stat-label">Total Properties</div>
           </div>
           <div class="profile-stat">
-            <div class="profile-stat-value" id="stat-active-listings">8</div>
-            <div class="profile-stat-label">Active Listings</div>
+            <div class="profile-stat-value" id="stat-active-properties">0</div>
+            <div class="profile-stat-label">Active Properties</div>
           </div>
           <div class="profile-stat">
-            <div class="profile-stat-value" id="stat-total-bookings">24</div>
+            <div class="profile-stat-value" id="stat-total-bookings">0</div>
             <div class="profile-stat-label">Total Bookings</div>
           </div>
           <div class="profile-stat">
-            <div class="profile-stat-value" id="stat-profile-views">1.2K</div>
-            <div class="profile-stat-label">Profile Views</div>
+            <div class="profile-stat-value" id="stat-total-views">0</div>
+            <div class="profile-stat-label">Total Views</div>
           </div>
         </div>
       </div>
@@ -190,22 +190,22 @@
             <div class="form-row">
               <div class="form-group">
                 <label for="profile-fullname">Full Name</label>
-                <input type="text" id="profile-fullname" class="form-input" value="Peter Kamau" placeholder="Your full name">
+                <input type="text" id="profile-fullname" class="form-input" value="" placeholder="Your full name">
               </div>
               <div class="form-group">
                 <label for="profile-email-field">Email Address</label>
-                <input type="email" id="profile-email-field" class="form-input" value="peter.kamau@email.com" readonly disabled>
+                <input type="email" id="profile-email-field" class="form-input" value="" readonly disabled>
                 <span class="form-hint">Email cannot be changed</span>
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
                 <label for="profile-phone">Phone Number</label>
-                <input type="tel" id="profile-phone" class="form-input" value="+254 722 000 111" placeholder="+254 7XX XXX XXX">
+                <input type="tel" id="profile-phone" class="form-input" value="" placeholder="+254 7XX XXX XXX">
               </div>
               <div class="form-group">
                 <label for="profile-business">Business / Property Name</label>
-                <input type="text" id="profile-business" class="form-input" value="Kamau Properties Ltd" placeholder="Your business name (optional)">
+                <input type="text" id="profile-business" class="form-input" value="" placeholder="Your business name (optional)">
               </div>
             </div>
             <div class="profile-form-actions">
@@ -370,9 +370,9 @@
   </main>
 
 
-  <!-- ═══════════════════════════════════════════
+  <!-- -------------------------------------------
        DEACTIVATION CONFIRMATION MODAL
-       ═══════════════════════════════════════════ -->
+       ------------------------------------------- -->
   <div class="modal-overlay" id="deactivate-modal">
     <div class="modal">
       <div class="modal-icon warning">
@@ -388,9 +388,9 @@
   </div>
 
 
-  <!-- ═══════════════════════════════════════════
+  <!-- -------------------------------------------
        FOOTER
-       ═══════════════════════════════════════════ -->
+       ------------------------------------------- -->
   <footer class="footer" id="footer">
     <div class="container">
       <div class="footer-grid">
@@ -403,7 +403,7 @@
             </svg>
             <span class="logo-text">HonnetKE</span>
           </a>
-          <p class="footer-tagline">Kenya's #1 student hostel discovery platform. List your properties and connect with thousands of students — join the hive.</p>
+          <p class="footer-tagline">Kenya's #1 student hostel discovery platform. List your properties and connect with thousands of students - join the hive.</p>
         </div>
         <div class="footer-quick-links">
           <h3 class="footer-heading">Quick Links</h3>
@@ -451,5 +451,5 @@
   <script src="../shared/js/auth.js"></script>
   <script src="js/landlord.js"></script>
 
-</body>
+<script src="../shared/js/notifications.js"></script></body>
 </html>

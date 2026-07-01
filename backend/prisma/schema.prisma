@@ -14,11 +14,29 @@ enum UserStatus {
   suspended
 }
 
-enum ListingStatus {
-  pending
+enum PropertyStatus {
+  draft
+  pending_approval
   active
-  inactive
-  blocked
+  fully_occupied
+  suspended
+  rejected
+  archived
+}
+
+enum PropertyType {
+  hostel_room
+  shared_room
+  studio
+  bedsitter
+  sq
+  one_bedroom
+  two_bedroom
+  three_bedroom
+  suite
+  apartment
+  maisonette
+  other
 }
 
 enum GenderPreference {
@@ -35,19 +53,36 @@ enum RoomType {
 
 enum BookingStatus {
   pending
-  confirmed
+  accepted
+  rejected
   cancelled
-  declined
+  visited
+  completed
 }
 
 enum ReportStatus {
   pending
   resolved
+  dismissed
+}
+
+enum ReportReason {
+  spam
+  fraud
+  wrong_information
+  already_occupied
+  inappropriate
+  other
 }
 
 enum NotificationType {
-  listing_review
+  property_review
   booking_update
+  visit_invitation
+  warning
+  suspension
+  announcement
+  report
   system
 }
 
@@ -74,6 +109,7 @@ model Student {
   reports       Report[]
   warnings      Warning[]
   notifications Notification[]
+  viewHistory   ViewHistory[]
 
   @@map("students")
 }
@@ -88,7 +124,7 @@ model Landlord {
   isVerified   Boolean    @default(false) @map("is_verified")
   createdAt    DateTime   @default(now()) @map("created_at")
 
-  listings      Listing[]
+  properties    Property[]
   warnings      Warning[]
   notifications Notification[]
 
@@ -105,7 +141,7 @@ model Agent {
   isVerified   Boolean    @default(false) @map("is_verified")
   createdAt    DateTime   @default(now()) @map("created_at")
 
-  listings      Listing[]
+  properties    Property[]
   warnings      Warning[]
   notifications Notification[]
 
@@ -121,60 +157,71 @@ model Admin {
   status       UserStatus @default(active)
   createdAt    DateTime   @default(now()) @map("created_at")
 
-  approvedListings  Listing[]      @relation("ApprovedBy")
-  resolvedReports   Report[]
-  warnings          Warning[]
-  notifications     Notification[]
+  approvedProperties Property[]     @relation("ApprovedBy")
+  resolvedReports    Report[]
+  warnings           Warning[]
+  notifications      Notification[]
 
   @@map("admins")
 }
 
-// ─── Listings ─────────────────────────────────────────────────────────────────
+// Properties
 
-model Listing {
-  listingId        Int               @id @default(autoincrement()) @map("listing_id")
+model Property {
+  propertyId       Int               @id @default(autoincrement()) @map("property_id")
   landlordId       Int?              @map("landlord_id")
   agentId          Int?              @map("agent_id")
   title            String            @db.VarChar(150)
   description      String?           @db.Text
-  propertyType     String?           @map("property_type") @db.VarChar(50)
+  propertyType     PropertyType      @default(other) @map("property_type")
   price            Decimal           @db.Decimal(10, 2)
+  deposit          Decimal?          @db.Decimal(10, 2)
   genderPreference GenderPreference? @map("gender_preference")
   roomType         RoomType?         @map("room_type")
   amenities        String[]
+  rules            String[]
+  capacity         Int               @default(1)
+  occupied         Int               @default(0)
   county           String            @db.VarChar(100)
   area             String            @db.VarChar(100)
+  estate           String?           @db.VarChar(100)
   nearestCampus    String?           @map("nearest_campus") @db.VarChar(150)
   address          String?           @db.VarChar(255)
-  status           ListingStatus     @default(pending)
+  latitude         Float?
+  longitude        Float?
+  mapLink          String?           @map("map_link") @db.VarChar(500)
+  status           PropertyStatus    @default(draft)
   approvedBy       Int?              @map("approved_by")
   approvedAt       DateTime?         @map("approved_at")
-  declineReason    String?           @map("decline_reason") @db.Text
+  rejectionReason  String?           @map("rejection_reason") @db.Text
   createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @default(now()) @updatedAt @map("updated_at")
 
-  landlord        Landlord?      @relation(fields: [landlordId], references: [landlordId], onDelete: Cascade)
-  agent           Agent?         @relation(fields: [agentId], references: [agentId], onDelete: Cascade)
-  approvedByAdmin Admin?         @relation("ApprovedBy", fields: [approvedBy], references: [adminId], onDelete: SetNull)
+  landlord        Landlord? @relation(fields: [landlordId], references: [landlordId], onDelete: Cascade)
+  agent           Agent?    @relation(fields: [agentId], references: [agentId], onDelete: Cascade)
+  approvedByAdmin Admin?    @relation("ApprovedBy", fields: [approvedBy], references: [adminId], onDelete: SetNull)
 
-  images      ListingImage[]
+  images      PropertyImage[]
   favourites  Favourite[]
   bookings    Booking[]
   reports     Report[]
   analytics   Analytics[]
+  viewHistory ViewHistory[]
 
-  @@map("listings")
+  @@map("properties")
 }
 
-model ListingImage {
-  imageId   Int      @id @default(autoincrement()) @map("image_id")
-  listingId Int      @map("listing_id")
-  imageUrl  String   @map("image_url") @db.VarChar(500)
-  isPrimary Boolean  @default(false) @map("is_primary")
-  createdAt DateTime @default(now()) @map("created_at")
+model PropertyImage {
+  imageId    Int      @id @default(autoincrement()) @map("image_id")
+  propertyId Int      @map("property_id")
+  imageUrl   String   @map("image_url") @db.VarChar(500)
+  isPrimary  Boolean  @default(false) @map("is_primary")
+  sortOrder  Int      @default(0) @map("sort_order")
+  createdAt  DateTime @default(now()) @map("created_at")
 
-  listing Listing @relation(fields: [listingId], references: [listingId], onDelete: Cascade)
+  property Property @relation(fields: [propertyId], references: [propertyId], onDelete: Cascade)
 
-  @@map("listing_images")
+  @@map("property_images")
 }
 
 // ─── Student Actions ──────────────────────────────────────────────────────────
@@ -182,48 +229,53 @@ model ListingImage {
 model Favourite {
   favouriteId Int      @id @default(autoincrement()) @map("favourite_id")
   studentId   Int      @map("student_id")
-  listingId   Int      @map("listing_id")
+  propertyId  Int      @map("property_id")
   createdAt   DateTime @default(now()) @map("created_at")
 
-  student Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
-  listing Listing @relation(fields: [listingId], references: [listingId], onDelete: Cascade)
+  student  Student  @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  property Property @relation(fields: [propertyId], references: [propertyId], onDelete: Cascade)
 
-  @@unique([studentId, listingId])
+  @@unique([studentId, propertyId])
   @@map("favourites")
 }
 
 model Booking {
   bookingId        Int           @id @default(autoincrement()) @map("booking_id")
   studentId        Int           @map("student_id")
-  listingId        Int           @map("listing_id")
+  propertyId       Int           @map("property_id")
   status           BookingStatus @default(pending)
   requestNote      String?       @map("request_note") @db.Text
   providerResponse String?       @map("provider_response") @db.Text
+  visitDate        DateTime?     @map("visit_date")
+  visitTime        String?       @map("visit_time") @db.VarChar(20)
+  meetingPoint     String?       @map("meeting_point") @db.VarChar(255)
+  visitNotes       String?       @map("visit_notes") @db.Text
+  mapLink          String?       @map("map_link") @db.VarChar(500)
   createdAt        DateTime      @default(now()) @map("created_at")
   updatedAt        DateTime      @default(now()) @updatedAt @map("updated_at")
 
   student       Student        @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
-  listing       Listing        @relation(fields: [listingId], references: [listingId], onDelete: Cascade)
+  property      Property       @relation(fields: [propertyId], references: [propertyId], onDelete: Cascade)
   notifications Notification[]
 
-  @@unique([studentId, listingId])
   @@map("bookings")
 }
 
 model Report {
   reportId       Int          @id @default(autoincrement()) @map("report_id")
   studentId      Int          @map("student_id")
-  listingId      Int          @map("listing_id")
-  reason         String       @db.Text
+  propertyId     Int          @map("property_id")
+  reason         ReportReason
+  details        String?      @db.Text
   status         ReportStatus @default(pending)
   resolutionNote String?      @map("resolution_note") @db.Text
   resolvedAt     DateTime?    @map("resolved_at")
   resolvedBy     Int?         @map("resolved_by")
   createdAt      DateTime     @default(now()) @map("created_at")
 
-  student Student @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
-  listing Listing @relation(fields: [listingId], references: [listingId], onDelete: Cascade)
-  admin   Admin?  @relation(fields: [resolvedBy], references: [adminId], onDelete: SetNull)
+  student  Student  @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  property Property @relation(fields: [propertyId], references: [propertyId], onDelete: Cascade)
+  admin    Admin?   @relation(fields: [resolvedBy], references: [adminId], onDelete: SetNull)
 
   @@map("reports")
 }
@@ -274,14 +326,27 @@ model Notification {
 
 model Analytics {
   analyticsId Int      @id @default(autoincrement()) @map("analytics_id")
-  listingId   Int      @map("listing_id")
+  propertyId  Int      @map("property_id")
   weekStart   DateTime @map("week_start") @db.Date
   viewCount   Int      @default(0) @map("view_count")
 
-  listing Listing @relation(fields: [listingId], references: [listingId], onDelete: Cascade)
+  property Property @relation(fields: [propertyId], references: [propertyId], onDelete: Cascade)
 
-  @@unique([listingId, weekStart])
+  @@unique([propertyId, weekStart])
   @@map("analytics")
+}
+
+model ViewHistory {
+  viewId     Int      @id @default(autoincrement()) @map("view_id")
+  studentId  Int      @map("student_id")
+  propertyId Int      @map("property_id")
+  viewedAt   DateTime @default(now()) @updatedAt @map("viewed_at")
+
+  student  Student  @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  property Property @relation(fields: [propertyId], references: [propertyId], onDelete: Cascade)
+
+  @@unique([studentId, propertyId])
+  @@map("view_history")
 }
 
 model ErrorLog {

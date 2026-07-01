@@ -1,5 +1,5 @@
-/* ===================================================
-   HonnetKE Landing Page — JavaScript
+﻿/* ===================================================
+   HonnetKE Landing Page - JavaScript
    Handles: sticky navbar, mobile menu, scroll reveal,
    smooth scrolling, and search interactions.
    =================================================== */
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ──────────────────────────────────────────
-     4. SEARCH BAR — Guest Redirect
+     4. SEARCH BAR - Guest Redirect
      ────────────────────────────────────────── */
   searchBar.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ──────────────────────────────────────────
-     5. LISTING CARDS — Guest Redirect
+     5. LISTING CARDS - Guest Redirect
      ────────────────────────────────────────── */
   const listingCards = document.querySelectorAll('.listing-card');
 
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ──────────────────────────────────────────
-     7. CONTACT FORM — Basic Validation Feedback
+     7. CONTACT FORM - Basic Validation Feedback
      ────────────────────────────────────────── */
   const contactForm = document.getElementById('contact-form');
 
@@ -229,8 +229,8 @@ document.addEventListener('DOMContentLoaded', () => {
   async function fetchFeaturedListings() {
     if (!hostelsGrid) return;
     try {
-      const res = await window.HonnetKE.api.get('/listings?limit=6');
-      const listings = res.listings || [];
+      const res = await window.HonnetKE.api.get('/properties?limit=6');
+      const listings = res.properties || [];
 
       if (listings.length === 0) {
         hostelsGrid.innerHTML = `
@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
           ? listing.genderPreference.charAt(0).toUpperCase() + listing.genderPreference.slice(1)
           : '';
         const typeLabel = listing.propertyType
-          ? listing.propertyType.charAt(0).toUpperCase() + listing.propertyType.slice(1).replace('-', ' ')
+          ? listing.propertyType.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
           : '';
         const roomLabel = listing.roomType
           ? listing.roomType.charAt(0).toUpperCase() + listing.roomType.slice(1) + ' Room'
@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <h3 class="card-title">${listing.title}</h3>
               <div class="card-location">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                ${locationText || '—'}
+                ${locationText || '-'}
               </div>
               <div class="card-badges">
                 ${typeLabel ? `<span class="badge badge-amber">${typeLabel}</span>` : ''}

@@ -1,8 +1,8 @@
 /* ===================================================
-   HonnetKE Admin Pages — JavaScript (API-wired)
+   HonnetKE Admin Pages - JavaScript (API-wired)
    Auth guard, Navbar, Toasts, Modals, Notifications,
-   and live data for Dashboard, Manage Listings,
-   Manage Users, and Flagged Listings.
+   and live data for Dashboard, Manage Properties,
+   Manage Users, and Flagged Properties.
    =================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -40,15 +40,27 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function formatDate(value) {
-    if (!value) return '—';
+    if (!value) return '-';
     const d = new Date(value);
-    if (isNaN(d)) return '—';
+    if (isNaN(d)) return '-';
     return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
   }
 
+  const STATUS_LABELS = {
+    draft: 'Draft', pending_approval: 'Pending review', active: 'Active',
+    fully_occupied: 'Fully occupied', suspended: 'Suspended', rejected: 'Rejected',
+    archived: 'Archived', pending: 'Pending', resolved: 'Resolved',
+    active: 'Active', suspended: 'Suspended',
+  };
+  const BADGE_CLASS = {
+    draft: 'inactive', pending_approval: 'pending', active: 'active',
+    fully_occupied: 'active', suspended: 'blocked', rejected: 'blocked',
+    archived: 'inactive', pending: 'pending', resolved: 'resolved',
+  };
   function statusBadge(status) {
-    const label = status.charAt(0).toUpperCase() + status.slice(1);
-    return `<span class="status-badge ${esc(status)}"><span class="status-dot"></span>${esc(label)}</span>`;
+    const label = STATUS_LABELS[status] || (status ? status.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : status);
+    const cls = BADGE_CLASS[status] || status;
+    return `<span class="status-badge ${esc(cls)}"><span class="status-dot"></span>${esc(label)}</span>`;
   }
 
   // ── Navbar scroll ──
@@ -259,9 +271,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (el) el.textContent = Number(val).toLocaleString();
       };
       setStat('stat-users', s.totalUsers);
-      setStat('stat-total-listings', s.totalListings);
-      setStat('stat-active-listings', s.activeListings);
-      setStat('stat-pending', s.pendingListings);
+      setStat('stat-total-listings', s.totalProperties);
+      setStat('stat-active-listings', s.activeProperties);
+      setStat('stat-pending', s.pendingProperties);
       setStat('stat-flagged', s.pendingReports);
       setStat('stat-errors', s.errorsToday);
 
@@ -271,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (errs) errs.textContent = Number(s.errorsToday).toLocaleString();
 
       const reviewDesc = document.querySelector('#action-review .action-desc');
-      if (reviewDesc) reviewDesc.textContent = `${s.pendingListings} listings awaiting approval`;
+      if (reviewDesc) reviewDesc.textContent = `${s.pendingProperties} properties awaiting approval`;
       const flaggedDesc = document.querySelector('#action-flagged .action-desc');
       if (flaggedDesc) flaggedDesc.textContent = `${s.pendingReports} pending student reports`;
     } catch (err) {
@@ -289,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
       tbody.innerHTML = reports.map(r => `
         <tr data-report-id="${r.reportId}" data-status="${esc(r.status)}">
           <td class="table-name">${esc(r.student?.fullName || 'Student')}</td>
-          <td class="table-name">${esc(r.listing?.title || 'Listing')}</td>
+          <td class="table-name">${esc(r.property?.title || 'Property')}</td>
           <td class="table-muted">${esc(r.reason)}</td>
           <td class="table-date">${formatDate(r.createdAt)}</td>
           <td>${statusBadge(r.status)}</td>
@@ -308,13 +320,13 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.addEventListener('click', async () => {
         const row = btn.closest('tr');
         const id = row.dataset.reportId;
-        const listing = row.querySelector('.table-name')?.textContent || 'listing';
+        const title = row.querySelector('.table-name')?.textContent || 'property';
         try {
           await api.patch(`/admin/reports/${id}/resolve`, {}, true);
           row.querySelector('td:nth-child(5)').innerHTML = statusBadge('resolved');
           row.querySelector('.table-actions').innerHTML = '<span class="no-action-text">Resolved</span>';
           row.dataset.status = 'resolved';
-          showToast('Report Resolved', `Report for "${listing}" resolved.`, 'success');
+          showToast('Report Resolved', `Report for "${title}" resolved.`, 'success');
         } catch (err) {
           showToast('Error', err.message, 'error');
         }
@@ -332,25 +344,25 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!tbody) return;
     tableLoading(tbody, 8);
     try {
-      const { listings } = await api.get('/admin/listings?status=all&limit=50', true);
-      if (!listings.length) { tableEmpty(tbody, 8, 'No listings found.'); return; }
-      tbody.innerHTML = listings.map(l => {
+      const { properties } = await api.get('/admin/properties?status=all&limit=50', true);
+      if (!properties.length) { tableEmpty(tbody, 8, 'No properties found.'); return; }
+      tbody.innerHTML = properties.map(l => {
         const provider = l.landlord?.fullName || l.agent?.fullName || 'Unknown';
         const price = Number(l.price).toLocaleString();
         let actions;
-        if (l.status === 'pending') {
+        if (l.status === 'pending_approval') {
           actions = `<button class="btn-sm btn-approve" data-action="approve">Approve</button>
-                     <button class="btn-sm btn-decline-action" data-action="decline">Decline</button>`;
-        } else if (l.status === 'active') {
+                     <button class="btn-sm btn-decline-action" data-action="reject">Reject</button>`;
+        } else if (l.status === 'active' || l.status === 'fully_occupied') {
           actions = `<button class="btn-sm btn-suspend" data-action="suspend-listing">Suspend</button>`;
-        } else if (l.status === 'inactive') {
-          actions = '<span class="no-action-text">Deactivated by owner</span>';
+        } else if (l.status === 'archived') {
+          actions = '<span class="no-action-text">Archived by owner</span>';
         } else {
           actions = '<span class="no-action-text">Blocked by admin</span>';
         }
         return `
-          <tr data-status="${esc(l.status)}" data-listing-id="${l.listingId}">
-            <td class="table-muted">#${l.listingId}</td>
+          <tr data-status="${esc(l.status)}" data-property-id="${l.propertyId}">
+            <td class="table-muted">#${l.propertyId}</td>
             <td class="table-name">${esc(l.title)}</td>
             <td class="table-muted">${esc(provider)}</td>
             <td class="table-muted">${esc(l.area)}, ${esc(l.county)}</td>
@@ -362,50 +374,50 @@ document.addEventListener('DOMContentLoaded', () => {
       }).join('');
       bindListingActions();
     } catch (err) {
-      tableEmpty(tbody, 8, err.message || 'Could not load listings.');
+      tableEmpty(tbody, 8, err.message || 'Could not load properties.');
     }
   }
 
   function setRowBlocked(row, label) {
-    row.querySelector('td:nth-child(6)').innerHTML = statusBadge('blocked');
+    row.querySelector('td:nth-child(6)').innerHTML = statusBadge('suspended');
     row.querySelector('.table-actions').innerHTML = `<span class="no-action-text">${esc(label)}</span>`;
-    row.dataset.status = 'blocked';
+    row.dataset.status = 'suspended';
   }
 
   function bindListingActions() {
     document.querySelectorAll('[data-action="approve"]').forEach(btn => {
       btn.addEventListener('click', () => {
         const row = btn.closest('tr');
-        const id = row.dataset.listingId;
-        const title = row.querySelector('.table-name')?.textContent || 'listing';
+        const id = row.dataset.propertyId;
+        const title = row.querySelector('.table-name')?.textContent || 'property';
         const modalTitle = document.querySelector('#approve-modal h3');
         if (modalTitle) modalTitle.textContent = `Approve "${title}"?`;
         openModal('approve-modal', async () => {
           try {
-            await api.patch(`/admin/listings/${id}/approve`, {}, true);
+            await api.patch(`/admin/properties/${id}/approve`, {}, true);
             row.querySelector('td:nth-child(6)').innerHTML = statusBadge('active');
             row.querySelector('.table-actions').innerHTML = '<button class="btn-sm btn-suspend" data-action="suspend-listing">Suspend</button>';
             row.dataset.status = 'active';
             bindListingActions();
-            showToast('Listing Approved', `"${title}" is now live.`, 'success');
+            showToast('Property Approved', `"${title}" is now live.`, 'success');
           } catch (err) { showToast('Error', err.message, 'error'); }
         });
       });
     });
 
-    document.querySelectorAll('[data-action="decline"]').forEach(btn => {
+    document.querySelectorAll('[data-action="reject"]').forEach(btn => {
       btn.addEventListener('click', () => {
         const row = btn.closest('tr');
-        const id = row.dataset.listingId;
-        const title = row.querySelector('.table-name')?.textContent || 'listing';
+        const id = row.dataset.propertyId;
+        const title = row.querySelector('.table-name')?.textContent || 'property';
         const modalTitle = document.querySelector('#decline-modal h3');
-        if (modalTitle) modalTitle.textContent = `Decline "${title}"?`;
+        if (modalTitle) modalTitle.textContent = `Reject "${title}"?`;
         openModal('decline-modal', async (reason) => {
-          if (!reason) { showToast('Reason required', 'Please provide a decline reason.', 'warning'); return; }
+          if (!reason) { showToast('Reason required', 'Please provide a rejection reason.', 'warning'); return; }
           try {
-            await api.patch(`/admin/listings/${id}/decline`, { reason }, true);
-            setRowBlocked(row, 'Declined');
-            showToast('Listing Declined', `"${title}" has been blocked.`, 'warning');
+            await api.patch(`/admin/properties/${id}/reject`, { reason }, true);
+            setRowBlocked(row, 'Rejected');
+            showToast('Property Rejected', `"${title}" has been rejected.`, 'warning');
           } catch (err) { showToast('Error', err.message, 'error'); }
         });
       });
@@ -414,13 +426,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-action="suspend-listing"]').forEach(btn => {
       btn.addEventListener('click', () => {
         const row = btn.closest('tr');
-        const id = row.dataset.listingId;
-        const title = row.querySelector('.table-name')?.textContent || 'listing';
+        const id = row.dataset.propertyId;
+        const title = row.querySelector('.table-name')?.textContent || 'property';
         openModal('suspend-listing-modal', async () => {
           try {
-            await api.patch(`/admin/listings/${id}/decline`, { reason: 'Suspended by admin' }, true);
+            await api.patch(`/admin/properties/${id}/reject`, { reason: 'Suspended by admin' }, true);
             setRowBlocked(row, 'Suspended');
-            showToast('Listing Suspended', `"${title}" has been suspended.`, 'warning');
+            showToast('Property Suspended', `"${title}" has been suspended.`, 'warning');
           } catch (err) { showToast('Error', err.message, 'error'); }
         });
       });
@@ -463,7 +475,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <td class="table-muted">#${u.id}</td>
           <td class="table-name">${esc(u.fullName)}</td>
           <td class="table-email table-muted">${esc(u.email)}</td>
-          <td class="table-muted">${esc(u.phoneNumber || '—')}</td>
+          <td class="table-muted">${esc(u.phoneNumber || '-')}</td>
           <td><span class="role-badge ${esc(u.role)}">${esc(roleLabel[u.role] || u.role)}</span></td>
           <td>${statusBadge(u.status)}</td>
           <td class="table-date">${formatDate(u.createdAt)}</td>
@@ -562,15 +574,15 @@ document.addEventListener('DOMContentLoaded', () => {
     tableLoading(tbody, 8);
     try {
       const { reports } = await api.get('/admin/reports?limit=50', true);
-      // Group by listing
+      // Group by property
       const groups = {};
       reports.forEach(r => {
-        const key = r.listingId;
+        const key = r.propertyId;
         if (!groups[key]) {
           groups[key] = {
-            listingId: key,
-            title: r.listing?.title || 'Listing',
-            provider: '—',
+            propertyId: key,
+            title: r.property?.title || 'Property',
+            provider: '-',
             entries: [],
             pending: 0,
             latest: r.createdAt,
@@ -581,11 +593,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (new Date(r.createdAt) > new Date(groups[key].latest)) groups[key].latest = r.createdAt;
       });
       const list = Object.values(groups).sort((a, b) => b.entries.length - a.entries.length);
-      if (!list.length) { tableEmpty(tbody, 8, 'No reported listings. The hive is clean!'); return; }
+      if (!list.length) { tableEmpty(tbody, 8, 'No reported properties. The hive is clean!'); return; }
 
       tbody.innerHTML = list.map(g => {
         const status = g.pending > 0 ? 'pending' : 'resolved';
-        const topReason = g.entries[0]?.reason || '—';
+        const topReason = g.entries[0]?.reason || '-';
         const countClass = g.entries.length >= 4 ? 'count-badge high' : 'count-badge';
         const pendingIds = g.entries.filter(e => e.status === 'pending').map(e => e.reportId).join(',');
         const actions = status === 'pending'
@@ -601,7 +613,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <p class="report-entry-reason">${esc(e.reason)}</p>
           </div>`).join('');
         return `
-          <tr class="expandable-row" data-status="${status}" data-listing-id="${g.listingId}" data-report-ids="${pendingIds}">
+          <tr class="expandable-row" data-status="${status}" data-property-id="${g.propertyId}" data-report-ids="${pendingIds}">
             <td><svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></td>
             <td class="table-name">${esc(g.title)}</td>
             <td class="table-muted">${esc(g.provider)}</td>
@@ -617,7 +629,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }).join('');
       bindFlaggedActions();
     } catch (err) {
-      tableEmpty(tbody, 8, err.message || 'Could not load flagged listings.');
+      tableEmpty(tbody, 8, err.message || 'Could not load flagged properties.');
     }
   }
 
@@ -637,7 +649,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         const row = btn.closest('tr');
-        const title = row.querySelector('.table-name')?.textContent || 'listing';
+        const title = row.querySelector('.table-name')?.textContent || 'property';
         const ids = (row.dataset.reportIds || '').split(',').filter(Boolean);
         openModal('resolve-modal', async (note) => {
           try {
@@ -655,23 +667,23 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.addEventListener('click', async (e) => {
         e.stopPropagation();
         const row = btn.closest('tr');
-        const id = row.dataset.listingId;
-        const title = row.querySelector('.table-name')?.textContent || 'listing';
+        const id = row.dataset.propertyId;
+        const title = row.querySelector('.table-name')?.textContent || 'property';
         const ids = (row.dataset.reportIds || '').split(',').filter(Boolean);
         try {
-          await api.patch(`/admin/listings/${id}/decline`, { reason: 'Blocked following student reports' }, true);
-          await Promise.all(ids.map(rid => api.patch(`/admin/reports/${rid}/resolve`, { resolutionNote: 'Listing blocked' }, true)));
+          await api.patch(`/admin/properties/${id}/reject`, { reason: 'Blocked following student reports' }, true);
+          await Promise.all(ids.map(rid => api.patch(`/admin/reports/${rid}/resolve`, { resolutionNote: 'Property blocked' }, true)));
           row.querySelector('td:nth-child(7)').innerHTML = statusBadge('resolved');
           row.querySelector('.table-actions').innerHTML = '<span class="no-action-text">Blocked</span>';
           row.dataset.status = 'resolved';
-          showToast('Listing Blocked', `"${title}" blocked and reports resolved.`, 'warning');
+          showToast('Property Blocked', `"${title}" blocked and reports resolved.`, 'warning');
         } catch (err) { showToast('Error', err.message, 'error'); }
       });
     });
   }
 
   // ════════════════════════════════════════════════
-  //  PAGE: DUPLICATE QUEUE (no backend yet — local UI)
+  //  PAGE: DUPLICATE QUEUE (no backend yet - local UI)
   // ════════════════════════════════════════════════
   if (page === 'duplicate-queue') {
     const dedupe = (action, msg, type) => {
@@ -687,9 +699,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       });
     };
-    dedupe('keep-both', { title: 'Kept Both', body: 'Both listings marked as unique.' }, 'success');
+    dedupe('keep-both', { title: 'Kept Both', body: 'Both properties marked as unique.' }, 'success');
     dedupe('remove-duplicate', { title: 'Duplicate Removed', body: 'The flagged duplicate was removed.' }, 'warning');
-    dedupe('merge-listings', { title: 'Listings Merged', body: 'Listings merged — best data retained.' }, 'success');
+    dedupe('merge-listings', { title: 'Properties Merged', body: 'Properties merged - best data retained.' }, 'success');
 
     function checkEmptyQueue() {
       const remaining = document.querySelectorAll('.duplicate-group');
@@ -702,93 +714,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
               </div>
               <h3>All Clear!</h3>
-              <p>No duplicate listings detected — the hive is clean!</p>
+              <p>No duplicate properties detected - the hive is clean!</p>
             </div>`;
         }
       }
     }
   }
 
-<<<<<<< HEAD
-
-  // ════════════════════════════════════════════════
-  //  PAGE: DUPLICATE QUEUE — Action Handlers
-  // ════════════════════════════════════════════════
-
-  if (page === 'duplicate-queue') {
-    document.querySelectorAll('[data-action="keep-both"]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const group = btn.closest('.duplicate-group');
-        if (group) {
-          group.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-          group.style.opacity = '0';
-          group.style.transform = 'translateY(-10px)';
-          setTimeout(() => group.remove(), 400);
-          showToast('Kept Both', 'Both listings have been marked as unique.', 'success');
-          checkEmptyQueue();
-        }
-      });
-    });
-
-    document.querySelectorAll('[data-action="remove-duplicate"]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const group = btn.closest('.duplicate-group');
-        if (group) {
-          group.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-          group.style.opacity = '0';
-          group.style.transform = 'translateY(-10px)';
-          setTimeout(() => group.remove(), 400);
-          showToast('Duplicate Removed', 'The flagged duplicate has been removed.', 'warning');
-          checkEmptyQueue();
-        }
-      });
-    });
-
-    document.querySelectorAll('[data-action="merge-listings"]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const group = btn.closest('.duplicate-group');
-        if (group) {
-          group.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-          group.style.opacity = '0';
-          group.style.transform = 'translateY(-10px)';
-          setTimeout(() => group.remove(), 400);
-          showToast('Listings Merged', 'Listings have been merged — best data retained.', 'success');
-          checkEmptyQueue();
-        }
-      });
-    });
-
-    function checkEmptyQueue() {
-      setTimeout(() => {
-        const remaining = document.querySelectorAll('.duplicate-group');
-        if (remaining.length === 0) {
-          const queue = document.querySelector('.duplicate-queue');
-          if (queue) {
-            queue.innerHTML = `
-              <div class="empty-state">
-                <div class="empty-state-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                </div>
-                <h3>All Clear! 🐝</h3>
-                <p>No duplicate listings detected — the hive is clean!</p>
-              </div>
-            `;
-          }
-        }
-      }, 500);
-    }
-  }
 
 
   // ════════════════════════════════════════════════
-  //  PAGE: DASHBOARD — Resolve Report from Dashboard
+  //  PAGE: DASHBOARD - Resolve Report from Dashboard
   // ════════════════════════════════════════════════
 
   if (page === 'dashboard') {
     document.querySelectorAll('[data-action="resolve-dash"]').forEach(btn => {
       btn.addEventListener('click', () => {
         const row = btn.closest('tr');
-        const listing = row.querySelector('.table-name')?.textContent || 'listing';
+        const title = row.querySelector('.table-name')?.textContent || 'property';
         const badge = row.querySelector('.status-badge');
         if (badge) {
           badge.className = 'status-badge resolved';
@@ -796,14 +739,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const actions = row.querySelector('.table-actions');
         if (actions) actions.innerHTML = '<span class="no-action-text">Resolved</span>';
-        showToast('Report Resolved', `Report for "${listing}" has been resolved.`, 'success');
+        showToast('Report Resolved', `Report for "${title}" has been resolved.`, 'success');
       });
     });
   }
 
 
   // ════════════════════════════════════════════════
-  //  PAGE: PROFILE — Admin Profile Handlers
+  //  PAGE: PROFILE - Admin Profile Handlers
   // ════════════════════════════════════════════════
 
   if (page === 'profile') {
@@ -824,6 +767,23 @@ document.addEventListener('DOMContentLoaded', () => {
         profileAvatar.textContent = initials;
       }
     }
+
+    // Fetch real stats for admin profile (single lightweight call)
+    async function fetchProfileStats() {
+      try {
+        const s = await api.get('/me/profile-stats', true);
+        const usersEl = document.getElementById('stat-users-managed');
+        const reviewedEl = document.getElementById('stat-listings-reviewed');
+        const reportsEl = document.getElementById('stat-reports-resolved');
+
+        if (usersEl) usersEl.textContent = Number(s.usersManaged || 0).toLocaleString();
+        if (reviewedEl) reviewedEl.textContent = Number(s.propertiesReviewed || 0).toLocaleString();
+        if (reportsEl) reportsEl.textContent = Number(s.reportsResolved || 0).toLocaleString();
+      } catch (err) {
+        console.warn('Could not fetch admin profile stats:', err.message);
+      }
+    }
+    fetchProfileStats();
 
     // Personal info form
     const personalForm = document.getElementById('personal-info-form');
@@ -867,6 +827,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-=======
->>>>>>> 20e284982f3cd05840554e84da8320cd8f66285a
 });

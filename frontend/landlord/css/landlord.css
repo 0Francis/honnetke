@@ -1,5 +1,5 @@
-/* ===================================================
-   HonnetKE Landlord Pages — Styles
+﻿/* ===================================================
+   HonnetKE Landlord Pages - Styles
    Covers: Landlord Navbar, Dashboard, Create Listing,
    Manage Listings, Bookings, Analytics, Modals, Toasts
    =================================================== */
@@ -172,7 +172,7 @@
   color: var(--color-white);
 }
 
-/* Right Actions — Notification Bell + Avatar */
+/* Right Actions - Notification Bell + Avatar */
 .landlord-navbar .navbar-right {
   display: flex;
   align-items: center;
@@ -534,7 +534,7 @@
 
 
 /* ───────────────────────────────────────────────
-   SECTION A — LANDLORD DASHBOARD
+   SECTION A - LANDLORD DASHBOARD
    ─────────────────────────────────────────────── */
 
 /* Stats Overview Cards */
@@ -966,7 +966,7 @@
 
 
 /* ───────────────────────────────────────────────
-   SECTION B — CREATE LISTING (Multi-Step Form)
+   SECTION B - CREATE LISTING (Multi-Step Form)
    ─────────────────────────────────────────────── */
 
 /* Stepper */
@@ -1491,7 +1491,7 @@
 
 
 /* ───────────────────────────────────────────────
-   SECTION C — MANAGE LISTINGS
+   SECTION C - MANAGE LISTINGS
    ─────────────────────────────────────────────── */
 
 .listings-grid {
@@ -1625,7 +1625,7 @@
 
 
 /* ───────────────────────────────────────────────
-   SECTION D — ANALYTICS
+   SECTION D - ANALYTICS
    ─────────────────────────────────────────────── */
 
 /* Bar Chart */
@@ -2049,7 +2049,7 @@
 
 
 /* ───────────────────────────────────────────────
-   RESPONSIVE — TABLET (768px)
+   RESPONSIVE - TABLET (768px)
    ─────────────────────────────────────────────── */
 
 @media (max-width: 1024px) {
@@ -2105,7 +2105,7 @@
 
 
 /* ───────────────────────────────────────────────
-   RESPONSIVE — MOBILE (480px)
+   RESPONSIVE - MOBILE (480px)
    ─────────────────────────────────────────────── */
 
 @media (max-width: 768px) {
@@ -2231,7 +2231,7 @@
 
 
 /* ───────────────────────────────────────────────
-   SECTION — LANDLORD PROFILE PAGE
+   SECTION - LANDLORD PROFILE PAGE
    ─────────────────────────────────────────────── */
 
 .profile-section {

@@ -1,5 +1,5 @@
-/* ===================================================
-   HonnetKE OTP Verification — JavaScript
+﻿/* ===================================================
+   HonnetKE OTP Verification - JavaScript
    Handles: digit auto-advance, paste support,
    backspace navigation, resend countdown, validation.
    =================================================== */
@@ -27,14 +27,14 @@ document.addEventListener('DOMContentLoaded', () => {
       phoneDisplay.textContent = masked;
     }
   } else {
-    // No pending flow — send them back to login
+    // No pending flow - send them back to login
     window.location.href = window.HonnetKE.auth.LOGIN_PAGE;
     return;
   }
 
 
   /* ──────────────────────────────────────────
-     2. OTP INPUT — Auto-advance & Navigation
+     2. OTP INPUT - Auto-advance & Navigation
      ────────────────────────────────────────── */
   otpInputs.forEach((input, index) => {
 
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ──────────────────────────────────────────
-     3. PASTE SUPPORT — Auto-fill all 6 digits
+     3. PASTE SUPPORT - Auto-fill all 6 digits
      ────────────────────────────────────────── */
   otpInputs[0].addEventListener('paste', (e) => {
     e.preventDefault();
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ──────────────────────────────────────────
-     4. FORM SUBMISSION — verify OTP via API
+     4. FORM SUBMISSION - verify OTP via API
      ────────────────────────────────────────── */
   otpForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
         purpose: pending.purpose || 'verify',
       });
 
-      // Success — store the session and redirect to dashboard
+      // Success - store the session and redirect to dashboard
       window.HonnetKE.auth.saveSession(res.token, res.user, pending.remember);
       window.HonnetKE.auth.clearPending();
       window.HonnetKE.auth.redirectToDashboard(res.user.role);

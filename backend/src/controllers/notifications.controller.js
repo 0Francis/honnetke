@@ -1,4 +1,4 @@
-// Sprint 7 — Notifications
+﻿// Sprint 7 - Notifications
 const prisma = require('../config/prisma');
 
 /* ── Helper: id-field filter for the current user's role ── */
@@ -15,7 +15,7 @@ function userFilter(req) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   GET /api/notifications  — current user's notifications
+   GET /api/notifications  - current user's notifications
    Query: unread (true → only unread), limit
    ═══════════════════════════════════════════════════════ */
 const getNotifications = async (req, res, next) => {
@@ -48,7 +48,7 @@ const getNotifications = async (req, res, next) => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   PATCH /api/notifications/:id/read  — mark one as read
+   PATCH /api/notifications/:id/read  - mark one as read
    ═══════════════════════════════════════════════════════ */
 const markAsRead = async (req, res, next) => {
   try {
@@ -82,4 +82,58 @@ const markAsRead = async (req, res, next) => {
   }
 };
 
-module.exports = { getNotifications, markAsRead };
+/* ═══════════════════════════════════════════════════════
+   PATCH /api/notifications/read-all  - mark all as read
+   ═══════════════════════════════════════════════════════ */
+const markAllAsRead = async (req, res, next) => {
+  try {
+    const filter = userFilter(req);
+    if (!filter) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+
+    const result = await prisma.notification.updateMany({
+      where: { ...filter, isRead: false },
+      data: { isRead: true },
+    });
+
+    res.json({ message: 'All notifications marked as read', count: result.count });
+  } catch (err) {
+    next(err);
+  }
+};
+
+/* ═══════════════════════════════════════════════════════
+   DELETE /api/notifications/:id  - delete a notification
+   ═══════════════════════════════════════════════════════ */
+const deleteNotification = async (req, res, next) => {
+  try {
+    const filter = userFilter(req);
+    if (!filter) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+
+    const notification = await prisma.notification.findUnique({
+      where: { notificationId: Number(req.params.id) },
+    });
+
+    if (!notification) {
+      return res.status(404).json({ message: 'Notification not found' });
+    }
+
+    const field = ROLE_ID_FIELD[req.user.role];
+    if (notification[field] !== req.user.id) {
+      return res.status(403).json({ message: 'Not authorized to delete this notification' });
+    }
+
+    await prisma.notification.delete({
+      where: { notificationId: notification.notificationId },
+    });
+
+    res.json({ message: 'Notification deleted' });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getNotifications, markAsRead, markAllAsRead, deleteNotification };

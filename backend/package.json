@@ -1,7 +1,7 @@
-{
+﻿{
   "name": "honnetke-backend",
   "version": "1.0.0",
-  "description": "HonnetKE student hostel platform — backend API",
+  "description": "HonnetKE student hostel platform - backend API",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
@@ -22,7 +22,9 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "express-rate-limit": "^8.5.2",
     "express-validator": "^7.1.0",
+    "helmet": "^8.2.0",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "multer-storage-cloudinary": "^4.0.0",

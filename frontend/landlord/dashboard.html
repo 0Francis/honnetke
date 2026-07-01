@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="HonnetKE Landlord Dashboard — Overview of your listings, bookings, and analytics at a glance.">
+  <meta name="description" content="HonnetKE Landlord Dashboard - Overview of your listings, bookings, and analytics at a glance.">
   <meta name="keywords" content="landlord dashboard, property management, listings, bookings, HonnetKE">
   <meta name="author" content="HonnetKE">
-  <title>Landlord Dashboard — HonnetKE</title>
+  <title>Landlord Dashboard - HonnetKE</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,15 +19,15 @@
   <link rel="stylesheet" href="../landingpage/css/global.css">
   <!-- Page-specific -->
   <link rel="stylesheet" href="css/landlord.css">
-</head>
+<link rel="stylesheet" href="../shared/css/notifications.css"></head>
 <body>
 
   <!-- Skip to main content (accessibility) -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- ═══════════════════════════════════════════
+  <!-- -------------------------------------------
        LANDLORD NAVBAR
-       ═══════════════════════════════════════════ -->
+       ------------------------------------------- -->
   <nav class="landlord-navbar" id="navbar" aria-label="Landlord navigation">
     <div class="navbar-inner">
 
@@ -43,7 +43,7 @@
 
       <!-- Center Nav -->
       <ul class="navbar-nav" id="navbar-nav">
-        <li><a href="../landingpage/index.html" class="nav-link">Home</a></li>
+        <li><a href="../landingpage/landingpage.html" class="nav-link">Home</a></li>
         <li><a href="dashboard.html" class="nav-link active">Dashboard</a></li>
         <li><a href="manage-listings.html" class="nav-link">My Listings</a></li>
         <li><a href="bookings.html" class="nav-link">Bookings</a></li>
@@ -103,7 +103,7 @@
 
   <!-- Landlord Mobile Nav Overlay -->
   <div class="landlord-mobile-nav" id="landlord-mobile-nav" aria-hidden="true">
-    <a href="../landingpage/index.html" class="nav-link">Home</a>
+    <a href="../landingpage/landingpage.html" class="nav-link">Home</a>
     <a href="dashboard.html" class="nav-link active">Dashboard</a>
     <a href="manage-listings.html" class="nav-link">My Listings</a>
     <a href="bookings.html" class="nav-link">Bookings</a>
@@ -116,9 +116,9 @@
   <!-- Toast Container -->
   <div class="toast-container" id="toast-container"></div>
 
-  <!-- ═══════════════════════════════════════════
-       MAIN CONTENT — DASHBOARD
-       ═══════════════════════════════════════════ -->
+  <!-- -------------------------------------------
+       MAIN CONTENT - DASHBOARD
+       ------------------------------------------- -->
   <main class="landlord-main" id="main-content">
 
     <!-- Page Header -->
@@ -139,8 +139,8 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             </div>
             <div class="stat-info">
-              <div class="stat-value">12</div>
-              <div class="stat-label">Total Listings</div>
+              <div class="stat-value">0</div>
+              <div class="stat-label">Total Properties</div>
             </div>
           </div>
 
@@ -149,8 +149,8 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             </div>
             <div class="stat-info">
-              <div class="stat-value">8</div>
-              <div class="stat-label">Active Listings</div>
+              <div class="stat-value">0</div>
+              <div class="stat-label">Active Properties</div>
             </div>
           </div>
 
@@ -159,7 +159,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             </div>
             <div class="stat-info">
-              <div class="stat-value">3</div>
+              <div class="stat-value">0</div>
               <div class="stat-label">Pending Review</div>
             </div>
           </div>
@@ -169,7 +169,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             </div>
             <div class="stat-info">
-              <div class="stat-value">24</div>
+              <div class="stat-value">0</div>
               <div class="stat-label">Total Bookings</div>
             </div>
           </div>
@@ -312,9 +312,9 @@
   </main>
 
 
-  <!-- ═══════════════════════════════════════════
+  <!-- -------------------------------------------
        BOOKING RESPONSE MODAL
-       ═══════════════════════════════════════════ -->
+       ------------------------------------------- -->
   <div class="modal-overlay" id="response-modal">
     <div class="modal">
       <div class="modal-icon warning">
@@ -331,9 +331,9 @@
   </div>
 
 
-  <!-- ═══════════════════════════════════════════
+  <!-- -------------------------------------------
        FOOTER
-       ═══════════════════════════════════════════ -->
+       ------------------------------------------- -->
   <footer class="footer" id="footer">
     <div class="container">
 
@@ -350,7 +350,7 @@
             <span class="logo-text">HonnetKE</span>
           </a>
           <p class="footer-tagline">
-            Kenya's #1 student hostel discovery platform. List your properties and connect with thousands of students — join the hive.
+            Kenya's #1 student hostel discovery platform. List your properties and connect with thousands of students - join the hive.
           </p>
         </div>
 
@@ -415,5 +415,5 @@
   <script src="../shared/js/auth.js"></script>
   <script src="js/landlord.js"></script>
 
-</body>
+<script src="../shared/js/notifications.js"></script></body>
 </html>

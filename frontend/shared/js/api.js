@@ -1,5 +1,5 @@
-/* ===================================================
-   HonnetKE — Shared API client
+﻿/* ===================================================
+   HonnetKE - Shared API client
    One front door for every page to talk to the backend.
    =================================================== */
 (function () {

@@ -1,4 +1,4 @@
-const prisma = require('../config/prisma');
+﻿const prisma = require('../config/prisma');
 
 const errorHandler = async (err, req, res, next) => {
   const statusCode = err.statusCode || 500;
@@ -7,7 +7,7 @@ const errorHandler = async (err, req, res, next) => {
   try {
     await prisma.errorLog.create({
       data: {
-        message: `${req.method} ${req.originalUrl} — ${message}`,
+        message: `${req.method} ${req.originalUrl} - ${message}`,
         stackTrace: err.stack || null,
       },
     });

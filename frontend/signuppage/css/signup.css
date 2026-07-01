@@ -1,4 +1,4 @@
-/* ===================================================
+﻿/* ===================================================
    HonnetKE Sign Up / OTP Page Styles
    Covers: Auth layout, form panel, visual panel,
    role-specific fields, password strength, OTP inputs.
@@ -269,7 +269,7 @@
 
 
 /* ───────────────────────────────────────────────
-   AUTH LAYOUT — Two Column
+   AUTH LAYOUT - Two Column
    ─────────────────────────────────────────────── */
 
 .auth-layout {
@@ -436,7 +436,7 @@
   animation: fadeInUp 0.6s var(--ease-out) 0.2s both;
 }
 
-/* Mobile logo — hidden on desktop */
+/* Mobile logo - hidden on desktop */
 .auth-mobile-logo {
   display: none;
   align-items: center;
@@ -1060,7 +1060,7 @@
 
 
 /* ───────────────────────────────────────────────
-   RESPONSIVE — TABLET (≤ 1024px)
+   RESPONSIVE - TABLET (≤ 1024px)
    ─────────────────────────────────────────────── */
 
 @media (max-width: 1024px) {
@@ -1087,7 +1087,7 @@
 
 
 /* ───────────────────────────────────────────────
-   RESPONSIVE — MOBILE (≤ 768px)
+   RESPONSIVE - MOBILE (≤ 768px)
    ─────────────────────────────────────────────── */
 
 @media (max-width: 768px) {
@@ -1156,7 +1156,7 @@
 
 
 /* ───────────────────────────────────────────────
-   RESPONSIVE — SMALL MOBILE (≤ 480px)
+   RESPONSIVE - SMALL MOBILE (≤ 480px)
    ─────────────────────────────────────────────── */
 
 @media (max-width: 480px) {

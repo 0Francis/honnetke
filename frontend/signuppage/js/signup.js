@@ -1,5 +1,5 @@
-/* ===================================================
-   HonnetKE Sign Up Page — JavaScript
+﻿/* ===================================================
+   HonnetKE Sign Up Page - JavaScript
    Handles: role-specific fields, password toggle,
    password strength, form validation, mobile menu,
    and OTP page logic.
@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // ── All valid — call register API ──
+      // ── All valid - call register API ──
       const submitBtn = document.getElementById('signup-submit');
       submitBtn.classList.add('btn-loading');
       submitBtn.disabled = true;
@@ -292,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ──────────────────────────────────────────
-     6. TERMS CHECKBOX — clear error on change
+     6. TERMS CHECKBOX - clear error on change
      ────────────────────────────────────────── */
   const termsCheckbox = document.getElementById('signup-terms');
   if (termsCheckbox) {

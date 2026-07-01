@@ -1,14 +1,14 @@
-# HonnetKE — Sprint Log
+﻿# HonnetKE - Sprint Log
 
 > Append a new sprint block at the end after each sprint review.
-> This file feeds directly into **Chapter 5.2 — Implementation Challenges and Adjustments / Deviations from Proposal**.
+> This file feeds directly into **Chapter 5.2 - Implementation Challenges and Adjustments / Deviations from Proposal**.
 
 ---
 
-## Sprint 0 — Setup & Scaffolding
+## Sprint 0 - Setup & Scaffolding
 
 **Dates:** ___ / ___ / 2025 → ___ / ___ / 2025
-**Sprint Goal:** Establish the project foundation — backend scaffold, database, Git workflow, and docs structure.
+**Sprint Goal:** Establish the project foundation - backend scaffold, database, Git workflow, and docs structure.
 
 ### Committed
 - [x] Initialize backend project (package.json, folder structure, dependencies)
@@ -22,7 +22,7 @@
 ### Completed
 - [x] Backend project initialized with Express, Prisma, all dependencies
 - [x] `.env` configured with DATABASE_URL, JWT_SECRET, Cloudinary, mail credentials
-- [x] PostgreSQL schema applied — 13 models, all enums, migrations + seed
+- [x] PostgreSQL schema applied - 13 models, all enums, migrations + seed
 - [x] Docs structure created (PRODUCT_BACKLOG, SPRINT_LOG, TECH_STACK, TEST_CASES, APPENDICES_INDEX)
 - [x] Frontend folder structure with shared CSS/JS, all page directories
 
@@ -36,10 +36,10 @@
 
 ---
 
-## Sprint 1 — Authentication
+## Sprint 1 - Authentication
 
 **Dates:** ___ / ___ / 2025 → ___ / ___ / 2025
-**Sprint Goal:** Full auth system for all roles — register, OTP verify, login with JWT, logout, role middleware.
+**Sprint Goal:** Full auth system for all roles - register, OTP verify, login with JWT, logout, role middleware.
 
 ### Committed
 - [x] US-01 Student register endpoint
@@ -55,10 +55,10 @@
 - [x] Partner: Landing page static HTML/CSS
 
 ### Completed
-- [x] Register endpoint — bcrypt hashing, OTP via nodemailer, role-specific table insertion
-- [x] Verify OTP endpoint — bcrypt code comparison, account activation, JWT issuance
-- [x] Login endpoint — 2FA with emailed OTP, JWT only after verification
-- [x] Forgot/reset password — reset OTP flow
+- [x] Register endpoint - bcrypt hashing, OTP via nodemailer, role-specific table insertion
+- [x] Verify OTP endpoint - bcrypt code comparison, account activation, JWT issuance
+- [x] Login endpoint - 2FA with emailed OTP, JWT only after verification
+- [x] Forgot/reset password - reset OTP flow
 - [x] Resend OTP endpoint
 - [x] JWT auth middleware + role-based access control
 - [x] Frontend: login, signup, OTP pages all wired to real API
@@ -73,7 +73,7 @@
 
 ---
 
-## Sprint 2 — Listings Core
+## Sprint 2 - Listings Core
 
 **Dates:** ___ / ___ / 2025 → ___ / ___ / 2025
 **Sprint Goal:** Full listings CRUD with Cloudinary image upload. Admin is notified on new listing submission.
@@ -92,7 +92,7 @@
 
 ### Completed
 - [x] Full listings CRUD with ownership checks (landlordId/agentId match)
-- [x] Cloudinary upload — multer-storage-cloudinary, 10 images max, 5MB each, auto-resize 1200×800
+- [x] Cloudinary upload - multer-storage-cloudinary, 10 images max, 5MB each, auto-resize 1200×800
 - [x] Admin notification on new listing creation
 - [x] Frontend: create-listing, manage-listings, edit mode all wired to API
 
@@ -106,7 +106,7 @@
 
 ---
 
-## Sprint 3 — Search & Discovery
+## Sprint 3 - Search & Discovery
 
 **Dates:** ___ / ___ / 2025 → ___ / ___ / 2025
 **Sprint Goal:** Public search/filter endpoint, listing detail, pagination. Partner delivers auth pages and hostels page.
@@ -139,16 +139,16 @@
 
 ---
 
-## Sprint 4 — Student Features
+## Sprint 4 - Student Features
 
 **Dates:** ___ / ___ / 2025 → ___ / ___ / 2025
-**Sprint Goal:** Full student interaction set — favourites, bookings, contact, reports, student dashboard data.
+**Sprint Goal:** Full student interaction set - favourites, bookings, contact, reports, student dashboard data.
 
 ### Committed
 - [x] US-22 Save listing to favourites (`POST /favourites`)
 - [x] US-23 Remove from favourites (`DELETE /favourites/:id`)
 - [x] US-24 Submit booking request (`POST /bookings`)
-- [x] US-25 Contact provider (external redirect — WhatsApp/call/SMS, no backend logic)
+- [x] US-25 Contact provider (external redirect - WhatsApp/call/SMS, no backend logic)
 - [x] US-26 Report listing (`POST /reports`)
 - [x] US-27 Student dashboard data endpoint
 - [x] Partner: US-FE-07 Student Dashboard
@@ -156,9 +156,9 @@
 - [ ] Partner: US-FE-09 Visited History page
 
 ### Completed
-- [x] Favourites controller — add, remove, list with listing includes
-- [x] Bookings controller — create with duplicate check, provider notification
-- [x] Reports controller — create with listing validation, admin notification
+- [x] Favourites controller - add, remove, list with listing includes
+- [x] Bookings controller - create with duplicate check, provider notification
+- [x] Reports controller - create with listing validation, admin notification
 - [x] Frontend: student dashboard, listing detail (booking modal + report modal), favourite toggle wired
 
 ### Carry-over
@@ -171,7 +171,7 @@
 
 ---
 
-## Sprint 5 — Provider Features
+## Sprint 5 - Provider Features
 
 **Dates:** ___ / ___ / 2025 → ___ / ___ / 2025
 **Sprint Goal:** Landlord/Agent booking management, analytics, notifications.
@@ -185,10 +185,10 @@
 - [x] Partner: US-FE-10 Landlord/Agent Dashboard
 
 ### Completed
-- [x] getBookings — role-based filtering (landlord/agent sees own listings' bookings, student sees own, admin sees all)
-- [x] updateBookingStatus — permission checks, status transition validation, notifications
-- [x] getAnalytics — per-listing view counts and weekly breakdown
-- [x] getOverviewAnalytics — aggregated stats across provider's listings
+- [x] getBookings - role-based filtering (landlord/agent sees own listings' bookings, student sees own, admin sees all)
+- [x] updateBookingStatus - permission checks, status transition validation, notifications
+- [x] getAnalytics - per-listing view counts and weekly breakdown
+- [x] getOverviewAnalytics - aggregated stats across provider's listings
 - [x] Frontend: landlord dashboard, bookings page (confirm/decline buttons), analytics page all wired
 
 ### Carry-over
@@ -201,10 +201,10 @@
 
 ---
 
-## Sprint 6 — Admin Features
+## Sprint 6 - Admin Features
 
 **Dates:** ___ / ___ / 2025 → ___ / ___ / 2025
-**Sprint Goal:** Full admin moderation — listing review, reports, account management, system logs.
+**Sprint Goal:** Full admin moderation - listing review, reports, account management, system logs.
 
 ### Committed
 - [x] US-32 Admin notification on new listing (triggered from Sprint 2, confirmed working here)
@@ -224,11 +224,11 @@
 - [x] Added `GET /admin/stats` (dashboard overview counts) and `GET /admin/users` (cross-role user list with warning counts)
 - [x] Approve sets status→active + approvedBy/approvedAt + notifies provider; decline sets status→blocked + declineReason + notifies provider
 - [x] Report resolution + warnings + suspend/reactivate all notify the affected user
-- [x] Admin frontend (`frontend/admin/js/admin.js`) rewritten to be fully data-driven — live fetch + render + real API actions on dashboard, manage-listings, manage-users, flagged-listings
+- [x] Admin frontend (`frontend/admin/js/admin.js`) rewritten to be fully data-driven - live fetch + render + real API actions on dashboard, manage-listings, manage-users, flagged-listings
 - [x] Verified end-to-end against live DB: stats, users, listings, approve, notifications all return real data
 
 ### Carry-over
-- Duplicate-queue page has no backend (no duplicate-detection model) — left as local-only UI
+- Duplicate-queue page has no backend (no duplicate-detection model) - left as local-only UI
 
 ### Retrospective
 - **Went well:** Routes were already scaffolded, so controller logic dropped in cleanly. Schema already had approvedBy/declineReason/resolution fields.
@@ -237,27 +237,27 @@
 
 ---
 
-## Sprint 7 — Notifications, Integration & Polish
+## Sprint 7 - Notifications, Integration & Polish
 
 **Dates:** ___ / ___ / 2025 → ___ / ___ / 2025
 **Sprint Goal:** Notifications system, global error logging middleware, traffic logging, CORS config, full frontend-backend integration.
 
 ### Committed
-- [x] US-42 Get notifications (`GET /notifications` — role-aware)
+- [x] US-42 Get notifications (`GET /notifications` - role-aware)
 - [x] US-43 Mark notification as read
 - [x] Global error handler middleware → writes to `error_logs`
 - [x] Traffic logging middleware → increments `traffic_logs` daily
 - [ ] CORS configuration for frontend origin
 - [ ] Input validation (all endpoints)
 - [ ] Partner: US-FE-12 404/Error page
-- [ ] Full integration test pass — replace all mock data with real API calls
+- [ ] Full integration test pass - replace all mock data with real API calls
 - [ ] Final Postman collection export
 
 ### Completed
-- [x] `notifications.controller.js` implemented — role-aware `getNotifications` (with unreadCount) + ownership-checked `markAsRead`
+- [x] `notifications.controller.js` implemented - role-aware `getNotifications` (with unreadCount) + ownership-checked `markAsRead`
 - [x] Notification bell badge wired on all admin pages
 - [x] Error/traffic logging middleware confirmed writing to DB (feeds admin error/traffic endpoints)
-- [ ] CORS, validation, 404 page, full integration pass, Postman export — still pending
+- [ ] CORS, validation, 404 page, full integration pass, Postman export - still pending
 
 ### Carry-over
 - _(none yet)_

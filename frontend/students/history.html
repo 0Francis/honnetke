@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Your visited hostel history on HonnetKE — see all the properties you've recently viewed.">
+  <meta name="description" content="Your visited hostel history on HonnetKE - see all the properties you've recently viewed.">
   <meta name="keywords" content="visited hostels, history, recently viewed, student accommodation HonnetKE">
   <meta name="author" content="HonnetKE">
-  <title>Visit History — HonnetKE</title>
+  <title>Visit History - HonnetKE</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="../landingpage/css/reset.css">
   <link rel="stylesheet" href="../landingpage/css/global.css">
   <link rel="stylesheet" href="css/students.css">
-</head>
+<link rel="stylesheet" href="../shared/css/notifications.css"></head>
 <body>
 
   <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -31,7 +31,7 @@
         <span class="logo-text">HonnetKE</span>
       </a>
       <ul class="navbar-nav">
-        <li><a href="../landingpage/index.html" class="nav-link">Home</a></li>
+        <li><a href="../landingpage/landingpage.html" class="nav-link">Home</a></li>
         <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
         <li><a href="hostels.html" class="nav-link">Hostels</a></li>
         <li><a href="favourites.html" class="nav-link">Favourites</a></li>
@@ -54,7 +54,7 @@
   </nav>
 
   <div class="student-mobile-nav" id="student-mobile-nav" aria-hidden="true">
-    <a href="../landingpage/index.html" class="nav-link">Home</a>
+    <a href="../landingpage/landingpage.html" class="nav-link">Home</a>
     <a href="dashboard.html" class="nav-link">Dashboard</a>
     <a href="hostels.html" class="nav-link">Hostels</a>
     <a href="favourites.html" class="nav-link">Favourites</a>
@@ -65,9 +65,9 @@
 
   <div class="toast-container" id="toast-container"></div>
 
-  <!-- ═══════════════════════════════════════════
-       MAIN CONTENT — VISIT HISTORY
-       ═══════════════════════════════════════════ -->
+  <!-- -------------------------------------------
+       MAIN CONTENT - VISIT HISTORY
+       ------------------------------------------- -->
   <main class="student-main" id="main-content">
 
     <div class="page-header">
@@ -80,104 +80,8 @@
     <section class="section" style="padding-top: 0;">
       <div class="container">
 
-        <div class="history-list">
-
-          <!-- History Item 1 -->
-          <a href="listing.html" class="history-item">
-            <div class="history-thumb">
-              <img src="../landingpage/assets/images/hostel-1.png" alt="Sunrise Student Hostel" loading="lazy">
-            </div>
-            <div class="history-info">
-              <h3 class="history-title">Sunrise Student Hostel</h3>
-              <div class="history-location">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                Rongai, near MMUST
-              </div>
-            </div>
-            <span class="history-date">Today, 2:15 PM</span>
-            <svg class="history-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </a>
-
-          <!-- History Item 2 -->
-          <a href="listing.html" class="history-item">
-            <div class="history-thumb">
-              <img src="../landingpage/assets/images/hostel-2.png" alt="Jamii Heights" loading="lazy">
-            </div>
-            <div class="history-info">
-              <h3 class="history-title">Jamii Heights</h3>
-              <div class="history-location">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                Juja, near JKUAT
-              </div>
-            </div>
-            <span class="history-date">Today, 11:30 AM</span>
-            <svg class="history-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </a>
-
-          <!-- History Item 3 -->
-          <a href="listing.html" class="history-item">
-            <div class="history-thumb">
-              <img src="../landingpage/assets/images/hostel-4.png" alt="Kilimani Studios" loading="lazy">
-            </div>
-            <div class="history-info">
-              <h3 class="history-title">Kilimani Studios</h3>
-              <div class="history-location">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                Kilimani, near UoN
-              </div>
-            </div>
-            <span class="history-date">Yesterday, 5:45 PM</span>
-            <svg class="history-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </a>
-
-          <!-- History Item 4 -->
-          <a href="listing.html" class="history-item">
-            <div class="history-thumb">
-              <img src="../landingpage/assets/images/hostel-3.png" alt="Hive Residences" loading="lazy">
-            </div>
-            <div class="history-info">
-              <h3 class="history-title">Hive Residences</h3>
-              <div class="history-location">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                Kikuyu, near PCEA
-              </div>
-            </div>
-            <span class="history-date">Yesterday, 9:10 AM</span>
-            <svg class="history-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </a>
-
-          <!-- History Item 5 -->
-          <a href="listing.html" class="history-item">
-            <div class="history-thumb">
-              <img src="../landingpage/assets/images/hostel-5.png" alt="Campus Gate Hostel" loading="lazy">
-            </div>
-            <div class="history-info">
-              <h3 class="history-title">Campus Gate Hostel</h3>
-              <div class="history-location">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                Thika, near Mt. Kenya Uni
-              </div>
-            </div>
-            <span class="history-date">Jun 16, 3:20 PM</span>
-            <svg class="history-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </a>
-
-          <!-- History Item 6 -->
-          <a href="listing.html" class="history-item">
-            <div class="history-thumb">
-              <img src="../landingpage/assets/images/hostel-6.png" alt="Nyeri Student Lodge" loading="lazy">
-            </div>
-            <div class="history-info">
-              <h3 class="history-title">Nyeri Student Lodge</h3>
-              <div class="history-location">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                Nyeri, near Dedan Kimathi Uni
-              </div>
-            </div>
-            <span class="history-date">Jun 15, 1:00 PM</span>
-            <svg class="history-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </a>
-
+        <div class="history-list" id="history-list" aria-live="polite">
+          <div style="text-align:center;padding:3rem;color:var(--color-text-muted);">Loading your history...</div>
         </div>
 
         <!-- Empty State (shown when no history)
@@ -203,7 +107,7 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <a href="dashboard.html" class="navbar-logo" aria-label="HonnetKE Home"><svg viewBox="0 0 40 40" fill="none"><path d="M20 2L35 10.66V28.34L20 37L5 28.34V10.66L20 2Z" fill="#E8900A" fill-opacity="0.15" stroke="#E8900A" stroke-width="2" stroke-linejoin="round"/><path d="M20 10L28 14.6V23.4L20 28L12 23.4V14.6L20 10Z" fill="#E8900A" stroke="#E8900A" stroke-width="1.5" stroke-linejoin="round"/><circle cx="20" cy="19" r="3" fill="#FFF8EC"/></svg><span class="logo-text">HonnetKE</span></a>
-          <p class="footer-tagline">Kenya's #1 student hostel discovery platform. Find affordable, verified accommodation near your campus — join the hive.</p>
+          <p class="footer-tagline">Kenya's #1 student hostel discovery platform. Find affordable, verified accommodation near your campus - join the hive.</p>
         </div>
         <div class="footer-quick-links">
           <h3 class="footer-heading">Quick Links</h3>
@@ -230,6 +134,9 @@
     </div>
   </footer>
 
+  <script src="../shared/js/api.js"></script>
+  <script src="../shared/js/auth.js"></script>
+  <script src="../shared/js/property.js"></script>
   <script src="js/students.js"></script>
-</body>
+<script src="../shared/js/notifications.js"></script></body>
 </html>

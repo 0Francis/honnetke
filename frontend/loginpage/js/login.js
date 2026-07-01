@@ -1,5 +1,5 @@
-/* ===================================================
-   HonnetKE Login Page — JavaScript
+﻿/* ===================================================
+   HonnetKE Login Page - JavaScript
    Handles: form validation, password toggle,
    forgot password modal, mobile menu.
    =================================================== */
@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // ── All valid — call login API (step 1 of 2FA) ──
+      // ── All valid - call login API (step 1 of 2FA) ──
       const submitBtn = document.getElementById('login-submit');
       submitBtn.classList.add('btn-loading');
       submitBtn.disabled = true;
@@ -219,12 +219,12 @@ document.addEventListener('DOMContentLoaded', () => {
     forgotBtn.addEventListener('click', openModal);
   }
 
-  // Close modal — X button
+  // Close modal - X button
   if (modalClose) {
     modalClose.addEventListener('click', closeModal);
   }
 
-  // Close modal — click backdrop
+  // Close modal - click backdrop
   if (forgotModal) {
     forgotModal.addEventListener('click', (e) => {
       if (e.target === forgotModal) {
@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Close modal — Escape key
+  // Close modal - Escape key
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && forgotModal && forgotModal.classList.contains('open')) {
       closeModal();

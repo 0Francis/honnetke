@@ -1,7 +1,7 @@
 /* ===================================================
-   HonnetKE Admin Pages — Styles
-   Covers: Admin Navbar, Dashboard, Manage Listings,
-   Manage Users, Flagged Listings, Duplicate Queue,
+   HonnetKE Admin Pages - Styles
+   Covers: Admin Navbar, Dashboard, Manage Properties,
+   Manage Users, Flagged Properties, Duplicate Queue,
    Modals, Toasts, Expandable Rows
    =================================================== */
 
@@ -192,7 +192,7 @@
   color: var(--color-white);
 }
 
-/* Right Actions — Notification Bell + Avatar */
+/* Right Actions - Notification Bell + Avatar */
 .admin-navbar .navbar-right {
   display: flex;
   align-items: center;
@@ -562,7 +562,7 @@
 
 
 /* ───────────────────────────────────────────────
-   STATS OVERVIEW CARDS — ADMIN DASHBOARD
+   STATS OVERVIEW CARDS - ADMIN DASHBOARD
    ─────────────────────────────────────────────── */
 
 .stats-grid {
@@ -650,7 +650,7 @@
 
 
 /* ───────────────────────────────────────────────
-   QUICK ACTIONS — ADMIN DASHBOARD
+   QUICK ACTIONS - ADMIN DASHBOARD
    ─────────────────────────────────────────────── */
 
 .quick-actions {
@@ -887,7 +887,7 @@
   background: var(--color-white);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
-  overflow: hidden;
+  overflow-x: auto;
 }
 
 .data-table {
@@ -1197,7 +1197,9 @@
 /* Search Input (for manage users) */
 .search-input-wrapper {
   position: relative;
-  max-width: 300px;
+  width: 300px;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .search-input-wrapper svg {
@@ -1466,7 +1468,7 @@
 
 
 /* ───────────────────────────────────────────────
-   DUPLICATE LISTING QUEUE — COMPARISON CARDS
+   DUPLICATE PROPERTY QUEUE - COMPARISON CARDS
    ─────────────────────────────────────────────── */
 
 .duplicate-queue {
@@ -2021,7 +2023,7 @@
 
 
 /* ───────────────────────────────────────────────
-   SECTION — ADMIN PROFILE PAGE
+   SECTION - ADMIN PROFILE PAGE
    ─────────────────────────────────────────────── */
 
 .profile-section {

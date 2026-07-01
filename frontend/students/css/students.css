@@ -1,5 +1,5 @@
-/* ===================================================
-   HonnetKE Student Pages — Styles
+﻿/* ===================================================
+   HonnetKE Student Pages - Styles
    Covers: Student Navbar, Dashboard, Hostels Search,
    Listing Detail, Favourites, History, Modals, Toasts
    =================================================== */
@@ -167,7 +167,7 @@
   color: var(--color-white);
 }
 
-/* Right Actions — Notification Bell + Avatar */
+/* Right Actions - Notification Bell + Avatar */
 .student-navbar .navbar-right {
   display: flex;
   align-items: center;
@@ -512,7 +512,7 @@
 
 
 /* ───────────────────────────────────────────────
-   SECTION A — STUDENT DASHBOARD
+   SECTION A - STUDENT DASHBOARD
    ─────────────────────────────────────────────── */
 
 /* Quick Actions */
@@ -673,7 +673,7 @@
   height: 16px;
 }
 
-/* Recent Activity — horizontal scroll */
+/* Recent Activity - horizontal scroll */
 .recent-scroll {
   display: flex;
   gap: var(--space-lg);
@@ -942,7 +942,7 @@
 
 
 /* ───────────────────────────────────────────────
-   SECTION B — HOSTELS SEARCH PAGE
+   SECTION B - HOSTELS SEARCH PAGE
    ─────────────────────────────────────────────── */
 
 /* Top Search Bar */
@@ -1253,7 +1253,7 @@
 
 
 /* ───────────────────────────────────────────────
-   SECTION C — LISTING DETAIL PAGE
+   SECTION C - LISTING DETAIL PAGE
    ─────────────────────────────────────────────── */
 
 /* Image Gallery */
@@ -1623,7 +1623,7 @@
 
 
 /* ───────────────────────────────────────────────
-   SECTION D — FAVOURITES PAGE
+   SECTION D - FAVOURITES PAGE
    ─────────────────────────────────────────────── */
 
 .favourites-grid {
@@ -1635,7 +1635,7 @@
 
 
 /* ───────────────────────────────────────────────
-   SECTION E — VISITED HISTORY PAGE
+   SECTION E - VISITED HISTORY PAGE
    ─────────────────────────────────────────────── */
 
 .history-list {
@@ -2013,7 +2013,7 @@
 
 
 /* ───────────────────────────────────────────────
-   RESPONSIVE — TABLET (≤ 1024px)
+   RESPONSIVE - TABLET (≤ 1024px)
    ─────────────────────────────────────────────── */
 
 @media (max-width: 1024px) {
@@ -2095,7 +2095,7 @@
 
 
 /* ───────────────────────────────────────────────
-   RESPONSIVE — MOBILE (≤ 768px)
+   RESPONSIVE - MOBILE (≤ 768px)
    ─────────────────────────────────────────────── */
 
 @media (max-width: 768px) {
@@ -2188,7 +2188,7 @@
 
 
 /* ───────────────────────────────────────────────
-   RESPONSIVE — SMALL MOBILE (≤ 480px)
+   RESPONSIVE - SMALL MOBILE (≤ 480px)
    ─────────────────────────────────────────────── */
 
 @media (max-width: 480px) {
@@ -2216,7 +2216,7 @@
 
 
 /* ───────────────────────────────────────────────
-   SECTION — STUDENT PROFILE PAGE
+   SECTION - STUDENT PROFILE PAGE
    ─────────────────────────────────────────────── */
 
 .profile-section {

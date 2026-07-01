@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="HonnetKE Admin — View and manage all student, landlord, and agent accounts on the platform.">
+  <meta name="description" content="HonnetKE Admin - View and manage all student, landlord, and agent accounts on the platform.">
   <meta name="keywords" content="manage users, admin, suspend accounts, HonnetKE">
   <meta name="author" content="HonnetKE">
-  <title>Manage Users — HonnetKE Admin</title>
+  <title>Manage Users - HonnetKE Admin</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="../landingpage/css/reset.css">
   <link rel="stylesheet" href="../landingpage/css/global.css">
   <link rel="stylesheet" href="css/admin.css">
-</head>
+<link rel="stylesheet" href="../shared/css/notifications.css"></head>
 <body data-page="manage-users">
 
   <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -31,7 +31,7 @@
       </a>
       <ul class="navbar-nav" id="navbar-nav">
         <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
-        <li><a href="manage-listings.html" class="nav-link">Listings</a></li>
+        <li><a href="manage-listings.html" class="nav-link">Properties</a></li>
         <li><a href="manage-users.html" class="nav-link active">Users</a></li>
         <li><a href="flagged-listings.html" class="nav-link">Flagged</a></li>
         <li><a href="duplicate-queue.html" class="nav-link">Duplicates</a></li>
@@ -53,7 +53,7 @@
 
   <div class="admin-mobile-nav" id="admin-mobile-nav" aria-hidden="true">
     <a href="dashboard.html" class="nav-link">Dashboard</a>
-    <a href="manage-listings.html" class="nav-link">Listings</a>
+    <a href="manage-listings.html" class="nav-link">Properties</a>
     <a href="manage-users.html" class="nav-link active">Users</a>
     <a href="flagged-listings.html" class="nav-link">Flagged</a>
     <a href="duplicate-queue.html" class="nav-link">Duplicates</a>
@@ -68,7 +68,7 @@
     <div class="page-header">
       <div class="container">
         <h1 class="page-title">Manage Users</h1>
-        <p class="page-subtitle">View and manage all platform accounts — students, landlords, and agents.</p>
+        <p class="page-subtitle">View and manage all platform accounts - students, landlords, and agents.</p>
       </div>
     </div>
 
@@ -106,107 +106,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr data-role="student" data-status="active">
-                <td class="table-muted">#001</td>
-                <td class="table-name">Jane Wanjiku</td>
-                <td class="table-email table-muted">jane.wanjiku@mail.com</td>
-                <td class="table-muted">0712 345 678</td>
-                <td><span class="role-badge student">Student</span></td>
-                <td><span class="status-badge active"><span class="status-dot"></span>Active</span></td>
-                <td class="table-date">15 Jan 2026</td>
-                <td><span class="warning-count">0</span></td>
-                <td>
-                  <div class="table-actions">
-                    <button class="btn-sm btn-suspend" data-action="suspend-user">Suspend</button>
-                    <button class="btn-sm btn-warn" data-action="warn-user">Warn</button>
-                    <button class="btn-sm btn-danger" data-action="delete-user">Delete</button>
-                  </div>
-                </td>
-              </tr>
-              <tr data-role="landlord" data-status="active">
-                <td class="table-muted">#002</td>
-                <td class="table-name">John Mwangi</td>
-                <td class="table-email table-muted">john.mwangi@landlord.com</td>
-                <td class="table-muted">0722 345 678</td>
-                <td><span class="role-badge landlord">Landlord</span></td>
-                <td><span class="status-badge active"><span class="status-dot"></span>Active</span></td>
-                <td class="table-date">20 Feb 2026</td>
-                <td><span class="warning-count">1</span></td>
-                <td>
-                  <div class="table-actions">
-                    <button class="btn-sm btn-suspend" data-action="suspend-user">Suspend</button>
-                    <button class="btn-sm btn-warn" data-action="warn-user">Warn</button>
-                    <button class="btn-sm btn-danger" data-action="delete-user">Delete</button>
-                  </div>
-                </td>
-              </tr>
-              <tr data-role="student" data-status="active">
-                <td class="table-muted">#003</td>
-                <td class="table-name">Grace Otieno</td>
-                <td class="table-email table-muted">grace.otieno@student.com</td>
-                <td class="table-muted">0733 456 789</td>
-                <td><span class="role-badge student">Student</span></td>
-                <td><span class="status-badge active"><span class="status-dot"></span>Active</span></td>
-                <td class="table-date">5 Mar 2026</td>
-                <td><span class="warning-count">0</span></td>
-                <td>
-                  <div class="table-actions">
-                    <button class="btn-sm btn-suspend" data-action="suspend-user">Suspend</button>
-                    <button class="btn-sm btn-warn" data-action="warn-user">Warn</button>
-                    <button class="btn-sm btn-danger" data-action="delete-user">Delete</button>
-                  </div>
-                </td>
-              </tr>
-              <tr data-role="agent" data-status="active">
-                <td class="table-muted">#004</td>
-                <td class="table-name">Peter Ochieng</td>
-                <td class="table-email table-muted">peter@realestate.co.ke</td>
-                <td class="table-muted">0744 567 890</td>
-                <td><span class="role-badge agent">Agent</span></td>
-                <td><span class="status-badge active"><span class="status-dot"></span>Active</span></td>
-                <td class="table-date">12 Apr 2026</td>
-                <td><span class="warning-count">0</span></td>
-                <td>
-                  <div class="table-actions">
-                    <button class="btn-sm btn-suspend" data-action="suspend-user">Suspend</button>
-                    <button class="btn-sm btn-warn" data-action="warn-user">Warn</button>
-                    <button class="btn-sm btn-danger" data-action="delete-user">Delete</button>
-                  </div>
-                </td>
-              </tr>
-              <tr data-role="landlord" data-status="suspended">
-                <td class="table-muted">#005</td>
-                <td class="table-name">Unknown Agent</td>
-                <td class="table-email table-muted">scammer@fake.com</td>
-                <td class="table-muted">0700 000 000</td>
-                <td><span class="role-badge landlord">Landlord</span></td>
-                <td><span class="status-badge suspended"><span class="status-dot"></span>Suspended</span></td>
-                <td class="table-date">1 May 2026</td>
-                <td><span class="warning-count">3</span></td>
-                <td>
-                  <div class="table-actions">
-                    <button class="btn-sm btn-reactivate" data-action="reactivate-user">Reactivate</button>
-                    <button class="btn-sm btn-danger" data-action="delete-user">Delete</button>
-                  </div>
-                </td>
-              </tr>
-              <tr data-role="student" data-status="active">
-                <td class="table-muted">#006</td>
-                <td class="table-name">Alex Mwangi</td>
-                <td class="table-email table-muted">alex.mwangi@uni.ac.ke</td>
-                <td class="table-muted">0711 222 333</td>
-                <td><span class="role-badge student">Student</span></td>
-                <td><span class="status-badge active"><span class="status-dot"></span>Active</span></td>
-                <td class="table-date">18 May 2026</td>
-                <td><span class="warning-count">0</span></td>
-                <td>
-                  <div class="table-actions">
-                    <button class="btn-sm btn-suspend" data-action="suspend-user">Suspend</button>
-                    <button class="btn-sm btn-warn" data-action="warn-user">Warn</button>
-                    <button class="btn-sm btn-danger" data-action="delete-user">Delete</button>
-                  </div>
-                </td>
-              </tr>
+              <tr><td colspan="9" class="table-muted" style="text-align:center;padding:2rem;">Loading…</td></tr>
             </tbody>
           </table>
         </div>
@@ -240,7 +140,7 @@
       </div>
       <h3>Issue Warning?</h3>
       <p>Provide a reason for the warning. The user will be notified.</p>
-      <textarea class="modal-textarea" placeholder="e.g. Abusive report filed against multiple listings..."></textarea>
+      <textarea class="modal-textarea" placeholder="e.g. Abusive report filed against multiple properties..."></textarea>
       <div class="modal-actions">
         <button class="modal-btn cancel">Cancel</button>
         <button class="modal-btn warn-action">Issue Warning</button>
@@ -270,9 +170,9 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <a href="dashboard.html" class="navbar-logo" aria-label="HonnetKE Home"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M20 2L35 10.66V28.34L20 37L5 28.34V10.66L20 2Z" fill="#E8900A" fill-opacity="0.15" stroke="#E8900A" stroke-width="2" stroke-linejoin="round"/><path d="M20 10L28 14.6V23.4L20 28L12 23.4V14.6L20 10Z" fill="#E8900A" stroke="#E8900A" stroke-width="1.5" stroke-linejoin="round"/><circle cx="20" cy="19" r="3" fill="#FFF8EC"/></svg><span class="logo-text">HonnetKE</span></a>
-          <p class="footer-tagline">Kenya's #1 student hostel discovery platform. Admin tools for managing listings, users, and platform health.</p>
+          <p class="footer-tagline">Kenya's #1 student hostel discovery platform. Admin tools for managing properties, users, and platform health.</p>
         </div>
-        <div class="footer-quick-links"><h3 class="footer-heading">Quick Links</h3><nav class="footer-links" aria-label="Footer navigation"><a href="dashboard.html" class="footer-link">Dashboard</a><a href="manage-listings.html" class="footer-link">Manage Listings</a><a href="manage-users.html" class="footer-link">Manage Users</a><a href="flagged-listings.html" class="footer-link">Flagged Listings</a><a href="../landingpage/landingpage.html#contact" class="footer-link">Contact</a></nav></div>
+        <div class="footer-quick-links"><h3 class="footer-heading">Quick Links</h3><nav class="footer-links" aria-label="Footer navigation"><a href="dashboard.html" class="footer-link">Dashboard</a><a href="manage-listings.html" class="footer-link">Manage Properties</a><a href="manage-users.html" class="footer-link">Manage Users</a><a href="flagged-listings.html" class="footer-link">Flagged Listings</a><a href="../landingpage/landingpage.html#contact" class="footer-link">Contact</a></nav></div>
         <div class="footer-contact"><h3 class="footer-heading">Get in Touch</h3><div class="footer-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>support@honnetke.co.ke</div><div class="footer-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+254 700 000 000</div><div class="footer-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Nairobi, Kenya</div></div>
       </div>
       <div class="footer-bottom"><p class="footer-copyright">&copy; 2026 HonnetKE. All rights reserved.</p><div class="footer-bottom-links"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div></div>
@@ -283,5 +183,5 @@
   <script src="../shared/js/auth.js"></script>
   <script src="js/admin.js"></script>
 
-</body>
+<script src="../shared/js/notifications.js"></script></body>
 </html>

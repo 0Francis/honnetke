@@ -1,5 +1,5 @@
-/* ===================================================
-   HonnetKE Student Pages — JavaScript
+﻿/* ===================================================
+   HonnetKE Student Pages - JavaScript
    Handles: navbar, mobile menu, toasts, search,
    filters, gallery, favourites, history, modals.
    =================================================== */
@@ -62,10 +62,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function fetchStudentListings() {
     try {
-      const res = await window.HonnetKE.api.get('/listings?limit=10');
-      const listings = res.listings || [];
+      const res = await window.HonnetKE.api.get('/properties?limit=10');
+      const listings = res.properties || [];
 
-      // Recent activity — first 5 listings
+      // Recent activity - first 5 listings
       if (recentScroll) {
         if (listings.length === 0) {
           recentScroll.innerHTML = `
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   <h3 class="recent-card-title">${l.title}</h3>
                   <div class="recent-card-location">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    ${locationText || '—'}
+                    ${locationText || '-'}
                   </div>
                   <span class="recent-card-price">KES ${price}/mo</span>
                 </div>
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // Featured hostels — first 3 active listings
+      // Featured hostels - first 3 active listings
       if (featuredGrid) {
         const active = listings.filter(l => l.status === 'active').slice(0, 3);
         if (active.length === 0 && listings.length === 0) {
@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const locationText = [l.area, l.nearestCampus].filter(Boolean).join(', near ');
 
             return `
-              <article class="listing-card" data-href="listing.html" data-listing-id="${l.listingId}" role="link" tabindex="0" aria-label="View ${l.title}">
+              <article class="listing-card" data-href="listing.html" data-property-id="${l.propertyId}" role="link" tabindex="0" aria-label="View ${l.title}">
                 <div class="card-image">
                   ${img
                     ? `<img src="${img}" alt="${l.title}" loading="lazy">`
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   <h3 class="card-title">${l.title}</h3>
                   <div class="card-location">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    ${locationText || '—'}
+                    ${locationText || '-'}
                   </div>
                   <div class="card-badges">
                     ${typeLabel ? `<span class="badge badge-amber">${typeLabel}</span>` : ''}
@@ -171,9 +171,9 @@ document.addEventListener('DOMContentLoaded', () => {
             card.addEventListener('click', (e) => {
               if (e.target.closest('.card-fav-btn')) return;
               const href = card.getAttribute('data-href');
-              const listingId = card.getAttribute('data-listing-id');
+              const propId = card.getAttribute('data-property-id');
               if (href) {
-                const url = listingId ? `${href}?id=${listingId}` : href;
+                const url = propId ? `${href}?id=${propId}` : href;
                 window.location.href = url;
               }
             });
@@ -181,9 +181,9 @@ document.addEventListener('DOMContentLoaded', () => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 const href = card.getAttribute('data-href');
-                const listingId = card.getAttribute('data-listing-id');
+                const propId = card.getAttribute('data-property-id');
                 if (href) {
-                  const url = listingId ? `${href}?id=${listingId}` : href;
+                  const url = propId ? `${href}?id=${propId}` : href;
                   window.location.href = url;
                 }
               }
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ──────────────────────────────────────────
-     0c. LISTING DETAIL PAGE — Fetch + Booking + Report
+     0c. LISTING DETAIL PAGE - Fetch + Booking + Report
      ────────────────────────────────────────── */
   const listingDetailPage = document.querySelector('.listing-detail');
   let currentListingId = null;
@@ -215,10 +215,10 @@ document.addEventListener('DOMContentLoaded', () => {
     currentListingId = Number(id);
 
     try {
-      const listing = await window.HonnetKE.api.get(`/listings/${id}`);
+      const listing = await window.HonnetKE.api.get(`/properties/${id}`);
 
       // Update page title
-      document.title = `${listing.title} — HonnetKE`;
+      document.title = `${listing.title} - HonnetKE`;
 
       // Update gallery
       const galleryMainImg = document.getElementById('gallery-main-img');
@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const locationEl = document.querySelector('.listing-info-location');
       if (locationEl) {
         const locationText = [listing.area, listing.county].filter(Boolean).join(', ');
-        const campusText = listing.nearestCampus ? ` — near ${listing.nearestCampus} Campus` : '';
+        const campusText = listing.nearestCampus ? ` - near ${listing.nearestCampus} Campus` : '';
         locationEl.innerHTML = `
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
           ${locationText}${campusText}`;
@@ -318,12 +318,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const whatsappLink = document.querySelector('.contact-btn.whatsapp');
       const callLink = document.querySelector('.contact-btn.call');
       const smsLink = document.querySelector('.contact-btn.sms');
-      // Provider contact info not in listing response — keep defaults
+      // Provider contact info not in listing response - keep defaults
 
       // Hide book button if listing is not active
       const bookBtn = document.getElementById('book-now-btn');
-      if (bookBtn && listing.status !== 'active') {
-        bookBtn.textContent = 'Not Available';
+      const isBookable = listing.status === 'active' && listing.availability !== 'full';
+      if (bookBtn && !isBookable) {
+        bookBtn.textContent = listing.availability === 'full' ? 'Fully Occupied' : 'Not Available';
         bookBtn.disabled = true;
         bookBtn.style.opacity = '0.6';
         bookBtn.style.cursor = 'not-allowed';
@@ -382,7 +383,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
           await window.HonnetKE.api.post('/bookings', {
-            listingId: currentListingId,
+            propertyId: currentListingId,
             requestNote: note || undefined,
           }, true);
 
@@ -409,8 +410,11 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       if (!currentListingId) return;
 
-      const reason = document.getElementById('report-reason').value.trim();
-      if (!reason) return;
+      const raw = document.getElementById('report-reason').value.trim();
+      if (!raw) return;
+      const validReasons = ['spam', 'fraud', 'wrong_information', 'already_occupied', 'inappropriate', 'other'];
+      const reason = validReasons.includes(raw) ? raw : 'other';
+      const details = validReasons.includes(raw) ? undefined : raw;
 
       const submitBtn = newReportForm.querySelector('button[type="submit"]');
       submitBtn.disabled = true;
@@ -418,8 +422,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       try {
         await window.HonnetKE.api.post('/reports', {
-          listingId: currentListingId,
+          propertyId: currentListingId,
           reason,
+          details,
         }, true);
 
         const rm = document.getElementById('report-modal');
@@ -587,7 +592,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ──────────────────────────────────────────
-     6. HOSTELS PAGE — FILTER SIDEBAR (mobile)
+     6. HOSTELS PAGE - FILTER SIDEBAR (mobile)
      ────────────────────────────────────────── */
   const filterToggle  = document.getElementById('filter-toggle-mobile');
   const filterSidebar = document.getElementById('filter-sidebar');
@@ -627,18 +632,269 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Search form
-  const hostelsSearchForm = document.getElementById('hostels-search-form');
-  if (hostelsSearchForm) {
-    hostelsSearchForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      showToast('Searching…', 'Finding hostels matching your criteria');
+  /* ──────────────────────────────────────────
+     6b. BROWSE PAGE - dynamic properties + filters
+     ────────────────────────────────────────── */
+  function renderPagination(el, page, pages, onGo) {
+    if (!el) return;
+    if (!pages || pages <= 1) { el.innerHTML = ''; return; }
+    const prevSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>';
+    const nextSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+    let html = `<button class="page-btn nav-arrow" ${page <= 1 ? 'disabled' : ''} data-go="${page - 1}" aria-label="Previous page">${prevSvg}</button>`;
+    for (let i = 1; i <= pages; i++) {
+      html += `<button class="page-btn ${i === page ? 'active' : ''}" data-go="${i}">${i}</button>`;
+    }
+    html += `<button class="page-btn nav-arrow" ${page >= pages ? 'disabled' : ''} data-go="${page + 1}" aria-label="Next page">${nextSvg}</button>`;
+    el.innerHTML = html;
+    el.querySelectorAll('.page-btn[data-go]').forEach((b) => {
+      b.addEventListener('click', () => {
+        if (b.hasAttribute('disabled')) return;
+        const p = Number(b.getAttribute('data-go'));
+        if (p >= 1 && p <= pages) onGo(p);
+      });
     });
   }
 
+  function bindFavButtons(container, favIds) {
+    container.querySelectorAll('.card-fav-btn').forEach((btn) => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const id = Number(btn.getAttribute('data-property-id'));
+        if (!id) return;
+        const wasActive = btn.classList.contains('active');
+        btn.classList.toggle('active');
+        btn.setAttribute('aria-pressed', String(!wasActive));
+        try {
+          if (!wasActive) {
+            await window.HonnetKE.api.post('/favourites', { propertyId: id }, true);
+            if (favIds) favIds.add(id);
+            showToast('Saved', 'Added to your Hive Saves');
+          } else {
+            await window.HonnetKE.api.del(`/favourites/${id}`, true);
+            if (favIds) favIds.delete(id);
+            showToast('Removed', 'Removed from your Hive Saves');
+          }
+        } catch (err) {
+          btn.classList.toggle('active');
+          btn.setAttribute('aria-pressed', String(wasActive));
+          showToast('Error', err.message || 'Could not update favourites');
+        }
+      });
+    });
+  }
+
+  async function initBrowse() {
+    const resultsEl = document.getElementById('hostels-results');
+    if (!resultsEl) return;
+    const countEl = document.getElementById('results-count');
+    const paginationEl = document.getElementById('pagination');
+    const sortEl = document.getElementById('results-sort');
+    const searchForm = document.getElementById('hostels-search-form');
+    const sidebar = document.getElementById('filter-sidebar');
+    const state = { page: 1 };
+
+    let favIds = new Set();
+    try {
+      const favRes = await window.HonnetKE.api.get('/favourites', true);
+      favIds = new Set((favRes.favourites || []).map((f) => f.propertyId));
+    } catch (_) { /* guest or not logged in */ }
+
+    const getChecked = (name) => sidebar?.querySelector(`input[name="${name}"]:checked`)?.value;
+
+    function buildQuery() {
+      const params = new URLSearchParams();
+      params.set('limit', '9');
+      params.set('page', String(state.page));
+
+      const loc = searchForm?.querySelector('input[name="location"]')?.value.trim();
+      if (loc) params.set('search', loc);
+
+      const topType = searchForm?.querySelector('select[name="property_type"]')?.value;
+      const topPrice = searchForm?.querySelector('select[name="price"]')?.value;
+
+      const gender = getChecked('gender'); if (gender) params.set('gender', gender);
+      const room = getChecked('room_type'); if (room) params.set('room', room);
+      const type = getChecked('type') || topType; if (type) params.set('type', type);
+      const avail = getChecked('availability'); if (avail) params.set('availability', avail);
+
+      const priceRange = getChecked('price_range') || topPrice;
+      if (priceRange) {
+        if (priceRange.endsWith('+')) {
+          params.set('minPrice', priceRange.replace('+', ''));
+        } else {
+          const [min, max] = priceRange.split('-');
+          if (min) params.set('minPrice', min);
+          if (max) params.set('maxPrice', max);
+        }
+      }
+      return params.toString();
+    }
+
+    async function load() {
+      resultsEl.setAttribute('aria-busy', 'true');
+      resultsEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--color-text-muted);">Loading properties...</div>';
+      try {
+        const res = await window.HonnetKE.api.get(`/properties?${buildQuery()}`);
+        let items = res.properties || [];
+        const sort = sortEl?.value;
+        if (sort === 'price-low') items.sort((a, b) => a.price - b.price);
+        else if (sort === 'price-high') items.sort((a, b) => b.price - a.price);
+
+        if (items.length === 0) {
+          resultsEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--color-text-muted);">No properties match your filters. Try widening your search.</div>';
+          paginationEl.innerHTML = '';
+        } else {
+          resultsEl.innerHTML = items.map((p) => window.HonnetKE.property.cardHtml(p, { isFav: favIds.has(p.propertyId) })).join('');
+          window.HonnetKE.property.bindCardNavigation(resultsEl);
+          bindFavButtons(resultsEl, favIds);
+        }
+
+        const pg = res.pagination || { total: items.length, page: 1, pages: 1 };
+        if (countEl) countEl.innerHTML = `Showing <strong>${items.length}</strong> of <strong>${pg.total}</strong> properties`;
+        renderPagination(paginationEl, pg.page, pg.pages, (p) => { state.page = p; load(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+      } catch (err) {
+        resultsEl.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--color-text-muted);">Could not load properties. ${err.message}</div>`;
+      } finally {
+        resultsEl.removeAttribute('aria-busy');
+      }
+    }
+
+    if (searchForm) searchForm.addEventListener('submit', (e) => { e.preventDefault(); state.page = 1; load(); });
+    if (sortEl) sortEl.addEventListener('change', () => load());
+    sidebar?.querySelectorAll('input').forEach((inp) => inp.addEventListener('change', () => { state.page = 1; load(); }));
+    const clearBtn = document.querySelector('.filter-clear');
+    if (clearBtn) clearBtn.addEventListener('click', () => setTimeout(() => { state.page = 1; load(); }, 0));
+
+    load();
+  }
+
+  initBrowse();
+
 
   /* ──────────────────────────────────────────
-     7. LISTING DETAIL — IMAGE GALLERY
+     6c. FAVOURITES PAGE - saved properties
+     ────────────────────────────────────────── */
+  async function initFavourites() {
+    const grid = document.getElementById('favourites-grid');
+    if (!grid) return;
+
+    const emptyHtml = `
+      <div class="empty-state" style="grid-column:1/-1;">
+        <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <h2 class="empty-state-title">No saves yet</h2>
+        <p class="empty-state-text">Start exploring hostels and save the ones you love by tapping the heart icon.</p>
+        <a href="hostels.html" class="btn btn-primary btn-lg">Explore Hostels</a>
+      </div>`;
+
+    try {
+      const res = await window.HonnetKE.api.get('/favourites', true);
+      const favourites = res.favourites || [];
+      const properties = favourites.map((f) => f.property).filter(Boolean);
+
+      if (properties.length === 0) {
+        grid.innerHTML = emptyHtml;
+        return;
+      }
+
+      const favIds = new Set(properties.map((p) => p.propertyId));
+      grid.innerHTML = properties.map((p) => window.HonnetKE.property.cardHtml(p, { isFav: true })).join('');
+      window.HonnetKE.property.bindCardNavigation(grid);
+
+      // On this page, toggling the heart removes the card.
+      grid.querySelectorAll('.card-fav-btn').forEach((btn) => {
+        btn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          const id = Number(btn.getAttribute('data-property-id'));
+          if (!id) return;
+          const card = btn.closest('.listing-card');
+          try {
+            await window.HonnetKE.api.del(`/favourites/${id}`, true);
+            favIds.delete(id);
+            if (card) card.remove();
+            showToast('Removed', 'Removed from your Hive Saves');
+            if (grid.querySelectorAll('.listing-card').length === 0) grid.innerHTML = emptyHtml;
+          } catch (err) {
+            showToast('Error', err.message || 'Could not update favourites');
+          }
+        });
+      });
+    } catch (err) {
+      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--color-text-muted);">Could not load your saves. ${err.message}</div>`;
+    }
+  }
+
+  initFavourites();
+
+
+  /* ──────────────────────────────────────────
+     6d. VISIT HISTORY PAGE - recently viewed
+     ────────────────────────────────────────── */
+  function formatViewedAt(dateStr) {
+    const date = new Date(dateStr);
+    if (Number.isNaN(date.getTime())) return '';
+    const now = new Date();
+    const sameDay = date.toDateString() === now.toDateString();
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+    const time = date.toLocaleTimeString('en-KE', { hour: 'numeric', minute: '2-digit' });
+    if (sameDay) return `Today, ${time}`;
+    if (date.toDateString() === yesterday.toDateString()) return `Yesterday, ${time}`;
+    return date.toLocaleDateString('en-KE', { month: 'short', day: 'numeric' }) + `, ${time}`;
+  }
+
+  async function initHistory() {
+    const list = document.getElementById('history-list');
+    if (!list) return;
+
+    const P = window.HonnetKE.property;
+    const pinSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+    const arrowSvg = '<svg class="history-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+
+    try {
+      const res = await window.HonnetKE.api.get('/me/history', true);
+      const history = res.history || [];
+
+      if (history.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <h2 class="empty-state-title">No visits logged yet</h2>
+            <p class="empty-state-text">Start browsing hostels to build your visit history.</p>
+            <a href="hostels.html" class="btn btn-primary btn-lg">Explore Hostels</a>
+          </div>`;
+        return;
+      }
+
+      list.innerHTML = history.map((h) => {
+        const p = h.property;
+        if (!p) return '';
+        const img = P.primaryImage(p);
+        const thumb = img
+          ? `<img src="${P.escapeHtml(img)}" alt="${P.escapeHtml(p.title)}" loading="lazy">`
+          : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--color-border-light,#eee);color:var(--color-text-muted,#888);font-size:0.75rem;">No image</div>`;
+        return `
+          <a href="listing.html?id=${p.propertyId}" class="history-item">
+            <div class="history-thumb">${thumb}</div>
+            <div class="history-info">
+              <h3 class="history-title">${P.escapeHtml(p.title)}</h3>
+              <div class="history-location">${pinSvg}${P.escapeHtml(P.locationText(p) || 'Location not specified')}</div>
+            </div>
+            <span class="history-date">${formatViewedAt(h.viewedAt)}</span>
+            ${arrowSvg}
+          </a>`;
+      }).join('');
+    } catch (err) {
+      list.innerHTML = `<div style="text-align:center;padding:3rem;color:var(--color-text-muted);">Could not load your history. ${err.message}</div>`;
+    }
+  }
+
+  initHistory();
+
+
+  /* ──────────────────────────────────────────
+     7. LISTING DETAIL - IMAGE GALLERY
      ────────────────────────────────────────── */
   const galleryMain = document.getElementById('gallery-main-img');
   const galleryThumbs = document.querySelectorAll('.gallery-thumb');
@@ -682,7 +938,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ──────────────────────────────────────────
-     8. FAVOURITES — Toggle Heart
+     8. FAVOURITES - Toggle Heart
      ────────────────────────────────────────── */
   const favBtns = document.querySelectorAll('.card-fav-btn');
 
@@ -691,14 +947,13 @@ document.addEventListener('DOMContentLoaded', () => {
       e.stopPropagation();
       e.preventDefault();
 
-      const card = btn.closest('.listing-card, [data-listing-id]');
-      const listingId = card?.dataset?.listingId || card?.getAttribute('data-listing-id');
+      const card = btn.closest('.listing-card, [data-property-id]');
+      const propId = card?.dataset?.propertyId || card?.getAttribute('data-property-id');
 
-      if (!listingId) {
-        // Static card without listing ID — just toggle visual
+      if (!propId) {
         btn.classList.toggle('active');
         showToast(btn.classList.contains('active') ? 'Saved! 💛' : 'Removed',
-                   btn.classList.contains('active') ? 'Added to your Hive Saves' : 'Listing removed from Hive Saves');
+                   btn.classList.contains('active') ? 'Added to your Hive Saves' : 'Property removed from Hive Saves');
         return;
       }
 
@@ -707,11 +962,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       try {
         if (!wasActive) {
-          await window.HonnetKE.api.post('/favourites', { listingId: Number(listingId) }, true);
+          await window.HonnetKE.api.post('/favourites', { propertyId: Number(propId) }, true);
           showToast('Saved! 💛', 'Added to your Hive Saves');
         } else {
-          await window.HonnetKE.api.del(`/favourites/${listingId}`, true);
-          showToast('Removed', 'Listing removed from Hive Saves');
+          await window.HonnetKE.api.del(`/favourites/${propId}`, true);
+          showToast('Removed', 'Property removed from Hive Saves');
         }
       } catch (err) {
         // Revert on error
@@ -765,7 +1020,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ──────────────────────────────────────────
-     10. LISTING CARDS — Navigate to Detail
+     10. LISTING CARDS - Navigate to Detail
      ────────────────────────────────────────── */
   const listingCards = document.querySelectorAll('.listing-card[data-href]');
 
@@ -773,9 +1028,9 @@ document.addEventListener('DOMContentLoaded', () => {
     card.addEventListener('click', (e) => {
       if (e.target.closest('.card-fav-btn')) return;
       const href = card.getAttribute('data-href');
-      const listingId = card.getAttribute('data-listing-id');
+      const propId = card.getAttribute('data-property-id');
       if (href) {
-        const url = listingId ? `${href}?id=${listingId}` : href;
+        const url = propId ? `${href}?id=${propId}` : href;
         window.location.href = url;
       }
     });
@@ -784,9 +1039,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         const href = card.getAttribute('data-href');
-        const listingId = card.getAttribute('data-listing-id');
+        const propId = card.getAttribute('data-property-id');
         if (href) {
-          const url = listingId ? `${href}?id=${listingId}` : href;
+          const url = propId ? `${href}?id=${propId}` : href;
           window.location.href = url;
         }
       }
@@ -853,6 +1108,30 @@ document.addEventListener('DOMContentLoaded', () => {
         profileAvatar.textContent = initials;
       }
     }
+
+    // Fetch real stats for profile page (single lightweight call)
+    const ageEl = document.getElementById('stat-age');
+    async function fetchProfileStats() {
+      try {
+        const s = await window.HonnetKE.api.get('/me/profile-stats', true);
+        const favEl = document.getElementById('stat-favourites');
+        const viewedEl = document.getElementById('stat-viewed');
+        if (favEl) favEl.textContent = s.favourites || 0;
+        if (viewedEl) viewedEl.textContent = s.hostelsViewed || 0;
+        if (ageEl && user) {
+          const joined = user.createdAt ? new Date(user.createdAt) : new Date();
+          const diffMs = Date.now() - joined.getTime();
+          const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+          if (diffDays < 1) ageEl.textContent = 'Today';
+          else if (diffDays < 30) ageEl.textContent = `${diffDays} day${diffDays > 1 ? 's' : ''}`;
+          else if (diffDays < 365) ageEl.textContent = `${Math.floor(diffDays / 30)} mo`;
+          else ageEl.textContent = `${Math.floor(diffDays / 365)} yr`;
+        }
+      } catch (err) {
+        console.warn('Could not fetch profile stats:', err.message);
+      }
+    }
+    fetchProfileStats();
 
     // Personal info form
     const personalForm = document.getElementById('personal-info-form');

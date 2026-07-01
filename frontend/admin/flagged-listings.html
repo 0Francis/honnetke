@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="HonnetKE Admin — Review listings with 3+ student reports pending admin review.">
-  <meta name="keywords" content="flagged listings, reports, admin moderation, HonnetKE">
+  <meta name="description" content="HonnetKE Admin - Review properties with 3+ student reports pending admin review.">
+  <meta name="keywords" content="flagged properties, reports, admin moderation, HonnetKE">
   <meta name="author" content="HonnetKE">
-  <title>Flagged Listings — HonnetKE Admin</title>
+  <title>Flagged Properties - HonnetKE Admin</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="../landingpage/css/reset.css">
   <link rel="stylesheet" href="../landingpage/css/global.css">
   <link rel="stylesheet" href="css/admin.css">
-</head>
+<link rel="stylesheet" href="../shared/css/notifications.css"></head>
 <body data-page="flagged-listings">
 
   <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -31,7 +31,7 @@
       </a>
       <ul class="navbar-nav" id="navbar-nav">
         <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
-        <li><a href="manage-listings.html" class="nav-link">Listings</a></li>
+        <li><a href="manage-listings.html" class="nav-link">Properties</a></li>
         <li><a href="manage-users.html" class="nav-link">Users</a></li>
         <li><a href="flagged-listings.html" class="nav-link active">Flagged</a></li>
         <li><a href="duplicate-queue.html" class="nav-link">Duplicates</a></li>
@@ -53,7 +53,7 @@
 
   <div class="admin-mobile-nav" id="admin-mobile-nav" aria-hidden="true">
     <a href="dashboard.html" class="nav-link">Dashboard</a>
-    <a href="manage-listings.html" class="nav-link">Listings</a>
+    <a href="manage-listings.html" class="nav-link">Properties</a>
     <a href="manage-users.html" class="nav-link">Users</a>
     <a href="flagged-listings.html" class="nav-link active">Flagged</a>
     <a href="duplicate-queue.html" class="nav-link">Duplicates</a>
@@ -67,8 +67,8 @@
 
     <div class="page-header">
       <div class="container">
-        <h1 class="page-title">Flagged Listings</h1>
-        <p class="page-subtitle">Listings with 3+ student reports pending admin review. Click a row to expand report details.</p>
+        <h1 class="page-title">Flagged Properties</h1>
+        <p class="page-subtitle">Properties with 3+ student reports pending admin review. Click a row to expand report details.</p>
       </div>
     </div>
 
@@ -93,13 +93,13 @@
           </div>
         </div>
 
-        <!-- Flagged Listings Table -->
+        <!-- Flagged Properties Table -->
         <div class="data-table-wrapper">
           <table class="data-table" id="flagged-table">
             <thead>
               <tr>
                 <th></th>
-                <th>Listing</th>
+                <th>Property</th>
                 <th>Provider</th>
                 <th>Reports</th>
                 <th>Top Reason</th>
@@ -109,7 +109,7 @@
               </tr>
             </thead>
             <tbody>
-              <!-- Row 1 — Expandable -->
+              <!-- Row 1 - Expandable -->
               <tr class="expandable-row" data-status="pending">
                 <td>
                   <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -117,7 +117,7 @@
                 <td class="table-name">Sunrise Hostel</td>
                 <td class="table-muted">John Mwangi</td>
                 <td><span class="count-badge high">5</span></td>
-                <td class="table-muted">Fake listing — stolen images</td>
+                <td class="table-muted">Fake property - stolen images</td>
                 <td class="table-date">24 Jun 2026</td>
                 <td><span class="status-badge pending"><span class="status-dot"></span>Pending</span></td>
                 <td>
@@ -136,7 +136,7 @@
                           <span class="report-entry-student">Jane Wanjiku</span>
                           <span class="report-entry-date">24 Jun 2026</span>
                         </div>
-                        <p class="report-entry-reason">Fake listing — images clearly stolen from a hotel booking site. Not a real hostel.</p>
+                        <p class="report-entry-reason">Fake property - images clearly stolen from a hotel booking site. Not a real hostel.</p>
                       </div>
                       <div class="report-entry">
                         <div class="report-entry-header">
@@ -164,7 +164,7 @@
                           <span class="report-entry-student">Mary Achieng</span>
                           <span class="report-entry-date">20 Jun 2026</span>
                         </div>
-                        <p class="report-entry-reason">This listing has been reported before. Still up — please take it down.</p>
+                        <p class="report-entry-reason">This property has been reported before. Still up - please take it down.</p>
                       </div>
                     </div>
                   </div>
@@ -179,7 +179,7 @@
                 <td class="table-name">Jamii Heights</td>
                 <td class="table-muted">Grace Nyambura</td>
                 <td><span class="count-badge high">4</span></td>
-                <td class="table-muted">Wrong location — not near campus</td>
+                <td class="table-muted">Wrong location - not near campus</td>
                 <td class="table-date">22 Jun 2026</td>
                 <td><span class="status-badge pending"><span class="status-dot"></span>Pending</span></td>
                 <td>
@@ -198,7 +198,7 @@
                           <span class="report-entry-student">Kevin Njoroge</span>
                           <span class="report-entry-date">22 Jun 2026</span>
                         </div>
-                        <p class="report-entry-reason">The listing says "5 mins from campus" but it's actually 30 minutes away by matatu.</p>
+                        <p class="report-entry-reason">The property says "5 mins from campus" but it's actually 30 minutes away by matatu.</p>
                       </div>
                       <div class="report-entry">
                         <div class="report-entry-header">
@@ -219,7 +219,7 @@
                           <span class="report-entry-student">Peter Ochieng</span>
                           <span class="report-entry-date">19 Jun 2026</span>
                         </div>
-                        <p class="report-entry-reason">Misleading amenities — says WiFi included but there's no internet at the hostel.</p>
+                        <p class="report-entry-reason">Misleading amenities - says WiFi included but there's no internet at the hostel.</p>
                       </div>
                     </div>
                   </div>
@@ -253,7 +253,7 @@
                           <span class="report-entry-student">Alex Mwangi</span>
                           <span class="report-entry-date">20 Jun 2026</span>
                         </div>
-                        <p class="report-entry-reason">The listing description contains inappropriate language and offensive content.</p>
+                        <p class="report-entry-reason">The property description contains inappropriate language and offensive content.</p>
                       </div>
                       <div class="report-entry">
                         <div class="report-entry-header">
@@ -274,7 +274,7 @@
                 </td>
               </tr>
 
-              <!-- Row 4 — Resolved -->
+              <!-- Row 4 - Resolved -->
               <tr class="expandable-row" data-status="resolved">
                 <td>
                   <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -300,7 +300,7 @@
                           <span class="report-entry-student">Grace Otieno</span>
                           <span class="report-entry-date">15 Jun 2026</span>
                         </div>
-                        <p class="report-entry-reason">Misleading price — listed at KES 12,000 but actual cost is KES 18,000 with mandatory extras.</p>
+                        <p class="report-entry-reason">Misleading price - listed at KES 12,000 but actual cost is KES 18,000 with mandatory extras.</p>
                       </div>
                       <div class="report-entry">
                         <div class="report-entry-header">
@@ -314,7 +314,7 @@
                           <span class="report-entry-student">Jane Wanjiku</span>
                           <span class="report-entry-date">13 Jun 2026</span>
                         </div>
-                        <p class="report-entry-reason">Agreed — I was told the price was different when I called. Very misleading.</p>
+                        <p class="report-entry-reason">Agreed - I was told the price was different when I called. Very misleading.</p>
                       </div>
                     </div>
                   </div>
@@ -338,8 +338,8 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
       </div>
       <h3>Resolve Reports?</h3>
-      <p>Add a resolution note explaining the action taken. The listing provider will be notified.</p>
-      <textarea class="modal-textarea" placeholder="e.g. Listing updated by provider — reports reviewed and content verified..."></textarea>
+      <p>Add a resolution note explaining the action taken. The property provider will be notified.</p>
+      <textarea class="modal-textarea" placeholder="e.g. Property updated by provider - reports reviewed and content verified..."></textarea>
       <div class="modal-actions">
         <button class="modal-btn cancel">Cancel</button>
         <button class="modal-btn confirm-action">Resolve Reports</button>
@@ -354,9 +354,9 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <a href="dashboard.html" class="navbar-logo" aria-label="HonnetKE Home"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M20 2L35 10.66V28.34L20 37L5 28.34V10.66L20 2Z" fill="#E8900A" fill-opacity="0.15" stroke="#E8900A" stroke-width="2" stroke-linejoin="round"/><path d="M20 10L28 14.6V23.4L20 28L12 23.4V14.6L20 10Z" fill="#E8900A" stroke="#E8900A" stroke-width="1.5" stroke-linejoin="round"/><circle cx="20" cy="19" r="3" fill="#FFF8EC"/></svg><span class="logo-text">HonnetKE</span></a>
-          <p class="footer-tagline">Kenya's #1 student hostel discovery platform. Admin tools for managing listings, users, and platform health.</p>
+          <p class="footer-tagline">Kenya's #1 student hostel discovery platform. Admin tools for managing properties, users, and platform health.</p>
         </div>
-        <div class="footer-quick-links"><h3 class="footer-heading">Quick Links</h3><nav class="footer-links" aria-label="Footer navigation"><a href="dashboard.html" class="footer-link">Dashboard</a><a href="manage-listings.html" class="footer-link">Manage Listings</a><a href="manage-users.html" class="footer-link">Manage Users</a><a href="flagged-listings.html" class="footer-link">Flagged Listings</a><a href="../landingpage/landingpage.html#contact" class="footer-link">Contact</a></nav></div>
+        <div class="footer-quick-links"><h3 class="footer-heading">Quick Links</h3><nav class="footer-links" aria-label="Footer navigation"><a href="dashboard.html" class="footer-link">Dashboard</a><a href="manage-listings.html" class="footer-link">Manage Properties</a><a href="manage-users.html" class="footer-link">Manage Users</a><a href="flagged-listings.html" class="footer-link">Flagged Listings</a><a href="../landingpage/landingpage.html#contact" class="footer-link">Contact</a></nav></div>
         <div class="footer-contact"><h3 class="footer-heading">Get in Touch</h3><div class="footer-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>support@honnetke.co.ke</div><div class="footer-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+254 700 000 000</div><div class="footer-contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Nairobi, Kenya</div></div>
       </div>
       <div class="footer-bottom"><p class="footer-copyright">&copy; 2026 HonnetKE. All rights reserved.</p><div class="footer-bottom-links"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div></div>
@@ -367,5 +367,5 @@
   <script src="../shared/js/auth.js"></script>
   <script src="js/admin.js"></script>
 
-</body>
+<script src="../shared/js/notifications.js"></script></body>
 </html>

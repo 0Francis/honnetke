@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
+﻿const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 
 const prisma = new PrismaClient();
@@ -6,11 +6,11 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Seeding database...');
 
-  // Hash passwords — all users share the same password
+  // Hash passwords - all users share the same password
   const passwordHash = await bcrypt.hash('Honnetke123!', 10);
   const adminPasswordHash = passwordHash;
 
-  // Admins (pre-seeded — admins cannot self-register)
+  // Admins (pre-seeded - admins cannot self-register)
   const admin = await prisma.admin.upsert({
     where: { email: 'francis.wainaina@strathmore.edu' },
     update: {},
@@ -103,19 +103,24 @@ async function main() {
     },
   });
 
-  // Listings
-  const listing1 = await prisma.listing.create({
+  // Properties
+  const listing1 = await prisma.property.create({
     data: {
       landlordId: landlord1.landlordId,
       title: 'Sunny Bedsitter near USIU',
       description: 'Modern bedsitter with natural light, WiFi, and water included.',
       propertyType: 'bedsitter',
       price: 8000,
+      deposit: 8000,
       genderPreference: 'mixed',
       roomType: 'single',
       amenities: ['WiFi', 'Water', 'Security'],
+      rules: ['No smoking', 'No pets'],
+      capacity: 5,
+      occupied: 2,
       county: 'Nairobi',
       area: 'Ruaka',
+      estate: 'Ruaka',
       nearestCampus: 'USIU',
       address: 'Ruaka Plaza, House 12',
       status: 'active',
@@ -124,18 +129,23 @@ async function main() {
     },
   });
 
-  const listing2 = await prisma.listing.create({
+  const listing2 = await prisma.property.create({
     data: {
       landlordId: landlord1.landlordId,
       title: 'Spacious 1-Bedroom in Kasarani',
       description: 'Large 1-bedroom with separate kitchen and balcony.',
-      propertyType: '1-bedroom',
+      propertyType: 'one_bedroom',
       price: 15000,
+      deposit: 15000,
       genderPreference: 'female',
       roomType: 'ensuite',
       amenities: ['WiFi', 'Water', 'Parking', 'Security'],
+      rules: ['No loud music after 10pm'],
+      capacity: 1,
+      occupied: 0,
       county: 'Nairobi',
       area: 'Kasarani',
+      estate: 'Kasarani',
       nearestCampus: 'KU',
       address: 'Kasarani Gardens, Apt 4B',
       status: 'active',
@@ -144,58 +154,68 @@ async function main() {
     },
   });
 
-  const listing3 = await prisma.listing.create({
+  const listing3 = await prisma.property.create({
     data: {
       landlordId: landlord2.landlordId,
       title: 'Cozy Shared Room near Daystar',
       description: 'Shared room with 2 beds, perfect for students on a budget.',
-      propertyType: 'hostel',
+      propertyType: 'shared_room',
       price: 4500,
+      deposit: 4500,
       genderPreference: 'male',
       roomType: 'shared',
       amenities: ['WiFi', 'Water', 'Security'],
+      rules: ['Shared kitchen duties'],
+      capacity: 4,
+      occupied: 4,
       county: 'Nairobi',
       area: 'Athi River',
+      estate: 'Athi River',
       nearestCampus: 'Daystar',
       address: 'Athi River Hostels, Block C',
-      status: 'active',
+      status: 'fully_occupied',
       approvedBy: admin.adminId,
       approvedAt: new Date(),
     },
   });
 
-  const listing4 = await prisma.listing.create({
+  const listing4 = await prisma.property.create({
     data: {
       agentId: agent1.agentId,
       title: 'Luxury Studio near Strathmore',
       description: 'Premium studio with modern finishes and gym access.',
       propertyType: 'studio',
       price: 25000,
+      deposit: 25000,
       genderPreference: 'mixed',
       roomType: 'ensuite',
       amenities: ['WiFi', 'Water', 'Gym', 'Parking', 'Security', 'Laundry'],
+      rules: ['No subletting'],
+      capacity: 1,
+      occupied: 0,
       county: 'Nairobi',
       area: 'Madaraka',
+      estate: 'Madaraka',
       nearestCampus: 'Strathmore',
       address: 'Madaraka Estate, Suite 5',
-      status: 'pending',
+      status: 'pending_approval',
     },
   });
 
-  // Listing Images — left empty (no real images yet)
+  // Property images left empty (no real images yet)
 
   // Favourites
   await prisma.favourite.create({
     data: {
       studentId: student1.studentId,
-      listingId: listing1.listingId,
+      propertyId: listing1.propertyId,
     },
   });
 
   await prisma.favourite.create({
     data: {
       studentId: student1.studentId,
-      listingId: listing2.listingId,
+      propertyId: listing2.propertyId,
     },
   });
 
@@ -203,7 +223,7 @@ async function main() {
   const booking1 = await prisma.booking.create({
     data: {
       studentId: student1.studentId,
-      listingId: listing1.listingId,
+      propertyId: listing1.propertyId,
       status: 'pending',
       requestNote: 'I need the room by 1st of next month.',
     },
@@ -212,8 +232,8 @@ async function main() {
   const booking2 = await prisma.booking.create({
     data: {
       studentId: student2.studentId,
-      listingId: listing3.listingId,
-      status: 'confirmed',
+      propertyId: listing3.propertyId,
+      status: 'accepted',
       requestNote: 'Can I view the room this weekend?',
       providerResponse: 'Yes, you can visit on Saturday at 10am.',
     },
@@ -223,8 +243,9 @@ async function main() {
   await prisma.report.create({
     data: {
       studentId: student2.studentId,
-      listingId: listing4.listingId,
-      reason: 'Listing images do not match the actual property. The photos are stolen from another site.',
+      propertyId: listing4.propertyId,
+      reason: 'wrong_information',
+      details: 'Property images do not match the actual property. The photos are stolen from another site.',
       status: 'pending',
     },
   });
@@ -263,7 +284,7 @@ async function main() {
     data: {
       adminId: admin.adminId,
       message: 'New listing submitted for review: "Luxury Studio near Strathmore".',
-      type: 'listing_review',
+      type: 'property_review',
       isRead: false,
     },
   });
@@ -275,7 +296,7 @@ async function main() {
 
   await prisma.analytics.create({
     data: {
-      listingId: listing1.listingId,
+      propertyId: listing1.propertyId,
       weekStart: weekAgo,
       viewCount: 45,
     },
@@ -283,7 +304,7 @@ async function main() {
 
   await prisma.analytics.create({
     data: {
-      listingId: listing2.listingId,
+      propertyId: listing2.propertyId,
       weekStart: weekAgo,
       viewCount: 32,
     },

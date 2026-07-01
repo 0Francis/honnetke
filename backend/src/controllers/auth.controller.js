@@ -1,4 +1,4 @@
-// Sprint 1 — Auth
+﻿// Sprint 1 - Auth
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -87,7 +87,7 @@ const register = async (req, res, next) => {
   }
 };
 
-// POST /api/auth/verify-otp  — completes registration ('verify') or login 2FA ('login')
+// POST /api/auth/verify-otp  - completes registration ('verify') or login 2FA ('login')
 const verifyOtp = async (req, res, next) => {
   try {
     const { email, role, code } = req.body;
@@ -166,9 +166,13 @@ const login = async (req, res, next) => {
     const otpCode = await createOtp(email, role, purpose);
     console.log(`[DEV] OTP for ${email} (${purpose}): ${otpCode}`);
     if (purpose === 'verify') {
-      await sendVerificationEmail(email, user.fullName, otpCode);
+      sendVerificationEmail(email, user.fullName, otpCode).catch((e) =>
+        console.error('[MAIL] sendVerificationEmail failed:', e.message)
+      );
     } else {
-      await sendLoginEmail(email, user.fullName, otpCode);
+      sendLoginEmail(email, user.fullName, otpCode).catch((e) =>
+        console.error('[MAIL] sendLoginEmail failed:', e.message)
+      );
     }
 
     return res.json({
@@ -185,7 +189,7 @@ const login = async (req, res, next) => {
   }
 };
 
-// POST /api/auth/resend-otp  — re-issues a code for an in-progress verify/login flow
+// POST /api/auth/resend-otp  - re-issues a code for an in-progress verify/login flow
 const resendOtp = async (req, res, next) => {
   try {
     const { email, role } = req.body;
@@ -274,7 +278,7 @@ const resetPassword = async (req, res, next) => {
   }
 };
 
-// POST /api/auth/logout  (stateless JWT — client discards token)
+// POST /api/auth/logout  (stateless JWT - client discards token)
 const logout = async (req, res) => {
   return res.json({ message: 'Logged out successfully.' });
 };

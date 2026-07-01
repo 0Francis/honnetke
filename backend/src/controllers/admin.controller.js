@@ -1,18 +1,23 @@
-// Sprint 6 — Admin Features
+﻿// Admin Features
 const prisma = require('../config/prisma');
+const {
+  sendPropertyApprovedEmail,
+  sendPropertyRejectedEmail,
+  sendWarningEmail,
+} = require('../utils/mailer');
 
-/* ── Helper: resolve a role's prisma delegate + id field ── */
+/* Helper: resolve a role's prisma delegate + id field. */
 const ROLE_MAP = {
   student: { model: () => prisma.student, idField: 'studentId' },
   landlord: { model: () => prisma.landlord, idField: 'landlordId' },
   agent: { model: () => prisma.agent, idField: 'agentId' },
 };
 
-/* ── Helper: notify the owner (landlord/agent) of a listing ── */
-async function notifyListingProvider(listing, message, type = 'listing_review') {
-  const providerId = listing.landlordId || listing.agentId;
+/* Helper: notify the owner (landlord/agent) of a property. */
+async function notifyPropertyProvider(property, message, type = 'property_review') {
+  const providerId = property.landlordId || property.agentId;
   if (!providerId) return;
-  const providerRole = listing.landlordId ? 'landlord' : 'agent';
+  const providerRole = property.landlordId ? 'landlord' : 'agent';
   await prisma.notification.create({
     data: {
       [providerRole + 'Id']: providerId,
@@ -23,24 +28,35 @@ async function notifyListingProvider(listing, message, type = 'listing_review') 
   });
 }
 
+/* Helper: fetch the provider's email and name for a property. */
+async function getProviderContact(property) {
+  if (property.landlordId) {
+    return prisma.landlord.findUnique({ where: { landlordId: property.landlordId }, select: { fullName: true, email: true } });
+  }
+  if (property.agentId) {
+    return prisma.agent.findUnique({ where: { agentId: property.agentId }, select: { fullName: true, email: true } });
+  }
+  return null;
+}
+
 /* ═══════════════════════════════════════════════════════
-   GET /api/admin/listings  — listings by status (default pending)
+   GET /api/admin/listings  - listings by status (default pending)
    Query: status (pending|active|inactive|blocked|all), page, limit
    ═══════════════════════════════════════════════════════ */
-const getPendingListings = async (req, res, next) => {
+const getPendingProperties = async (req, res, next) => {
   try {
-    const { status = 'pending', page = 1, limit = 20 } = req.query;
+    const { status = 'pending_approval', page = 1, limit = 20 } = req.query;
     const where = {};
     if (status && status !== 'all') where.status = status;
 
     const skip = (Math.max(1, parseInt(page)) - 1) * parseInt(limit);
     const take = Math.min(50, parseInt(limit));
 
-    const [listings, total] = await Promise.all([
-      prisma.listing.findMany({
+    const [properties, total] = await Promise.all([
+      prisma.property.findMany({
         where,
         include: {
-          images: { take: 1, orderBy: { isPrimary: 'desc' } },
+          images: { take: 1, orderBy: [{ isPrimary: 'desc' }, { sortOrder: 'asc' }] },
           landlord: { select: { fullName: true, email: true, phoneNumber: true } },
           agent: { select: { fullName: true, email: true, phoneNumber: true } },
         },
@@ -48,11 +64,11 @@ const getPendingListings = async (req, res, next) => {
         skip,
         take,
       }),
-      prisma.listing.count({ where }),
+      prisma.property.count({ where }),
     ]);
 
     res.json({
-      listings,
+      properties,
       pagination: {
         page: parseInt(page),
         limit: take,
@@ -66,84 +82,96 @@ const getPendingListings = async (req, res, next) => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   PATCH /api/admin/listings/:id/approve  — approve a listing
+   PATCH /api/admin/listings/:id/approve  - approve a listing
    ═══════════════════════════════════════════════════════ */
-const approveListing = async (req, res, next) => {
+const approveProperty = async (req, res, next) => {
   try {
-    const listing = await prisma.listing.findUnique({
-      where: { listingId: Number(req.params.id) },
+    const property = await prisma.property.findUnique({
+      where: { propertyId: Number(req.params.id) },
     });
 
-    if (!listing) {
-      return res.status(404).json({ message: 'Listing not found' });
+    if (!property) {
+      return res.status(404).json({ message: 'Property not found' });
     }
 
-    if (listing.status === 'active') {
-      return res.status(400).json({ message: 'Listing is already active' });
+    if (property.status === 'active') {
+      return res.status(400).json({ message: 'Property is already active' });
     }
 
-    const updated = await prisma.listing.update({
-      where: { listingId: listing.listingId },
+    const updated = await prisma.property.update({
+      where: { propertyId: property.propertyId },
       data: {
         status: 'active',
         approvedBy: req.user.id,
         approvedAt: new Date(),
-        declineReason: null,
+        rejectionReason: null,
       },
     });
 
-    await notifyListingProvider(
-      listing,
-      `Your listing "${listing.title}" has been approved and is now live.`,
+    await notifyPropertyProvider(
+      property,
+      `Your property "${property.title}" has been approved and is now live.`,
     );
 
-    res.json({ message: 'Listing approved', listing: updated });
+    const contact = await getProviderContact(property);
+    if (contact) {
+      sendPropertyApprovedEmail(contact.email, contact.fullName, property.title)
+        .catch(e => console.error('[MAIL] property approved:', e.message));
+    }
+
+    res.json({ message: 'Property approved', property: updated });
   } catch (err) {
     next(err);
   }
 };
 
 /* ═══════════════════════════════════════════════════════
-   PATCH /api/admin/listings/:id/decline  — decline / block a listing
+   PATCH /api/admin/listings/:id/decline  - decline / block a listing
    Body: reason
    ═══════════════════════════════════════════════════════ */
-const declineListing = async (req, res, next) => {
+const rejectProperty = async (req, res, next) => {
   try {
     const { reason } = req.body;
 
     if (!reason) {
-      return res.status(400).json({ message: 'A decline reason is required' });
+      return res.status(400).json({ message: 'A rejection reason is required' });
     }
 
-    const listing = await prisma.listing.findUnique({
-      where: { listingId: Number(req.params.id) },
+    const property = await prisma.property.findUnique({
+      where: { propertyId: Number(req.params.id) },
     });
 
-    if (!listing) {
-      return res.status(404).json({ message: 'Listing not found' });
+    if (!property) {
+      return res.status(404).json({ message: 'Property not found' });
     }
 
-    const updated = await prisma.listing.update({
-      where: { listingId: listing.listingId },
+    const updated = await prisma.property.update({
+      where: { propertyId: property.propertyId },
       data: {
-        status: 'blocked',
-        declineReason: reason,
+        status: 'rejected',
+        rejectionReason: reason,
       },
     });
 
-    await notifyListingProvider(
-      listing,
-      `Your listing "${listing.title}" was declined. Reason: ${reason}`,
+    await notifyPropertyProvider(
+      property,
+      `Your property "${property.title}" was not approved. Reason: ${reason}`,
     );
 
-    res.json({ message: 'Listing declined', listing: updated });
+    const contact = await getProviderContact(property);
+    if (contact) {
+      sendPropertyRejectedEmail(contact.email, contact.fullName, property.title, reason)
+        .catch(e => console.error('[MAIL] property rejected:', e.message));
+    }
+
+    res.json({ message: 'Property rejected', property: updated });
   } catch (err) {
     next(err);
   }
 };
 
 /* ═══════════════════════════════════════════════════════
-   GET /api/admin/reports  — list reports
+   GET /api/admin/reports  - list reports
    Query: status (pending|resolved|all), page, limit
    ═══════════════════════════════════════════════════════ */
 const getReports = async (req, res, next) => {
@@ -160,7 +188,7 @@ const getReports = async (req, res, next) => {
         where,
         include: {
           student: { select: { fullName: true, email: true } },
-          listing: { select: { title: true, area: true, landlordId: true, agentId: true } },
+          property: { select: { title: true, area: true, landlordId: true, agentId: true } },
         },
         orderBy: { createdAt: 'desc' },
         skip,
@@ -184,7 +212,7 @@ const getReports = async (req, res, next) => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   PATCH /api/admin/reports/:id/resolve  — resolve a report
+   PATCH /api/admin/reports/:id/resolve  - resolve a report
    Body: resolutionNote (optional)
    ═══════════════════════════════════════════════════════ */
 const resolveReport = async (req, res, next) => {
@@ -193,7 +221,7 @@ const resolveReport = async (req, res, next) => {
 
     const report = await prisma.report.findUnique({
       where: { reportId: Number(req.params.id) },
-      include: { listing: { select: { title: true } } },
+      include: { property: { select: { title: true } } },
     });
 
     if (!report) {
@@ -218,8 +246,8 @@ const resolveReport = async (req, res, next) => {
     await prisma.notification.create({
       data: {
         studentId: report.studentId,
-        message: `Your report on "${report.listing.title}" has been reviewed and resolved.`,
-        type: 'system',
+        message: `Your report on "${report.property.title}" has been reviewed and resolved.`,
+        type: 'report',
         isRead: false,
       },
     });
@@ -231,7 +259,7 @@ const resolveReport = async (req, res, next) => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   POST /api/admin/warnings  — issue a warning to a user
+   POST /api/admin/warnings  - issue a warning to a user
    Body: role (student|landlord|agent), userId, reason
    ═══════════════════════════════════════════════════════ */
 const issueWarning = async (req, res, next) => {
@@ -268,10 +296,15 @@ const issueWarning = async (req, res, next) => {
       data: {
         [config.idField]: Number(userId),
         message: `You have received a warning from the HonnetKE team: ${reason}`,
-        type: 'system',
+        type: 'warning',
         isRead: false,
       },
     });
+
+    if (user.email) {
+      sendWarningEmail(user.email, user.fullName, reason)
+        .catch(e => console.error('[MAIL] warning:', e.message));
+    }
 
     res.status(201).json({ message: 'Warning issued', warning });
   } catch (err) {
@@ -280,7 +313,7 @@ const issueWarning = async (req, res, next) => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   PATCH /api/admin/accounts/:id/suspend  — suspend an account
+   PATCH /api/admin/accounts/:id/suspend  - suspend an account
    Body: role (student|landlord|agent)
    ═══════════════════════════════════════════════════════ */
 const suspendAccount = async (req, res, next) => {
@@ -313,7 +346,7 @@ const suspendAccount = async (req, res, next) => {
       data: {
         [config.idField]: Number(req.params.id),
         message: 'Your account has been suspended. Contact support for more information.',
-        type: 'system',
+        type: 'suspension',
         isRead: false,
       },
     });
@@ -325,7 +358,7 @@ const suspendAccount = async (req, res, next) => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   PATCH /api/admin/accounts/:id/reactivate  — reactivate an account
+   PATCH /api/admin/accounts/:id/reactivate  - reactivate an account
    Body: role (student|landlord|agent)
    ═══════════════════════════════════════════════════════ */
 const reactivateAccount = async (req, res, next) => {
@@ -370,7 +403,7 @@ const reactivateAccount = async (req, res, next) => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   GET /api/admin/errors  — system error logs
+   GET /api/admin/errors  - system error logs
    Query: page, limit
    ═══════════════════════════════════════════════════════ */
 const getErrorLogs = async (req, res, next) => {
@@ -403,7 +436,7 @@ const getErrorLogs = async (req, res, next) => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   GET /api/admin/traffic  — daily traffic logs
+   GET /api/admin/traffic  - daily traffic logs
    Query: days (default 30)
    ═══════════════════════════════════════════════════════ */
 const getTrafficLogs = async (req, res, next) => {
@@ -425,7 +458,7 @@ const getTrafficLogs = async (req, res, next) => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   GET /api/admin/stats  — dashboard overview counts
+   GET /api/admin/stats  - dashboard overview counts
    ═══════════════════════════════════════════════════════ */
 const getStats = async (req, res, next) => {
   try {
@@ -439,9 +472,9 @@ const getStats = async (req, res, next) => {
       students,
       landlords,
       agents,
-      totalListings,
-      activeListings,
-      pendingListings,
+      totalProperties,
+      activeProperties,
+      pendingProperties,
       pendingReports,
       errorsToday,
       trafficToday,
@@ -449,9 +482,9 @@ const getStats = async (req, res, next) => {
       prisma.student.count(),
       prisma.landlord.count(),
       prisma.agent.count(),
-      prisma.listing.count(),
-      prisma.listing.count({ where: { status: 'active' } }),
-      prisma.listing.count({ where: { status: 'pending' } }),
+      prisma.property.count(),
+      prisma.property.count({ where: { status: 'active' } }),
+      prisma.property.count({ where: { status: 'pending_approval' } }),
       prisma.report.count({ where: { status: 'pending' } }),
       prisma.errorLog.count({ where: { createdAt: { gte: since } } }),
       prisma.trafficLog.findUnique({ where: { date: today } }),
@@ -462,9 +495,9 @@ const getStats = async (req, res, next) => {
       students,
       landlords,
       agents,
-      totalListings,
-      activeListings,
-      pendingListings,
+      totalProperties,
+      activeProperties,
+      pendingProperties,
       pendingReports,
       errorsToday,
       visitsToday: trafficToday ? trafficToday.visitCount : 0,
@@ -475,7 +508,7 @@ const getStats = async (req, res, next) => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   GET /api/admin/users  — list all users across roles
+   GET /api/admin/users  - list all users across roles
    Query: role (student|landlord|agent|all), search
    ═══════════════════════════════════════════════════════ */
 const getUsers = async (req, res, next) => {
@@ -547,9 +580,9 @@ const getUsers = async (req, res, next) => {
 module.exports = {
   getStats,
   getUsers,
-  getPendingListings,
-  approveListing,
-  declineListing,
+  getPendingProperties,
+  approveProperty,
+  rejectProperty,
   getReports,
   resolveReport,
   issueWarning,

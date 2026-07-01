@@ -1,37 +1,37 @@
-HonnetKE Wireframes Detailed Guide
+﻿HonnetKE Wireframes Detailed Guide
 
 HonnetKE Brand Identity
 Logo concept:
-A honeycomb/hive icon with a clean modern wordmark. The contradiction is the hook — "Why is a hostel platform a hive?" — but it makes sense once you feel the community vibe.
+A honeycomb/hive icon with a clean modern wordmark. The contradiction is the hook - "Why is a hostel platform a hive?" - but it makes sense once you feel the community vibe.
 
 Tagline options:
 "Join the Hive"
-"Find Your Cell" (as in honeycomb cell — also contradictory and fun)
+"Find Your Cell" (as in honeycomb cell - also contradictory and fun)
 "Where Students Nest"
 
 Color Palette:
 RoleColorHexPrimaryDeep Amber/Honey#E8900ASecondaryDark Charcoal#1E1E1EAccentWarm Cream/Off-white#FFF8ECSuccessSoft Green#2D9B5AErrorWarm Red#D94040
 Typography:
 
-Headings — bold, modern sans-serif (e.g. Plus Jakarta Sans)
-Body — clean, readable (e.g. Inter)
+Headings - bold, modern sans-serif (e.g. Plus Jakarta Sans)
+Body - clean, readable (e.g. Inter)
 
 Ideas!!
 hornet animation 
-Splash screen — hornet flying in to build the logo/hive. Perfect brand moment
-Sign up page — subtle hornet flying across or sitting on the hive illustration. Adds life without distraction
-404/error page — a confused or lost hornet. Fun and on-brand
+Splash screen - hornet flying in to build the logo/hive. Perfect brand moment
+Sign up page - subtle hornet flying across or sitting on the hive illustration. Adds life without distraction
+404/error page - a confused or lost hornet. Fun and on-brand
 
-SCREEN 1 — Splash Screen
+SCREEN 1 - Splash Screen
 Layout:
 
 Full screen cream/off-white background
 Center: HonnetKE hive logo + wordmark
 Below logo: subtle loading spinner in amber
 Tagline beneath: "Join the Hive"
-No navigation, no buttons — pure brand moment
+No navigation, no buttons - pure brand moment
 
-SCREEN 2 — Landing/Home Page (Guest)
+SCREEN 2 - Landing/Home Page (Guest)
 Navbar (charcoal background):
 
 Left: HonnetKE logo
@@ -64,7 +64,7 @@ Footer:
 
 Logo · Tagline · Basic links
 
-SCREEN 3 — Sign Up Page
+SCREEN 3 - Sign Up Page
 Navbar: Same global navbar as landing page
 Layout:
 
@@ -91,7 +91,7 @@ After submission:
 Redirect to OTP verification screen
 
 
-SCREEN 4 — OTP Verification Page
+SCREEN 4 - OTP Verification Page
 Layout:
 
 Centered card on cream background
@@ -103,7 +103,7 @@ Amber confirm button
 "Didn't receive a code? Resend" link below
 Resend link grayed out with a countdown timer e.g. "Resend in 0:45"
 
-SCREEN 5 — Login Page
+SCREEN 5 - Login Page
 Navbar: Same global navbar
 Layout:
 
@@ -132,14 +132,14 @@ Enter registered email
 Receive reset link
 Simple and standard
 
-SCREEN 6 — Hostels Page (Guest/Student)
+SCREEN 6 - Hostels Page (Guest/Student)
 Navbar: Role appropriate
 Layout:
 
 Full width page
-Top: Search bar with filters — Location · Price · Property Type · Gender · Room Type
+Top: Search bar with filters - Location · Price · Property Type · Gender · Room Type
 Results grid below: listing cards showing image, title, location, price, property type, gender preference
-Left side: Filter sidebar — collapsible, same filter options as search bar
+Left side: Filter sidebar - collapsible, same filter options as search bar
 Right side: Listing cards grid
 
 Listing Card:
@@ -150,26 +150,26 @@ Location
 Price per month
 Property type badge
 Gender preference badge
-"View Details" button — redirects to login if guest
+"View Details" button - redirects to login if guest
 
 Pagination at bottom of results
 
-SCREEN 7 — Listing Detail Page (Student only)
+SCREEN 7 - Listing Detail Page (Student only)
 Navbar: Student navbar
 Layout:
 
 Large image gallery/carousel at top
 Below gallery two column layout:
 
-Left: Property details — title, location, price, amenities, room type, gender preference, description
-Right: Contact card — verified contact info with WhatsApp · Call · SMS icons/buttons
+Left: Property details - title, location, price, amenities, room type, gender preference, description
+Right: Contact card - verified contact info with WhatsApp · Call · SMS icons/buttons
 
 
 Below: Similar listings section
-Report listing link — small, bottom of page
+Report listing link - small, bottom of page
 
 
-SCREEN 8 — Student Dashboard
+SCREEN 8 - Student Dashboard
 Welcome message → toast notification/popup on login, not a permanent page element
 Dashboard jumps straight into content
 Navbar: Student navbar
@@ -193,7 +193,7 @@ Small grid of listing cards
 Footer: Yes
 
 
-SCREEN 9 — Favourites Page (Student)
+SCREEN 9 - Favourites Page (Student)
 Navbar: Student navbar
 Layout:
 
@@ -204,7 +204,7 @@ Empty state: hornet illustration with "No saves yet, start exploring"
 
 Footer: Yes
 
-SCREEN 10 — Visited History Page (Student)
+SCREEN 10 - Visited History Page (Student)
 Navbar: Student navbar
 Layout:
 

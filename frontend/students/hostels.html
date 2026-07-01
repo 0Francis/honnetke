@@ -6,7 +6,7 @@
   <meta name="description" content="Search and browse verified student hostels across Kenya. Filter by location, price, property type, gender, and room type.">
   <meta name="keywords" content="search hostels, student accommodation Kenya, filter hostels, affordable housing">
   <meta name="author" content="HonnetKE">
-  <title>Hostels — HonnetKE</title>
+  <title>Hostels - HonnetKE</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,14 +18,14 @@
   <link rel="stylesheet" href="../landingpage/css/reset.css">
   <link rel="stylesheet" href="../landingpage/css/global.css">
   <link rel="stylesheet" href="css/students.css">
-</head>
+<link rel="stylesheet" href="../shared/css/notifications.css"></head>
 <body>
 
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- ═══════════════════════════════════════════
+  <!-- -------------------------------------------
        STUDENT NAVBAR
-       ═══════════════════════════════════════════ -->
+       ------------------------------------------- -->
   <nav class="student-navbar" id="navbar" aria-label="Student navigation">
     <div class="navbar-inner">
       <a href="dashboard.html" class="navbar-logo" aria-label="HonnetKE Dashboard">
@@ -37,7 +37,7 @@
         <span class="logo-text">HonnetKE</span>
       </a>
       <ul class="navbar-nav">
-        <li><a href="../landingpage/index.html" class="nav-link">Home</a></li>
+        <li><a href="../landingpage/landingpage.html" class="nav-link">Home</a></li>
         <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
         <li><a href="hostels.html" class="nav-link active">Hostels</a></li>
         <li><a href="favourites.html" class="nav-link">Favourites</a></li>
@@ -68,7 +68,7 @@
   </nav>
 
   <div class="student-mobile-nav" id="student-mobile-nav" aria-hidden="true">
-    <a href="../landingpage/index.html" class="nav-link">Home</a>
+    <a href="../landingpage/landingpage.html" class="nav-link">Home</a>
     <a href="dashboard.html" class="nav-link">Dashboard</a>
     <a href="hostels.html" class="nav-link active">Hostels</a>
     <a href="favourites.html" class="nav-link">Favourites</a>
@@ -79,9 +79,9 @@
 
   <div class="toast-container" id="toast-container"></div>
 
-  <!-- ═══════════════════════════════════════════
-       MAIN CONTENT — HOSTELS
-       ═══════════════════════════════════════════ -->
+  <!-- -------------------------------------------
+       MAIN CONTENT - HOSTELS
+       ------------------------------------------- -->
   <main class="student-main" id="main-content">
 
     <div class="page-header">
@@ -99,13 +99,13 @@
           <form class="hostels-search-form" id="hostels-search-form" role="search" aria-label="Search hostels">
             <div class="search-input-wrap">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              <input type="text" name="location" placeholder="Search by location or university…" aria-label="Search location">
+              <input type="text" name="location" placeholder="Search by location or university�" aria-label="Search location">
             </div>
             <select name="price" aria-label="Price range">
               <option value="" selected disabled>Price Range</option>
               <option value="0-5000">Under KES 5,000</option>
-              <option value="5000-10000">KES 5,000 – 10,000</option>
-              <option value="10000-15000">KES 10,000 – 15,000</option>
+              <option value="5000-10000">KES 5,000 � 10,000</option>
+              <option value="10000-15000">KES 10,000 � 15,000</option>
               <option value="15000+">KES 15,000+</option>
             </select>
             <select name="property_type" aria-label="Property type">
@@ -143,28 +143,37 @@
             <div class="filter-group">
               <h4>Gender Preference</h4>
               <div class="filter-options">
-                <label class="filter-option"><input type="checkbox" name="gender" value="male"> Male</label>
-                <label class="filter-option"><input type="checkbox" name="gender" value="female"> Female</label>
-                <label class="filter-option"><input type="checkbox" name="gender" value="mixed"> Mixed</label>
+                <label class="filter-option"><input type="radio" name="gender" value="male"> Male</label>
+                <label class="filter-option"><input type="radio" name="gender" value="female"> Female</label>
+                <label class="filter-option"><input type="radio" name="gender" value="any"> Any</label>
               </div>
             </div>
 
             <div class="filter-group">
               <h4>Room Type</h4>
               <div class="filter-options">
-                <label class="filter-option"><input type="checkbox" name="room_type" value="single"> Single</label>
-                <label class="filter-option"><input type="checkbox" name="room_type" value="ensuite"> Ensuite</label>
-                <label class="filter-option"><input type="checkbox" name="room_type" value="shared"> Shared</label>
+                <label class="filter-option"><input type="radio" name="room_type" value="single"> Single</label>
+                <label class="filter-option"><input type="radio" name="room_type" value="ensuite"> Ensuite</label>
+                <label class="filter-option"><input type="radio" name="room_type" value="shared"> Shared</label>
               </div>
             </div>
 
             <div class="filter-group">
               <h4>Property Type</h4>
               <div class="filter-options">
-                <label class="filter-option"><input type="checkbox" name="type" value="hostel"> Hostel</label>
-                <label class="filter-option"><input type="checkbox" name="type" value="bedsitter"> Bedsitter</label>
-                <label class="filter-option"><input type="checkbox" name="type" value="single-room"> Single Room</label>
-                <label class="filter-option"><input type="checkbox" name="type" value="apartment"> Apartment</label>
+                <label class="filter-option"><input type="radio" name="type" value="hostel_room"> Hostel Room</label>
+                <label class="filter-option"><input type="radio" name="type" value="bedsitter"> Bedsitter</label>
+                <label class="filter-option"><input type="radio" name="type" value="studio"> Studio</label>
+                <label class="filter-option"><input type="radio" name="type" value="one_bedroom"> 1 Bedroom</label>
+                <label class="filter-option"><input type="radio" name="type" value="apartment"> Apartment</label>
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <h4>Availability</h4>
+              <div class="filter-options">
+                <label class="filter-option"><input type="radio" name="availability" value="available"> Available</label>
+                <label class="filter-option"><input type="radio" name="availability" value="few"> Few slots left</label>
               </div>
             </div>
 
@@ -172,8 +181,8 @@
               <h4>Price Range</h4>
               <div class="filter-options">
                 <label class="filter-option"><input type="radio" name="price_range" value="0-5000"> Under KES 5,000</label>
-                <label class="filter-option"><input type="radio" name="price_range" value="5000-10000"> KES 5,000 – 10,000</label>
-                <label class="filter-option"><input type="radio" name="price_range" value="10000-15000"> KES 10,000 – 15,000</label>
+                <label class="filter-option"><input type="radio" name="price_range" value="5000-10000"> KES 5,000 � 10,000</label>
+                <label class="filter-option"><input type="radio" name="price_range" value="10000-15000"> KES 10,000 � 15,000</label>
                 <label class="filter-option"><input type="radio" name="price_range" value="15000+"> KES 15,000+</label>
               </div>
             </div>
@@ -183,19 +192,19 @@
           <div class="hostels-results-wrap">
 
             <div class="results-info">
-              <span class="results-count">Showing <strong>6</strong> of <strong>24</strong> hostels</span>
+              <span class="results-count" id="results-count">Loading properties...</span>
               <div class="results-sort">
-                <select aria-label="Sort results">
-                  <option value="relevant">Most Relevant</option>
+                <select aria-label="Sort results" id="results-sort">
+                  <option value="newest">Newest First</option>
                   <option value="price-low">Price: Low to High</option>
                   <option value="price-high">Price: High to Low</option>
-                  <option value="newest">Newest First</option>
                 </select>
               </div>
             </div>
 
-            <div class="hostels-results">
+            <div class="hostels-results" id="hostels-results" aria-live="polite">
 
+              <!-- Cards are rendered dynamically by students.js -->
               <!-- Card 1 -->
               <article class="listing-card" data-href="listing.html" role="link" tabindex="0" aria-label="View Sunrise Student Hostel">
                 <div class="card-image">
@@ -288,19 +297,8 @@
 
             </div>
 
-            <!-- Pagination -->
-            <nav class="pagination" aria-label="Results pagination">
-              <button class="page-btn nav-arrow" aria-label="Previous page">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-              </button>
-              <button class="page-btn active">1</button>
-              <button class="page-btn">2</button>
-              <button class="page-btn">3</button>
-              <button class="page-btn">4</button>
-              <button class="page-btn nav-arrow" aria-label="Next page">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-              </button>
-            </nav>
+            <!-- Pagination (rendered dynamically) -->
+            <nav class="pagination" aria-label="Results pagination" id="pagination"></nav>
 
           </div>
 
@@ -320,7 +318,7 @@
             <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M20 2L35 10.66V28.34L20 37L5 28.34V10.66L20 2Z" fill="#E8900A" fill-opacity="0.15" stroke="#E8900A" stroke-width="2" stroke-linejoin="round"/><path d="M20 10L28 14.6V23.4L20 28L12 23.4V14.6L20 10Z" fill="#E8900A" stroke="#E8900A" stroke-width="1.5" stroke-linejoin="round"/><circle cx="20" cy="19" r="3" fill="#FFF8EC"/></svg>
             <span class="logo-text">HonnetKE</span>
           </a>
-          <p class="footer-tagline">Kenya's #1 student hostel discovery platform. Find affordable, verified accommodation near your campus — join the hive.</p>
+          <p class="footer-tagline">Kenya's #1 student hostel discovery platform. Find affordable, verified accommodation near your campus - join the hive.</p>
         </div>
         <div class="footer-quick-links">
           <h3 class="footer-heading">Quick Links</h3>
@@ -351,6 +349,9 @@
     </div>
   </footer>
 
+  <script src="../shared/js/api.js"></script>
+  <script src="../shared/js/auth.js"></script>
+  <script src="../shared/js/property.js"></script>
   <script src="js/students.js"></script>
-</body>
+<script src="../shared/js/notifications.js"></script></body>
 </html>

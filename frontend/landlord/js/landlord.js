@@ -1,5 +1,5 @@
-/* ===================================================
-   HonnetKE Landlord Pages — JavaScript
+﻿/* ===================================================
+   HonnetKE Landlord Pages - JavaScript
    Handles: navbar, mobile menu, toasts, form stepper,
    image upload, modals, filter tabs, charts, tables.
    =================================================== */
@@ -149,13 +149,30 @@ document.addEventListener('DOMContentLoaded', () => {
     toast.addEventListener('animationend', () => toast.remove());
   }
 
+  /* ── Status helpers (Property + Booking) ── */
+  const STATUS_LABELS = {
+    draft: 'Draft', pending_approval: 'Pending review', active: 'Active',
+    rejected: 'Rejected', archived: 'Archived', fully_occupied: 'Fully occupied',
+    suspended: 'Suspended', pending: 'Pending', accepted: 'Accepted',
+    visited: 'Visited', completed: 'Completed', cancelled: 'Cancelled',
+  };
+  const BADGE_CLASS = {
+    draft: 'inactive', pending_approval: 'pending', active: 'active',
+    rejected: 'blocked', archived: 'inactive', fully_occupied: 'active',
+    suspended: 'blocked', pending: 'pending', accepted: 'active',
+    visited: 'pending', completed: 'active', cancelled: 'blocked',
+  };
+  const statusLabelOf = (s) => STATUS_LABELS[s] || (s ? s.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) : '');
+  const badgeClassOf = (s) => BADGE_CLASS[s] || 'pending';
+
   // Welcome toast on dashboard
   const currentPage = window.location.pathname.split('/').pop();
   if (currentPage === 'dashboard.html') {
     const hasShownWelcome = sessionStorage.getItem('honnetke_landlord_welcome');
     if (!hasShownWelcome) {
       setTimeout(() => {
-        showToast('Welcome back, Peter! 🏠', 'Manage your listings and check booking requests.');
+        const firstName = user.fullName ? user.fullName.split(' ')[0] : 'there';
+        showToast(`Welcome back, ${firstName}! 🏠`, 'Manage your listings and check booking requests.');
         sessionStorage.setItem('honnetke_landlord_welcome', 'true');
       }, 800);
     }
@@ -298,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadListingForEdit() {
     if (!isEditMode) return;
     try {
-      const listing = await window.HonnetKE.api.get(`/listings/${editId}`, true);
+      const listing = await window.HonnetKE.api.get(`/properties/${editId}`, true);
 
       // Update page header
       const pageTitle = document.querySelector('.page-title');
@@ -324,6 +341,9 @@ document.addEventListener('DOMContentLoaded', () => {
       setVal('listing-area', listing.area);
       setVal('listing-campus', listing.nearestCampus);
       setVal('listing-address', listing.address);
+      setVal('listing-estate', listing.estate);
+      setVal('listing-capacity', listing.capacity);
+      setVal('listing-deposit', listing.deposit);
 
       // Step 3 amenities
       if (listing.amenities && Array.isArray(listing.amenities)) {
@@ -333,7 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
 
-      // Step 4 images — show existing images as previews
+      // Step 4 images - show existing images as previews
       if (listing.images && listing.images.length > 0 && previewGrid) {
         listing.images.forEach((img, index) => {
           const item = document.createElement('div');
@@ -389,6 +409,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const address = document.getElementById('listing-address')?.value.trim();
       const amenities = Array.from(document.querySelectorAll('.amenity-checkbox input:checked'))
         .map(c => c.value);
+      const estate = document.getElementById('listing-estate')?.value.trim();
+      const capacity = document.getElementById('listing-capacity')?.value;
+      const deposit = document.getElementById('listing-deposit')?.value;
 
       btnSubmit.classList.add('btn-loading');
       btnSubmit.disabled = true;
@@ -398,17 +421,20 @@ document.addEventListener('DOMContentLoaded', () => {
           title, description, propertyType, price,
           genderPreference, roomType, amenities,
           county, area, nearestCampus, address,
+          estate: estate || undefined,
+          capacity: capacity ? Number(capacity) : undefined,
+          deposit: deposit ? Number(deposit) : undefined,
         };
 
         let listingId;
         if (isEditMode) {
-          const res = await window.HonnetKE.api.patch(`/listings/${editId}`, payload, true);
+          const res = await window.HonnetKE.api.patch(`/properties/${editId}`, payload, true);
           listingId = editId;
-          showToast('Listing Updated ✅', res.message || 'Your listing has been updated.');
+          showToast('Property Updated', res.message || 'Your property has been updated.');
         } else {
-          const res = await window.HonnetKE.api.post('/listings', payload, true);
-          listingId = res.listing.listingId;
-          showToast('Listing Submitted! 🎉', res.message || 'Your listing is pending admin review.');
+          const res = await window.HonnetKE.api.post('/properties', payload, true);
+          listingId = res.property.propertyId;
+          showToast('Property Submitted!', res.message || 'Your property is pending admin review.');
         }
 
         // Upload images if any new ones were selected
@@ -418,7 +444,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           const token = window.HonnetKE.auth.getToken();
           const imgRes = await fetch(
-            `${window.HonnetKE.api.BASE}/listings/${listingId}/images`,
+            `${window.HonnetKE.api.BASE}/properties/${listingId}/images`,
             {
               method: 'POST',
               headers: { Authorization: `Bearer ${token}` },
@@ -442,7 +468,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Review edit buttons — go back to specific step
+  // Review edit buttons - go back to specific step
   document.querySelectorAll('.review-edit-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const targetStep = parseInt(btn.dataset.step);
@@ -463,12 +489,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const genderEl= document.getElementById('review-gender');
     const roomEl  = document.getElementById('review-room-type');
 
-    if (titleEl) titleEl.textContent = document.getElementById('listing-title')?.value || '—';
-    if (descEl)  descEl.textContent  = document.getElementById('listing-description')?.value || '—';
-    if (typeEl)  typeEl.textContent   = document.getElementById('property-type')?.selectedOptions[0]?.text || '—';
-    if (priceEl) priceEl.textContent  = 'KES ' + (document.getElementById('listing-price')?.value || '—');
-    if (genderEl) genderEl.textContent = document.getElementById('gender-preference')?.selectedOptions[0]?.text || '—';
-    if (roomEl)  roomEl.textContent   = document.getElementById('room-type')?.selectedOptions[0]?.text || '—';
+    if (titleEl) titleEl.textContent = document.getElementById('listing-title')?.value || '-';
+    if (descEl)  descEl.textContent  = document.getElementById('listing-description')?.value || '-';
+    if (typeEl)  typeEl.textContent   = document.getElementById('property-type')?.selectedOptions[0]?.text || '-';
+    if (priceEl) priceEl.textContent  = 'KES ' + (document.getElementById('listing-price')?.value || '-');
+    if (genderEl) genderEl.textContent = document.getElementById('gender-preference')?.selectedOptions[0]?.text || '-';
+    if (roomEl)  roomEl.textContent   = document.getElementById('room-type')?.selectedOptions[0]?.text || '-';
 
     // Location
     const countyEl  = document.getElementById('review-county');
@@ -476,10 +502,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const campusEl  = document.getElementById('review-campus');
     const addressEl = document.getElementById('review-address');
 
-    if (countyEl)  countyEl.textContent  = document.getElementById('listing-county')?.value || '—';
-    if (areaEl)    areaEl.textContent    = document.getElementById('listing-area')?.value || '—';
-    if (campusEl)  campusEl.textContent  = document.getElementById('listing-campus')?.value || '—';
-    if (addressEl) addressEl.textContent = document.getElementById('listing-address')?.value || '—';
+    if (countyEl)  countyEl.textContent  = document.getElementById('listing-county')?.value || '-';
+    if (areaEl)    areaEl.textContent    = document.getElementById('listing-area')?.value || '-';
+    if (campusEl)  campusEl.textContent  = document.getElementById('listing-campus')?.value || '-';
+    if (addressEl) addressEl.textContent = document.getElementById('listing-address')?.value || '-';
 
     // Amenities
     const amenitiesEl = document.getElementById('review-amenities');
@@ -747,15 +773,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ──────────────────────────────────────────
-     12. MANAGE LISTINGS — Fetch from API
+     12. MANAGE LISTINGS - Fetch from API
      ────────────────────────────────────────── */
   const listingsGrid = document.querySelector('.listings-grid');
 
   async function fetchMyListings() {
     if (!listingsGrid) return;
     try {
-      const res = await window.HonnetKE.api.get('/listings?scope=mine&status=all&limit=50', true);
-      renderListings(res.listings || []);
+      const res = await window.HonnetKE.api.get('/properties?scope=mine&status=all&limit=50', true);
+      renderListings(res.properties || []);
     } catch (err) {
       showToast('Error', 'Could not load your listings.');
     }
@@ -776,13 +802,13 @@ document.addEventListener('DOMContentLoaded', () => {
     listingsGrid.innerHTML = listings.map(listing => {
       const img = listing.images && listing.images.length > 0
         ? listing.images[0].imageUrl
-        : '../landingpage/assets/images/hostel-placeholder.png';
-      const statusClass = listing.status;
-      const statusLabel = listing.status.charAt(0).toUpperCase() + listing.status.slice(1);
+        : 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" fill="%23FFF8EC"><rect width="400" height="300" fill="%23FFF8EC"/><text x="200" y="150" font-family="Arial" font-size="20" fill="%23E8900A" text-anchor="middle">No Image</text></svg>');
+      const statusClass = badgeClassOf(listing.status);
+      const statusLabel = statusLabelOf(listing.status);
       const price = Number(listing.price).toLocaleString();
 
       return `
-        <div class="manage-card" data-status="${statusClass}" data-id="${listing.listingId}">
+        <div class="manage-card" data-status="${statusClass}" data-id="${listing.propertyId}">
           <div class="manage-card-img">
             <img src="${img}" alt="${listing.title}" loading="lazy">
             <span class="status-badge ${statusClass}"><span class="status-dot"></span>${statusLabel}</span>
@@ -795,12 +821,12 @@ document.addEventListener('DOMContentLoaded', () => {
               ${listing.area}, ${listing.county}
             </div>
             <div class="manage-card-actions">
-              <button class="action-btn" data-action="edit" data-id="${listing.listingId}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>
-              ${listing.status === 'active' || listing.status === 'pending'
-                ? `<button class="action-btn" data-action="deactivate" data-id="${listing.listingId}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>Deactivate</button>`
-                : `<button class="action-btn" data-action="reactivate" data-id="${listing.listingId}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>Reactivate</button>`
+              <button class="action-btn" data-action="edit" data-id="${listing.propertyId}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>
+              ${['active', 'pending_approval', 'fully_occupied'].includes(listing.status)
+                ? `<button class="action-btn" data-action="deactivate" data-id="${listing.propertyId}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>Deactivate</button>`
+                : `<button class="action-btn" data-action="reactivate" data-id="${listing.propertyId}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>Reactivate</button>`
               }
-              <button class="action-btn danger" data-action="delete" data-id="${listing.listingId}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Delete</button>
+              <button class="action-btn danger" data-action="delete" data-id="${listing.propertyId}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Delete</button>
             </div>
           </div>
         </div>`;
@@ -817,7 +843,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const id = btn.dataset.id;
         if (!confirm('Are you sure you want to permanently delete this listing?')) return;
         try {
-          await window.HonnetKE.api.del(`/listings/${id}`, true);
+          await window.HonnetKE.api.del(`/properties/${id}`, true);
           showToast('Listing Deleted', 'The listing has been permanently removed.');
           fetchMyListings();
         } catch (err) {
@@ -831,8 +857,8 @@ document.addEventListener('DOMContentLoaded', () => {
         e.stopPropagation();
         const id = btn.dataset.id;
         try {
-          await window.HonnetKE.api.patch(`/listings/${id}/deactivate`, {}, true);
-          showToast('Listing Deactivated', 'The listing is now inactive and hidden from students.');
+          await window.HonnetKE.api.patch(`/properties/${id}/archive`, {}, true);
+          showToast('Property Archived', 'The property is now hidden from students.');
           fetchMyListings();
         } catch (err) {
           showToast('Error', err.message || 'Failed to deactivate listing.');
@@ -845,8 +871,8 @@ document.addEventListener('DOMContentLoaded', () => {
         e.stopPropagation();
         const id = btn.dataset.id;
         try {
-          await window.HonnetKE.api.patch(`/listings/${id}/reactivate`, {}, true);
-          showToast('Listing Reactivated ✅', 'Your listing has been re-submitted for review.');
+          await window.HonnetKE.api.patch(`/properties/${id}/submit`, {}, true);
+          showToast('Property Submitted', 'Your property has been re-submitted for review.');
           fetchMyListings();
         } catch (err) {
           showToast('Error', err.message || 'Failed to reactivate listing.');
@@ -870,7 +896,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ──────────────────────────────────────────
-     12b. DASHBOARD — Stats + Recent Bookings
+     12b. DASHBOARD - Stats + Recent Bookings
      ────────────────────────────────────────── */
   const statsGrid = document.querySelector('.stats-grid');
   const recentBookingsBody = document.querySelector('.data-table tbody');
@@ -881,15 +907,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const [listingsRes, bookingsRes] = await Promise.all([
-        window.HonnetKE.api.get('/listings?scope=mine&status=all&limit=100', true),
+        window.HonnetKE.api.get('/properties?scope=mine&status=all&limit=100', true),
         window.HonnetKE.api.get('/bookings', true).catch(() => ({ bookings: [] })),
       ]);
-      const listings = listingsRes.listings || [];
+      const listings = listingsRes.properties || [];
       const bookings = bookingsRes.bookings || [];
 
       const total = listings.length;
       const active = listings.filter(l => l.status === 'active').length;
-      const pending = listings.filter(l => l.status === 'pending').length;
+      const pending = listings.filter(l => l.status === 'pending_approval').length;
 
       // Update stat cards
       const statValues = statsGrid.querySelectorAll('.stat-value');
@@ -911,10 +937,10 @@ document.addEventListener('DOMContentLoaded', () => {
           const recent = bookings.slice(0, 5);
           recentBookingsBody.innerHTML = recent.map(b => {
             const date = new Date(b.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
-            const statusClass = b.status;
-            const statusLabel = b.status.charAt(0).toUpperCase() + b.status.slice(1);
+            const statusClass = badgeClassOf(b.status);
+            const statusLabel = statusLabelOf(b.status);
             const studentName = b.student ? b.student.fullName : 'Unknown';
-            const listingTitle = b.listing ? b.listing.title : 'Unknown';
+            const listingTitle = b.property ? b.property.title : 'Unknown';
 
             return `
               <tr>
@@ -936,7 +962,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ──────────────────────────────────────────
-     12c. BOOKINGS PAGE — Fetch from API
+     12c. BOOKINGS PAGE - Fetch from API
      ────────────────────────────────────────── */
   const bookingFilters = document.getElementById('booking-filters');
   const bookingsTableBody = document.querySelector('.data-table tbody');
@@ -968,43 +994,48 @@ document.addEventListener('DOMContentLoaded', () => {
       if (bookingsTableBody) {
         bookingsTableBody.innerHTML = bookings.map(b => {
           const date = new Date(b.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-          const statusClass = b.status;
-          const statusLabel = b.status.charAt(0).toUpperCase() + b.status.slice(1);
+          const badgeClass = badgeClassOf(b.status);
+          const statusLabel = statusLabelOf(b.status);
           const studentName = b.student ? b.student.fullName : 'Unknown Student';
-          const listingTitle = b.listing ? b.listing.title : 'Unknown Listing';
+          const listingTitle = b.property ? b.property.title : 'Unknown Property';
 
           let actions = '';
           if (b.status === 'pending') {
             actions = `
               <div class="table-actions">
-                <button class="btn-sm btn-confirm" data-action="confirm-booking" data-id="${b.bookingId}">Confirm</button>
-                <button class="btn-sm btn-decline" data-action="decline-booking" data-id="${b.bookingId}">Decline</button>
+                <button class="btn-sm btn-confirm" data-action="confirm-booking" data-id="${b.bookingId}">Accept</button>
+                <button class="btn-sm btn-decline" data-action="decline-booking" data-id="${b.bookingId}">Reject</button>
+              </div>`;
+          } else if (b.status === 'accepted' || b.status === 'visited') {
+            actions = `
+              <div class="table-actions">
+                <button class="btn-sm btn-confirm" data-action="complete-booking" data-id="${b.bookingId}">Mark complete</button>
               </div>`;
           } else {
             actions = `<span style="color: var(--color-text-muted); font-size: var(--fs-caption);">Responded</span>`;
           }
 
           return `
-            <tr data-status="${statusClass}">
+            <tr data-status="${b.status}">
               <td class="table-student-name">${studentName}</td>
               <td class="table-listing-name">${listingTitle}</td>
               <td class="table-date">${date}</td>
-              <td style="max-width: 180px; font-size: var(--fs-caption); color: var(--color-text-muted);">${b.requestNote || '—'}</td>
-              <td><span class="status-badge ${statusClass}"><span class="status-dot"></span>${statusLabel}</span></td>
+              <td style="max-width: 180px; font-size: var(--fs-caption); color: var(--color-text-muted);">${b.requestNote || ''}</td>
+              <td><span class="status-badge ${badgeClass}"><span class="status-dot"></span>${statusLabel}</span></td>
               <td>${actions}</td>
             </tr>`;
         }).join('');
       }
 
       // Update filter counts
-      const counts = { all: bookings.length, pending: 0, confirmed: 0, declined: 0, cancelled: 0 };
+      const counts = { all: bookings.length, pending: 0, accepted: 0, visited: 0, completed: 0, rejected: 0, cancelled: 0 };
       bookings.forEach(b => { if (counts[b.status] !== undefined) counts[b.status]++; });
       bookingFilters.querySelectorAll('.filter-tab').forEach(tab => {
         const filter = tab.dataset.filter;
         tab.textContent = `${filter.charAt(0).toUpperCase() + filter.slice(1)} (${counts[filter] || 0})`;
       });
     } catch (err) {
-      // Backend bookings not implemented — show empty state
+      // Backend bookings not implemented - show empty state
       if (bookingsTableBody) {
         bookingsTableBody.innerHTML = `
           <tr>
@@ -1031,8 +1062,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!bookingId) return;
 
     const statusMap = {
-      'confirm-booking': { status: 'confirmed', label: 'confirmed', toast: 'Booking Confirmed ✅' },
-      'decline-booking': { status: 'declined', label: 'declined', toast: 'Booking Declined' },
+      'confirm-booking': { status: 'accepted', label: 'accepted', toast: 'Booking Accepted' },
+      'decline-booking': { status: 'rejected', label: 'rejected', toast: 'Booking Rejected' },
+      'complete-booking': { status: 'completed', label: 'completed', toast: 'Booking Completed' },
     };
     const config = statusMap[action];
     if (!config) return;
@@ -1046,14 +1078,14 @@ document.addEventListener('DOMContentLoaded', () => {
       fetchBookings();
     } catch (err) {
       btn.disabled = false;
-      btn.textContent = action === 'confirm-booking' ? 'Confirm' : 'Decline';
+      btn.textContent = action === 'confirm-booking' ? 'Accept' : action === 'decline-booking' ? 'Reject' : 'Mark complete';
       showToast('Error', err.message || 'Could not update booking');
     }
   });
 
 
   /* ──────────────────────────────────────────
-     12d. ANALYTICS PAGE — Fetch from API
+     12d. ANALYTICS PAGE - Fetch from API
      ────────────────────────────────────────── */
   const analyticsStatsGrid = document.querySelector('.analytics-page .stats-grid, .landlord-main .stats-grid');
   const analyticsTableBody = document.querySelector('.analytics-page .data-table tbody, .landlord-main .data-table tbody');
@@ -1071,31 +1103,31 @@ document.addEventListener('DOMContentLoaded', () => {
       const statValues = document.querySelectorAll('.stats-grid .stat-value');
       if (statValues[0]) statValues[0].textContent = data.thisWeekViews || 0;
       if (statValues[1]) statValues[1].textContent = data.totalViews || 0;
-      if (statValues[2]) statValues[2].textContent = data.mostViewedListing || '—';
+      if (statValues[2]) statValues[2].textContent = data.mostViewedProperty || 'None yet';
 
       // Render per-listing performance table
       const analyticsTable = document.querySelectorAll('.data-table tbody');
       const tableBody = analyticsTable[analyticsTable.length - 1];
       if (tableBody) {
-        const perListing = data.perListing || [];
+        const perListing = data.perProperty || [];
         if (perListing.length === 0) {
           tableBody.innerHTML = `
             <tr>
               <td colspan="5" style="text-align: center; padding: 2rem; color: var(--color-text-muted);">
-                No listings to show analytics for.
+                No properties to show analytics for.
               </td>
             </tr>`;
         } else {
           tableBody.innerHTML = perListing.map(l => {
-            const statusClass = l.status;
-            const statusLabel = l.status.charAt(0).toUpperCase() + l.status.slice(1);
+            const statusClass = badgeClassOf(l.status);
+            const statusLabel = statusLabelOf(l.status);
             const locationText = [l.area, l.nearestCampus].filter(Boolean).join(', near ');
             const weekColor = l.thisWeekViews > 0 ? 'var(--color-primary)' : 'var(--color-text-muted)';
 
             return `
               <tr>
                 <td class="table-student-name">${l.title}</td>
-                <td class="table-listing-name">${locationText || '—'}</td>
+                <td class="table-listing-name">${locationText || '-'}</td>
                 <td><strong style="color: ${weekColor};">${l.thisWeekViews}</strong></td>
                 <td>${l.totalViews}</td>
                 <td><span class="status-badge ${statusClass}"><span class="status-dot"></span>${statusLabel}</span></td>
@@ -1106,7 +1138,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Render bar chart from per-listing data
       if (barChart) {
-        const perListing = data.perListing || [];
+        const perListing = data.perProperty || [];
         if (perListing.length === 0 || data.totalViews === 0) {
           barChart.innerHTML = `
             <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--color-text-muted); font-size: var(--fs-caption);">
@@ -1114,13 +1146,14 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>`;
         } else {
           const maxViews = Math.max(...perListing.map(l => l.thisWeekViews), 1);
-          barChart.innerHTML = perListing.map(l => {
+          barChart.innerHTML = perListing.map((l, i) => {
             const heightPct = Math.max((l.thisWeekViews / maxViews) * 100, 5);
-            const shortTitle = l.title.length > 15 ? l.title.substring(0, 12) + '…' : l.title;
+            const shortTitle = l.title.length > 15 ? l.title.substring(0, 12) + '...' : l.title;
             return `
-              <div class="bar-chart-bar" title="${l.title}: ${l.thisWeekViews} views this week">
-                <div class="bar-fill" style="height: ${heightPct}%;"></div>
-                <span class="bar-label">${shortTitle}</span>
+              <div class="bar-column" title="${l.title}: ${l.thisWeekViews} views this week">
+                <div class="bar-value">${l.thisWeekViews}</div>
+                <div class="bar" style="height: ${heightPct}%; animation-delay: ${i * 0.1}s;"></div>
+                <div class="bar-label">${shortTitle}</div>
               </div>`;
           }).join('');
         }
@@ -1207,6 +1240,24 @@ document.addEventListener('DOMContentLoaded', () => {
         profileAvatar.textContent = initials;
       }
     }
+
+    // Fetch real stats for profile page (single lightweight call)
+    async function fetchProfileStats() {
+      try {
+        const s = await window.HonnetKE.api.get('/me/profile-stats', true);
+        const totalEl = document.getElementById('stat-total-properties');
+        const activeEl = document.getElementById('stat-active-properties');
+        const bookingsEl = document.getElementById('stat-total-bookings');
+        const viewsEl = document.getElementById('stat-total-views');
+        if (totalEl) totalEl.textContent = s.totalProperties || 0;
+        if (activeEl) activeEl.textContent = s.activeProperties || 0;
+        if (bookingsEl) bookingsEl.textContent = s.totalBookings || 0;
+        if (viewsEl) viewsEl.textContent = s.totalViews || 0;
+      } catch (err) {
+        console.warn('Could not fetch profile stats:', err.message);
+      }
+    }
+    fetchProfileStats();
 
     // Personal info form
     const personalForm = document.getElementById('personal-info-form');

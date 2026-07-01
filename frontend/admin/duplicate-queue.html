@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="HonnetKE Admin — Review flagged potential duplicate listings and take action.">
-  <meta name="keywords" content="duplicate listings, admin queue, moderation, HonnetKE">
+  <meta name="description" content="HonnetKE Admin - Review flagged potential duplicate properties and take action.">
+  <meta name="keywords" content="duplicate properties, admin queue, moderation, HonnetKE">
   <meta name="author" content="HonnetKE">
-  <title>Duplicate Queue — HonnetKE Admin</title>
+  <title>Duplicate Queue - HonnetKE Admin</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="../landingpage/css/reset.css">
   <link rel="stylesheet" href="../landingpage/css/global.css">
   <link rel="stylesheet" href="css/admin.css">
-</head>
+<link rel="stylesheet" href="../shared/css/notifications.css"></head>
 <body data-page="duplicate-queue">
 
   <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -31,7 +31,7 @@
       </a>
       <ul class="navbar-nav" id="navbar-nav">
         <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
-        <li><a href="manage-listings.html" class="nav-link">Listings</a></li>
+        <li><a href="manage-listings.html" class="nav-link">Properties</a></li>
         <li><a href="manage-users.html" class="nav-link">Users</a></li>
         <li><a href="flagged-listings.html" class="nav-link">Flagged</a></li>
         <li><a href="duplicate-queue.html" class="nav-link active">Duplicates</a></li>
@@ -53,7 +53,7 @@
 
   <div class="admin-mobile-nav" id="admin-mobile-nav" aria-hidden="true">
     <a href="dashboard.html" class="nav-link">Dashboard</a>
-    <a href="manage-listings.html" class="nav-link">Listings</a>
+    <a href="manage-listings.html" class="nav-link">Properties</a>
     <a href="manage-users.html" class="nav-link">Users</a>
     <a href="flagged-listings.html" class="nav-link">Flagged</a>
     <a href="duplicate-queue.html" class="nav-link active">Duplicates</a>
@@ -67,8 +67,8 @@
 
     <div class="page-header">
       <div class="container">
-        <h1 class="page-title">Duplicate Listings</h1>
-        <p class="page-subtitle">Review flagged potential duplicate listings and decide how to handle them.</p>
+        <h1 class="page-title">Duplicate Properties</h1>
+        <p class="page-subtitle">Review flagged potential duplicate properties and decide how to handle them.</p>
       </div>
     </div>
 
@@ -77,7 +77,7 @@
 
         <div class="duplicate-queue">
 
-          <!-- Duplicate Group 1 — High Similarity -->
+          <!-- Duplicate Group 1 - High Similarity -->
           <div class="duplicate-group">
             <div class="duplicate-header">
               <div class="duplicate-header-left">
@@ -150,7 +150,7 @@
             </div>
           </div>
 
-          <!-- Duplicate Group 2 — Medium Similarity -->
+          <!-- Duplicate Group 2 - Medium Similarity -->
           <div class="duplicate-group">
             <div class="duplicate-header">
               <div class="duplicate-header-left">
@@ -218,7 +218,7 @@
             </div>
           </div>
 
-          <!-- Duplicate Group 3 — High -->
+          <!-- Duplicate Group 3 - High -->
           <div class="duplicate-group">
             <div class="duplicate-header">
               <div class="duplicate-header-left">
@@ -313,5 +313,5 @@
   <script src="../shared/js/auth.js"></script>
   <script src="js/admin.js"></script>
 
-</body>
+<script src="../shared/js/notifications.js"></script></body>
 </html>
